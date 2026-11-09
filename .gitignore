@@ -1,0 +1,40 @@
+# Gradle
+.gradle/
+build/
+**/build/
+
+# Konfigurasi lokal dan rahasia (JANGAN di-commit)
+local.properties
+secrets.properties
+keystore.properties
+*.jks
+*.keystore
+.env
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Hasil build
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+bin/
+gen/
+out/
+release/
+
+# Log
+*.log
+
+# File sistem
+.DS_Store
+Thumbs.db
+
+# Firebase (aktifkan baris ini kalau repo public)
+# google-services.json
