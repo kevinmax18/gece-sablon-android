@@ -1,15 +1,25 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { input ->
+        localProperties.load(input)
+    }
+}
+
+val rawBaseUrl = localProperties.getProperty("BASE_URL")?.trim() ?: "http://10.0.2.2:8000/"
+val rawNomorWa = localProperties.getProperty("NOMOR_WA_WORKSHOP")?.trim() ?: ""
 
 android {
     namespace = "com.gecesablon.app"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.gecesablon.app"
@@ -19,6 +29,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "BASE_URL", "\"$rawBaseUrl\"")
+        buildConfigField("String", "NOMOR_WA_WORKSHOP", "\"$rawNomorWa\"")
     }
 
     buildTypes {
@@ -36,6 +49,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -48,6 +62,25 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+
+    // Navigation Compose
+    implementation(libs.androidx.navigation.compose)
+
+    // Image Loading (Coil)
+    implementation(libs.coil.compose)
+
+    // Networking (Retrofit + OkHttp)
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.converter.kotlinx.serialization)
+    implementation(libs.okhttp.core)
+    implementation(libs.okhttp.logging)
+
+    // Serialization
+    implementation(libs.kotlinx.serialization.json)
+
+    // DataStore Preferences
+    implementation(libs.androidx.datastore.preferences)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
