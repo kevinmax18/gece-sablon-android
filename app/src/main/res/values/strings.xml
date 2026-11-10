@@ -1,3 +1,55 @@
 <resources>
-    <string name="app_name">Gece Sablon</string>
+    <string name="app_name">GeCe Sablon</string>
+
+    <!-- Tombol & Aksi -->
+    <string name="btn_continue">Lanjutkan</string>
+    <string name="btn_order">Pesan Sekarang</string>
+    <string name="btn_see_detail">Lihat Detail</string>
+    <string name="btn_retry">Coba Lagi</string>
+    <string name="btn_whatsapp">Hubungi via WhatsApp</string>
+
+    <!-- Input & Form -->
+    <string name="content_desc_show_password">Tampilkan kata sandi</string>
+    <string name="content_desc_hide_password">Sembunyikan kata sandi</string>
+    <string name="content_desc_clear_text">Hapus teks</string>
+
+    <!-- Kartu Produk -->
+    <string name="product_badge_dtf">CETAK DTF</string>
+    <string name="product_price_start_from">MULAI</string>
+    <string name="product_action_select">Pilih produk</string>
+
+    <!-- Kartu Pesanan -->
+    <string name="order_action_detail">Lihat Detail</string>
+    <string name="order_pcs_format">%1$d pcs</string>
+
+    <!-- Status Pesanan (OrderStatus) -->
+    <string name="status_diterima">Diterima</string>
+    <string name="status_sedang_diproses">Sedang Diproses</string>
+    <string name="status_cetak_dtf">Cetak DTF</string>
+    <string name="status_pressing">Pressing</string>
+    <string name="status_siap_diambil">Siap Diambil</string>
+    <string name="status_selesai">Selesai</string>
+    <string name="status_dibatalkan">Dibatalkan</string>
+
+    <!-- Navigasi Bawah -->
+    <string name="nav_home">Beranda</string>
+    <string name="nav_catalog">Katalog</string>
+    <string name="nav_order">Pesan</string>
+    <string name="nav_orders">Pesanan</string>
+    <string name="nav_process">Proses</string>
+    <string name="nav_contact">Kontak</string>
+    <string name="nav_finance">Keuangan</string>
+    <string name="nav_account">Akun</string>
+
+    <!-- Navigasi Atas -->
+    <string name="content_desc_back">Kembali</string>
+    <string name="content_desc_profile">Profil Pengguna</string>
+    <string name="content_desc_whatsapp">Hubungi Workshop</string>
+
+    <!-- Tampilan Status (State Views) -->
+    <string name="state_loading">Memuat data...</string>
+    <string name="state_empty_title">Belum Ada Data</string>
+    <string name="state_empty_desc">Tidak ada data atau pesanan yang ditemukan saat ini.</string>
+    <string name="state_error_title">Terjadi Kesalahan</string>
+    <string name="state_error_desc">Gagal memuat data. Silakan periksa koneksi Anda dan coba lagi.</string>
 </resources>

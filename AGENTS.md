@@ -61,6 +61,6 @@ Komponen yang dipakai dua peran atau lebih (daftar pesanan, detail pesanan, taha
 ## Cara kerja
 - Kerjakan satu fitur atau satu tahap per tugas. Jelaskan rencana singkat sebelum mengubah banyak file.
 - Jangan menghapus atau menulis ulang file yang tidak berkaitan dengan tugas.
-- Jangan menjalankan git commit, git push, atau perintah yang menghapus file. Saya yang melakukannya.
+- Jangan menjalankan git commit, git push, build, atau perintah yang menghapus file. Saya yang melakukannya.
 - Jika spesifikasi kurang jelas, tanyakan, jangan menebak. Lihat bagian "Pertanyaan terbuka" di spesifikasi.
 - Setelah selesai, sebutkan file apa saja yang diubah dan apa yang perlu saya tes di emulator.
