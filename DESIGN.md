@@ -1,3 +1,17 @@
+# WARNA RESMI (BERLAKU)
+Jika ada nilai warna lain di file ini (termasuk bagian YAML di bawah), ABAIKAN.
+Hanya gunakan nilai berikut untuk ui/theme/Color.kt.
+
+| Token | Hex |
+|-------|-----|
+| background | #FAFAF7 |
+| surface | #F1F1ED |
+| primary (tombol utama, teks kontras) | #111111 |
+| onBackground (teks utama) | #171717 |
+| onSurfaceVariant (teks sekunder) | #737373 |
+| accent / secondary (kuning) | #F5E85B |
+| outline / border | #E5E5E0 |
+
 ---
 name: Cetak Presisi
 colors:

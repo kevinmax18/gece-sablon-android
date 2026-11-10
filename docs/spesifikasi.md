@@ -52,7 +52,17 @@ Akun admin dibuat oleh Owner lewat menu Kelola Akun Admin. Akun owner dibuat lan
 ## Status dan tahapan pesanan
 Status yang dilihat pelanggan: Diterima -> Sedang Diproses -> Cetak DTF -> Pressing -> Siap Diambil -> Selesai.
 Tahapan produksi internal (checklist admin): Desain & Mockup -> Pengadaan Baju Polos -> Cetak DTF & Material -> Penyablonan Workshop -> Pemeriksaan QC -> Siap Diambil / Selesai.
-Pemetaan tahapan internal ke status pelanggan: [ISI: konfirmasikan, mis. Penyablonan Workshop = Pressing].
+Pemetaan tahapan internal ke status pelanggan:
+- Pesanan masuk                         -> Diterima
+- Desain & Mockup, Pengadaan Baju Polos -> Sedang Diproses
+- Cetak DTF & Material                  -> Cetak DTF
+- Penyablonan Workshop, Pemeriksaan QC  -> Pressing
+- Siap Diambil                          -> Siap Diambil
+- Diambil / selesai                     -> Selesai
+  Pengelompokan di dashboard Figma (Pesanan Masuk, Menunggu Pemeriksaan, Sedang Diproses, Siap Diambil)
+  hanya cara menampilkan daftar, bukan status baru.
+  Bilah status di DESIGN.md (Pemisahan Warna, Afdruk Film, dst.) adalah teks bawaan Stitch untuk sablon manual.
+  Abaikan; pakai daftar status di atas.
 
 ## Data utama (usulan, belum final)
 - users: id, nama, email, password, no_hp, role (owner/admin/customer)

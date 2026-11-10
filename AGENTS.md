@@ -5,7 +5,7 @@ Aplikasi mobile UMKM sablon DTF untuk tugas PjBL, tiga peran: pelanggan (dan tam
 Sebelum mengerjakan fitur, baca docs/spesifikasi.md, lalu lihat docs/flowchart/ dan docs/figma/.
 Jika spesifikasi bertentangan dengan gambar Figma, tampilan mengikuti Figma dan alur mengikuti spesifikasi.
 Kerjakan hanya fitur yang diminta. Fitur di bagian "Di luar cakupan" pada spesifikasi tidak boleh dibuat.
-Token desain (warna, font, bentuk, jarak) mengikuti docs/DESIGN.md. Tata letak mengikuti gambar di docs/figma/.
+Warna, font, bentuk, dan jarak mengikuti docs/DESIGN.md (tabel "WARNA RESMI" yang berlaku). Tata letak mengikuti docs/figma/.Warna, font, bentuk, dan jarak mengikuti docs/DESIGN.md (tabel "WARNA RESMI" yang berlaku). Tata letak mengikuti docs/figma/.
 Jika DESIGN.md dan Figma berbeda, Figma yang berlaku.
 
 ## Stack wajib (jangan ganti, jangan tambah library tanpa izin)
