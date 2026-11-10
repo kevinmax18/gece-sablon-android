@@ -16,15 +16,19 @@ Flowchart hanya menggambarkan alur UI/UX, belum mencakup backend dan database.
 Owner memiliki semua akses admin, ditambah keuangan, laporan, pengelolaan produk/harga/variasi, dan pengelolaan akun admin.
 
 ## Alur umum
-Splash -> Onboarding -> (Punya akun? Ya: Login | Belum: Register | Tamu: Katalog).
-Admin dan Owner masuk lewat Welcome/Login, lalu ke dashboard masing-masing.
+Splash -> Onboarding -> Welcome (Masuk | Daftar | Jelajahi sebagai Tamu).
+Satu layar Login untuk semua peran. Peran diambil dari respons server, lalu aplikasi membuka
+navigasi dan dashboard sesuai peran. Register hanya untuk pelanggan (peran selalu "customer").
+Akun admin dibuat oleh Owner lewat menu Kelola Akun Admin. Akun owner dibuat langsung di database.
 
 ## Fitur Pelanggan
-- Mode tamu: boleh melihat Beranda, Katalog, dan Detail Produk tanpa login.
-- Pembuatan pesanan: Pilih Produk -> Pilih Warna -> Pilih Ukuran -> Atur Jumlah (harga dihitung otomatis) -> Upload Desain / Catatan -> Ringkasan Pesanan -> Kirim/Konfirmasi -> Pesanan Berhasil.
-- Status & Detail Pesanan (pelacakan status).
-- Riwayat pesanan dan detail pesanan.
-- Hubungi workshop lewat WhatsApp (membuka aplikasi WhatsApp dengan nomor workshop).
+- Mode tamu: boleh melihat Beranda, Katalog, dan Detail Produk. Saat menekan Pesan atau Kirim,
+  tamu diarahkan ke Login/Register, lalu kembali ke layar sebelumnya.
+- Register (nama, no HP/WhatsApp, email, password) dan Login.
+- Pembuatan pesanan: Pilih Produk -> Pilih Warna -> Pilih Ukuran -> Atur Jumlah (harga otomatis)
+  -> Upload Desain / Catatan -> Ringkasan Pesanan -> Kirim/Konfirmasi -> Pesanan Berhasil.
+- Status & Detail Pesanan, Riwayat Pesanan.
+- Hubungi workshop lewat WhatsApp.
 - Profil dan Logout.
 
 ## Fitur Admin
@@ -74,6 +78,5 @@ Pemetaan tahapan internal ke status pelanggan: [ISI: konfirmasikan, mis. Penyabl
 - Fitur chat dalam aplikasi (cukup tombol WhatsApp).
 
 ## Pertanyaan terbuka (konfirmasi sebelum dikerjakan)
-- Apakah tamu wajib login saat menekan Kirim/Konfirmasi? (asumsi: ya)
 - Apakah pelanggan bisa membatalkan pesanan? Sampai tahap apa?
 - Format ekspor PDF/XLSX: kolom apa saja yang dimuat?

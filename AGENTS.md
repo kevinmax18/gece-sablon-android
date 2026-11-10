@@ -5,6 +5,8 @@ Aplikasi mobile UMKM sablon DTF untuk tugas PjBL, tiga peran: pelanggan (dan tam
 Sebelum mengerjakan fitur, baca docs/spesifikasi.md, lalu lihat docs/flowchart/ dan docs/figma/.
 Jika spesifikasi bertentangan dengan gambar Figma, tampilan mengikuti Figma dan alur mengikuti spesifikasi.
 Kerjakan hanya fitur yang diminta. Fitur di bagian "Di luar cakupan" pada spesifikasi tidak boleh dibuat.
+Token desain (warna, font, bentuk, jarak) mengikuti docs/DESIGN.md. Tata letak mengikuti gambar di docs/figma/.
+Jika DESIGN.md dan Figma berbeda, Figma yang berlaku.
 
 ## Stack wajib (jangan ganti, jangan tambah library tanpa izin)
 - Kotlin, build Gradle Kotlin DSL, min SDK 24
@@ -30,7 +32,8 @@ Komponen yang dipakai dua peran atau lebih (daftar pesanan, detail pesanan, taha
 
 ## Peran dan navigasi
 - Role berasal dari respons login, disimpan di DataStore, dan menentukan NavGraph yang dipakai.
-- Pelanggan/tamu: Beranda, Katalog, Pesan, Kontak. Tamu hanya boleh melihat Beranda, Katalog, Detail Produk.
+- Pelanggan: Beranda, Katalog, Pesan, Kontak. Tamu hanya boleh melihat Beranda, Katalog, Detail Produk;
+  aksi memesan memerlukan login.
 - Admin: Beranda, Pesanan, Proses, Akun.
 - Owner: Beranda, Pesanan, Proses, Keuangan, Akun.
 - Halaman milik satu peran tidak boleh bisa dibuka oleh peran lain (cek role di navigasi dan di API).
@@ -50,6 +53,10 @@ Komponen yang dipakai dua peran atau lebih (daftar pesanan, detail pesanan, taha
 - Jangan membuat, mengubah, atau mem-commit local.properties, .env, atau keystore.
 - Alamat server lokal untuk emulator: http://10.0.2.2:8000/
 - Data keuangan dan akun admin hanya boleh diakses owner. Jangan mengandalkan penyembunyian menu saja.
+- Register di aplikasi hanya membuat akun pelanggan. Aplikasi tidak boleh mengirim atau menerima pilihan
+  role dari pengguna. Role hanya berasal dari server.
+- Jangan menanam kredensial demo (akun owner/admin) di kode. Fitur "akses cepat" hanya boleh ada
+  di build debug dan harus saya setujui dulu.
 
 ## Cara kerja
 - Kerjakan satu fitur atau satu tahap per tugas. Jelaskan rencana singkat sebelum mengubah banyak file.
