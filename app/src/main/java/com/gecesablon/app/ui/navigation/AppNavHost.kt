@@ -3,17 +3,26 @@ package com.gecesablon.app.ui.navigation
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.gecesablon.app.core.datastore.SessionStore
+import androidx.navigation.navArgument
+import com.gecesablon.app.core.di.AppContainer
+import com.gecesablon.app.data.model.Role
+import com.gecesablon.app.data.model.Session
 import com.gecesablon.app.ui.about.AboutScreen
+import com.gecesablon.app.ui.account.AccountViewModel
 import com.gecesablon.app.ui.auth.LoginScreen
+import com.gecesablon.app.ui.auth.LoginViewModel
 import com.gecesablon.app.ui.auth.RegisterScreen
+import com.gecesablon.app.ui.auth.RegisterViewModel
 import com.gecesablon.app.ui.components.AppBottomBar
 import com.gecesablon.app.ui.onboarding.OnboardingScreen
 import com.gecesablon.app.ui.splash.SplashScreen
@@ -25,12 +34,24 @@ import com.gecesablon.app.ui.welcome.WelcomeScreen
  */
 @Composable
 fun AppNavHost(
-    sessionStore: SessionStore,
+    appContainer: AppContainer,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+
+    // Pantau sesi saat ini untuk menentukan apakah pengguna dalam mode tamu
+    val currentSession by appContainer.sessionStore.session.collectAsState(initial = null)
+    val isGuest = currentSession == null
+
+    // ViewModel bersama untuk pengelolaan profil/akun dan logout
+    val accountViewModel: AccountViewModel = viewModel(
+        factory = AccountViewModel.factory(
+            authRepository = appContainer.authRepository,
+            sessionStore = appContainer.sessionStore
+        )
+    )
 
     val isCustomerTab = BottomNavItems.customerItems.any { it.route == currentRoute }
     val isAdminTab = BottomNavItems.adminItems.any { it.route == currentRoute }
@@ -47,6 +68,52 @@ fun AppNavHost(
         }
     }
 
+    /**
+     * Menangani navigasi setelah login atau register berhasil:
+     * - Role CUSTOMER: jika ada redirect "order", kembali ke tab Pesan di CustomerNavGraph.
+     *   Jika tidak, masuk CustomerNavGraph dari awal (bersihkan Welcome).
+     * - Role ADMIN / OWNER: abaikan redirect dan bersihkan seluruh back stack.
+     */
+    fun handleAuthSuccess(session: Session, redirect: String?) {
+        val safeRedirect = if (redirect != null && redirect in Routes.VALID_REDIRECTS) redirect else null
+        when (session.role) {
+            Role.CUSTOMER -> {
+                if (safeRedirect == "order") {
+                    navController.navigate(Routes.CUSTOMER_ORDER) {
+                        popUpTo(Routes.CUSTOMER_HOME) {
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                    }
+                } else {
+                    navController.navigate(Routes.CUSTOMER_ROOT) {
+                        popUpTo(Routes.WELCOME) { inclusive = true }
+                    }
+                }
+            }
+            Role.ADMIN -> {
+                navController.navigate(Routes.ADMIN_ROOT) {
+                    popUpTo(0) { inclusive = true }
+                }
+            }
+            Role.OWNER -> {
+                navController.navigate(Routes.OWNER_ROOT) {
+                    popUpTo(0) { inclusive = true }
+                }
+            }
+        }
+    }
+
+    val handleLogout: () -> Unit = {
+        navController.navigate(Routes.WELCOME) {
+            popUpTo(0) { inclusive = true }
+        }
+    }
+
+    val handleNavigateToAbout: () -> Unit = {
+        navController.navigate(Routes.ABOUT)
+    }
+
     Scaffold(
         modifier = modifier,
         bottomBar = {
@@ -56,7 +123,12 @@ fun AppNavHost(
                         items = BottomNavItems.customerItems,
                         currentRoute = currentRoute,
                         onItemSelected = { item ->
-                            navigateTab(item.route, Routes.CUSTOMER_HOME)
+                            if (item.route == Routes.CUSTOMER_ORDER && isGuest) {
+                                // Tamu klik tab Pesan -> Buka Login, tab tidak berpindah
+                                navController.navigate(Routes.loginRoute("order"))
+                            } else {
+                                navigateTab(item.route, Routes.CUSTOMER_HOME)
+                            }
                         }
                     )
                 }
@@ -79,7 +151,7 @@ fun AppNavHost(
                     )
                 }
                 else -> {
-                    // AppBottomBar tidak ditampilkan di Splash, Onboarding, Welcome, Login, Register, dan About
+                    // AppBottomBar tidak ditampilkan di Splash, Onboarding, Welcome, Login, Register, Profile, dan About
                 }
             }
         }
@@ -92,7 +164,7 @@ fun AppNavHost(
             // 1. Splash Screen
             composable(Routes.SPLASH) {
                 SplashScreen(
-                    sessionStore = sessionStore,
+                    sessionStore = appContainer.sessionStore,
                     onNavigateToCustomer = {
                         navController.navigate(Routes.CUSTOMER_ROOT) {
                             popUpTo(Routes.SPLASH) { inclusive = true }
@@ -124,7 +196,7 @@ fun AppNavHost(
             // 2. Onboarding Screen
             composable(Routes.ONBOARDING) {
                 OnboardingScreen(
-                    sessionStore = sessionStore,
+                    sessionStore = appContainer.sessionStore,
                     onFinishOnboarding = {
                         navController.navigate(Routes.WELCOME) {
                             popUpTo(Routes.ONBOARDING) { inclusive = true }
@@ -134,7 +206,7 @@ fun AppNavHost(
                         navController.navigate(Routes.WELCOME) {
                             popUpTo(Routes.ONBOARDING) { inclusive = true }
                         }
-                        navController.navigate(Routes.LOGIN)
+                        navController.navigate(Routes.loginRoute())
                     }
                 )
             }
@@ -143,47 +215,86 @@ fun AppNavHost(
             composable(Routes.WELCOME) {
                 WelcomeScreen(
                     onNavigateToLogin = {
-                        navController.navigate(Routes.LOGIN)
+                        navController.navigate(Routes.loginRoute())
                     },
                     onNavigateToRegister = {
-                        navController.navigate(Routes.REGISTER)
+                        navController.navigate(Routes.registerRoute())
                     },
                     onExploreAsGuest = {
                         navController.navigate(Routes.CUSTOMER_ROOT) {
                             popUpTo(Routes.WELCOME) { inclusive = true }
                         }
                     },
-                    onDebugNavigateToCustomer = {
+                    onNavigateToAbout = handleNavigateToAbout
+                )
+            }
+
+            // 4. Layar Login & Register
+            composable(
+                route = Routes.LOGIN_WITH_REDIRECT,
+                arguments = listOf(
+                    navArgument("redirect") {
+                        type = NavType.StringType
+                        nullable = true
+                        defaultValue = null
+                    }
+                )
+            ) {
+                val loginViewModel: LoginViewModel = viewModel(
+                    factory = LoginViewModel.factory(
+                        authRepository = appContainer.authRepository,
+                        sessionStore = appContainer.sessionStore
+                    )
+                )
+                LoginScreen(
+                    viewModel = loginViewModel,
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    },
+                    onNavigateToRegister = { redirect ->
+                        navController.navigate(Routes.registerRoute(redirect)) {
+                            popUpTo(Routes.LOGIN_WITH_REDIRECT) { inclusive = true }
+                        }
+                    },
+                    onExploreAsGuest = {
                         navController.navigate(Routes.CUSTOMER_ROOT) {
                             popUpTo(Routes.WELCOME) { inclusive = true }
                         }
                     },
-                    onDebugNavigateToAdmin = {
-                        navController.navigate(Routes.ADMIN_ROOT) {
-                            popUpTo(Routes.WELCOME) { inclusive = true }
+                    onLoginSuccess = { session, redirect ->
+                        handleAuthSuccess(session, redirect)
+                    }
+                )
+            }
+
+            composable(
+                route = Routes.REGISTER_WITH_REDIRECT,
+                arguments = listOf(
+                    navArgument("redirect") {
+                        type = NavType.StringType
+                        nullable = true
+                        defaultValue = null
+                    }
+                )
+            ) {
+                val registerViewModel: RegisterViewModel = viewModel(
+                    factory = RegisterViewModel.factory(
+                        authRepository = appContainer.authRepository,
+                        sessionStore = appContainer.sessionStore
+                    )
+                )
+                RegisterScreen(
+                    viewModel = registerViewModel,
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    },
+                    onNavigateToLogin = { redirect ->
+                        navController.navigate(Routes.loginRoute(redirect)) {
+                            popUpTo(Routes.REGISTER_WITH_REDIRECT) { inclusive = true }
                         }
                     },
-                    onDebugNavigateToOwner = {
-                        navController.navigate(Routes.OWNER_ROOT) {
-                            popUpTo(Routes.WELCOME) { inclusive = true }
-                        }
-                    }
-                )
-            }
-
-            // 4. Layar Sementara Login & Register
-            composable(Routes.LOGIN) {
-                LoginScreen(
-                    onNavigateBack = {
-                        navController.popBackStack()
-                    }
-                )
-            }
-
-            composable(Routes.REGISTER) {
-                RegisterScreen(
-                    onNavigateBack = {
-                        navController.popBackStack()
+                    onRegisterSuccess = { session, redirect ->
+                        handleAuthSuccess(session, redirect)
                     }
                 )
             }
@@ -198,9 +309,30 @@ fun AppNavHost(
             }
 
             // 6. NavGraph masing-masing peran
-            customerNavGraph(navController)
-            adminNavGraph(navController)
-            ownerNavGraph(navController)
+            customerNavGraph(
+                navController = navController,
+                isGuest = isGuest,
+                accountViewModel = accountViewModel,
+                onNavigateToLogin = {
+                    navController.navigate(Routes.loginRoute())
+                },
+                onNavigateToAbout = handleNavigateToAbout,
+                onLogout = handleLogout
+            )
+
+            adminNavGraph(
+                navController = navController,
+                accountViewModel = accountViewModel,
+                onNavigateToAbout = handleNavigateToAbout,
+                onLogout = handleLogout
+            )
+
+            ownerNavGraph(
+                navController = navController,
+                accountViewModel = accountViewModel,
+                onNavigateToAbout = handleNavigateToAbout,
+                onLogout = handleLogout
+            )
         }
     }
 }

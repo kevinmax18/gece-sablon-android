@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.gecesablon.app.core.datastore.SessionStore
+import com.gecesablon.app.core.di.AppContainer
 import com.gecesablon.app.ui.navigation.AppNavHost
 import com.gecesablon.app.ui.theme.GeceSablonTheme
 
@@ -18,12 +18,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             GeceSablonTheme {
                 val geceApp = application as? GeceApp
-                val sessionStore = remember {
-                    geceApp?.container?.sessionStore ?: SessionStore(applicationContext)
+                val appContainer = remember {
+                    geceApp?.container ?: AppContainer(applicationContext)
                 }
 
                 AppNavHost(
-                    sessionStore = sessionStore,
+                    appContainer = appContainer,
                     modifier = Modifier.fillMaxSize()
                 )
             }

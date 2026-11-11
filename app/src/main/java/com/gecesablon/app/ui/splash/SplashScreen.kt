@@ -54,14 +54,14 @@ fun SplashScreen(
     modifier: Modifier = Modifier
 ) {
     LaunchedEffect(Unit) {
-        val role = sessionStore.userRole.first()
+        val session = sessionStore.session.first()
         val onboardingDone = sessionStore.isOnboardingCompleted.first()
         delay(1500)
 
         when {
-            role == Role.CUSTOMER -> onNavigateToCustomer()
-            role == Role.ADMIN -> onNavigateToAdmin()
-            role == Role.OWNER -> onNavigateToOwner()
+            session?.role == Role.CUSTOMER -> onNavigateToCustomer()
+            session?.role == Role.ADMIN -> onNavigateToAdmin()
+            session?.role == Role.OWNER -> onNavigateToOwner()
             !onboardingDone -> onNavigateToOnboarding()
             else -> onNavigateToWelcome()
         }

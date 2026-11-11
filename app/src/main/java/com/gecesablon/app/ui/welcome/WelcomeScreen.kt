@@ -24,10 +24,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,7 +49,7 @@ import com.gecesablon.app.ui.theme.GeceColors
  * Layar Welcome GeCe Screen Printing sesuai Figma:
  * - Menampilkan hero banner sablon DTF & spesifikasi studio
  * - Tombol Masuk, Daftar, dan Jelajahi sebagai Tamu
- * - Panel Debug Bypass khusus build DEBUG (dihapus pada Tahap 3)
+ * - Tautan "Tentang Aplikasi" di bagian bawah
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -59,9 +57,7 @@ fun WelcomeScreen(
     onNavigateToLogin: () -> Unit,
     onNavigateToRegister: () -> Unit,
     onExploreAsGuest: () -> Unit,
-    onDebugNavigateToCustomer: () -> Unit,
-    onDebugNavigateToAdmin: () -> Unit,
-    onDebugNavigateToOwner: () -> Unit,
+    onNavigateToAbout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
@@ -276,75 +272,18 @@ fun WelcomeScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
             )
 
-            // Panel Debug Bypass (hanya muncul saat BuildConfig.DEBUG)
-            if (BuildConfig.DEBUG) {
-                // TODO: Hapus di Tahap 3 saat alur autentikasi dan API login selesai
-                Spacer(modifier = Modifier.height(20.dp))
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(14.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(14.dp))
-                        .padding(14.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = stringResource(R.string.welcome_debug_panel_title),
-                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            OutlinedButton(
-                                onClick = onDebugNavigateToCustomer,
-                                modifier = Modifier.weight(1f),
-                                colors = ButtonDefaults.outlinedButtonColors(
-                                    contentColor = MaterialTheme.colorScheme.onBackground
-                                )
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.welcome_debug_customer),
-                                    style = MaterialTheme.typography.labelSmall,
-                                    maxLines = 1
-                                )
-                            }
-                            OutlinedButton(
-                                onClick = onDebugNavigateToAdmin,
-                                modifier = Modifier.weight(1f),
-                                colors = ButtonDefaults.outlinedButtonColors(
-                                    contentColor = MaterialTheme.colorScheme.onBackground
-                                )
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.welcome_debug_admin),
-                                    style = MaterialTheme.typography.labelSmall,
-                                    maxLines = 1
-                                )
-                            }
-                            OutlinedButton(
-                                onClick = onDebugNavigateToOwner,
-                                modifier = Modifier.weight(1f),
-                                colors = ButtonDefaults.outlinedButtonColors(
-                                    contentColor = MaterialTheme.colorScheme.onBackground
-                                )
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.welcome_debug_owner),
-                                    style = MaterialTheme.typography.labelSmall,
-                                    maxLines = 1
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Tautan Tentang Aplikasi
+            Text(
+                text = stringResource(R.string.welcome_about_link),
+                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium),
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                modifier = Modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .clickable { onNavigateToAbout() }
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
         }

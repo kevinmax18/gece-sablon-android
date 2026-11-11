@@ -57,6 +57,7 @@ Komponen yang dipakai dua peran atau lebih (daftar pesanan, detail pesanan, taha
   role dari pengguna. Role hanya berasal dari server.
 - Jangan menanam kredensial demo (akun owner/admin) di kode. Fitur "akses cepat" hanya boleh ada
   di build debug dan harus saya setujui dulu.
+- Tidak boleh ada kredensial asli di kode. Pengecualian sementara: tiga akun contoh palsu hanya di FakeAuthRepository, dan dihapus pada Tahap 8 saat integrasi API. Password tidak boleh dicatat di log.
 
 ## Cara kerja
 - Kerjakan satu fitur atau satu tahap per tugas. Jelaskan rencana singkat sebelum mengubah banyak file.

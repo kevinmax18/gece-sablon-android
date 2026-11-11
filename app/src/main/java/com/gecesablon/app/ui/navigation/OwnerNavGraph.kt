@@ -4,6 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.gecesablon.app.ui.account.AccountViewModel
 import com.gecesablon.app.ui.owner.OwnerAccountScreen
 import com.gecesablon.app.ui.owner.OwnerDashboardScreen
 import com.gecesablon.app.ui.owner.OwnerFinanceScreen
@@ -14,7 +15,12 @@ import com.gecesablon.app.ui.staff.StaffProcessScreen
  * NavGraph untuk alur peran Owner / Pemilik Workshop:
  * - Tab Beranda, Pesanan, Proses, Keuangan, Akun
  */
-fun NavGraphBuilder.ownerNavGraph(navController: NavHostController) {
+fun NavGraphBuilder.ownerNavGraph(
+    navController: NavHostController,
+    accountViewModel: AccountViewModel,
+    onNavigateToAbout: () -> Unit,
+    onLogout: () -> Unit
+) {
     navigation(startDestination = Routes.OWNER_HOME, route = Routes.OWNER_ROOT) {
         composable(Routes.OWNER_HOME) {
             OwnerDashboardScreen()
@@ -29,7 +35,11 @@ fun NavGraphBuilder.ownerNavGraph(navController: NavHostController) {
             OwnerFinanceScreen()
         }
         composable(Routes.OWNER_ACCOUNT) {
-            OwnerAccountScreen()
+            OwnerAccountScreen(
+                viewModel = accountViewModel,
+                onNavigateToAbout = onNavigateToAbout,
+                onLogout = onLogout
+            )
         }
     }
 }

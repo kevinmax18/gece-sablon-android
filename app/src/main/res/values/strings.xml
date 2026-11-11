@@ -66,7 +66,7 @@
     <string name="onboarding_studio_badge">GECE STUDIO</string>
     <string name="onboarding_studio_sub">Produksi DTF</string>
     <string name="onboarding_skip">Lewati</string>
-    <string name="onboarding_page_counter">%02d / %02d</string>
+    <string name="onboarding_page_counter">%1$d / %2$d</string>
     <string name="onboarding_standard_label">Standar Sablon GeCe</string>
     <string name="onboarding_btn_next">LANJUT</string>
     <string name="onboarding_btn_start">MULAI SEKARANG</string>
@@ -119,10 +119,67 @@
     <string name="welcome_btn_register">Daftar</string>
     <string name="welcome_btn_guest">Jelajahi sebagai Tamu</string>
     <string name="welcome_footer">v%1$s • GeCe Screen Printing Studio</string>
-    <string name="welcome_debug_panel_title">DEBUG BYPASS (Tahap 2)</string>
-    <string name="welcome_debug_customer">Debug: Pelanggan</string>
-    <string name="welcome_debug_admin">Debug: Admin</string>
-    <string name="welcome_debug_owner">Debug: Owner</string>
+    <string name="welcome_about_link">Tentang Aplikasi</string>
+
+    <!-- Header Beranda (Home) -->
+    <string name="home_header_brand">GECE</string>
+
+    <!-- Layar Login -->
+    <string name="login_title">Masuk</string>
+    <string name="login_subtitle">Masuk untuk memesan dan memantau pesanan Anda.</string>
+    <string name="login_explore_as_guest">Jelajahi Katalog sebagai Tamu</string>
+    <string name="login_label_identifier">EMAIL / NO. HP</string>
+    <string name="login_placeholder_identifier">nama@email.com</string>
+    <string name="login_label_password">PASSWORD</string>
+    <string name="login_placeholder_password">Masukkan kata sandi</string>
+    <string name="login_forgot_password">Lupa Password?</string>
+    <string name="login_forgot_password_soon">Fitur reset kata sandi segera hadir.</string>
+    <string name="login_btn_submit">Masuk</string>
+    <string name="login_no_account">Belum punya akun?</string>
+    <string name="login_register_link">Daftar</string>
+    <string name="login_security_footer">Dilindungi enkripsi data GeCe Studio</string>
+
+    <!-- Layar Register -->
+    <string name="register_topbar_title">Daftar Akun</string>
+    <string name="register_title">Buat Akun Pelanggan</string>
+    <string name="register_subtitle">Daftar untuk memesan dan memantau status pesanan Anda.</string>
+    <string name="register_label_name">NAMA LENGKAP</string>
+    <string name="register_placeholder_name">Contoh: Budi Pratama</string>
+    <string name="register_label_phone">NO. HP / WHATSAPP</string>
+    <string name="register_placeholder_phone">Contoh: 08123456789</string>
+    <string name="register_label_email">EMAIL</string>
+    <string name="register_placeholder_email">nama@email.com</string>
+    <string name="register_label_password">PASSWORD</string>
+    <string name="register_placeholder_password">Minimal 8 karakter</string>
+    <string name="register_label_confirm_password">KONFIRMASI PASSWORD</string>
+    <string name="register_placeholder_confirm_password">Ulangi kata sandi</string>
+    <string name="register_terms_prefix">Saya menyetujui</string>
+    <string name="register_terms_link">Syarat &amp; Ketentuan</string>
+    <string name="register_terms_and">serta</string>
+    <string name="register_privacy_link">Kebijakan Privasi</string>
+    <string name="register_terms_suffix">GeCe Screen Printing</string>
+    <string name="register_btn_submit">Daftar</string>
+    <string name="register_have_account">Sudah punya akun?</string>
+    <string name="register_login_link">Masuk</string>
+    <string name="register_terms_dialog_title">Syarat &amp; Ketentuan</string>
+    <string name="register_terms_dialog_body">Dengan menggunakan aplikasi GeCe Screen Printing, Anda menyetujui pemrosesan data pemesanan sablon DTF dan penggunaan kontak untuk pembaruan status pesanan Anda.</string>
+    <string name="register_terms_dialog_close">Tutup</string>
+
+    <!-- Layar Profil & Akun -->
+    <string name="title_profile">Profil Saya</string>
+    <string name="profile_name_placeholder">Pengguna GeCe</string>
+    <string name="profile_role_customer">Pelanggan</string>
+    <string name="profile_role_admin">Admin Workshop</string>
+    <string name="profile_role_owner">Owner GeCe Studio</string>
+    <string name="profile_label_phone">Nomor HP / WhatsApp</string>
+    <string name="profile_label_email">Email</string>
+    <string name="profile_placeholder_contact">—</string>
+    <string name="menu_about_app">Tentang Aplikasi</string>
+    <string name="menu_logout">Keluar</string>
+    <string name="profile_logout_dialog_title">Konfirmasi Keluar</string>
+    <string name="profile_logout_dialog_message">Apakah Anda yakin ingin keluar dari akun Anda?</string>
+    <string name="profile_logout_dialog_confirm">Keluar</string>
+    <string name="profile_logout_dialog_cancel">Batal</string>
 
     <!-- Judul Halaman / Screen Titles -->
     <string name="title_home">Beranda</string>
