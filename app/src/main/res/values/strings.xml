@@ -52,4 +52,99 @@
     <string name="state_empty_desc">Tidak ada data atau pesanan yang ditemukan saat ini.</string>
     <string name="state_error_title">Terjadi Kesalahan</string>
     <string name="state_error_desc">Gagal memuat data. Silakan periksa koneksi Anda dan coba lagi.</string>
+    <string name="state_coming_soon_title">Segera Hadir</string>
+    <string name="state_coming_soon_desc">Fitur ini sedang dalam tahap pengembangan.</string>
+
+    <!-- Splash Screen -->
+    <string name="splash_brand_title">GeCe</string>
+    <string name="splash_studio_pill">SCREEN PRINTING</string>
+    <string name="splash_tagline">Spesialis Sablon DTF &amp; Kaos Custom Berkualitas</string>
+    <string name="splash_loading">Menyiapkan Bengkel Sablon…</string>
+    <string name="splash_footer">v%1$s • GeCe Studio Platform</string>
+
+    <!-- Onboarding Screen -->
+    <string name="onboarding_studio_badge">GECE STUDIO</string>
+    <string name="onboarding_studio_sub">Produksi DTF</string>
+    <string name="onboarding_skip">Lewati</string>
+    <string name="onboarding_page_counter">%02d / %02d</string>
+    <string name="onboarding_standard_label">Standar Sablon GeCe</string>
+    <string name="onboarding_btn_next">LANJUT</string>
+    <string name="onboarding_btn_start">MULAI SEKARANG</string>
+    <string name="onboarding_have_account">Sudah punya akun?</string>
+    <string name="onboarding_login_link">Masuk</string>
+
+    <!-- Onboarding Halaman 1 -->
+    <string name="onboarding_tag_1">LAYANAN SABLON</string>
+    <string name="onboarding_title_1">Sablon Satuan &amp; Jumlah Banyak</string>
+    <string name="onboarding_desc_1">Pesan kaos atau polo custom dengan sablon DTF berkualitas, bisa mulai dari 1 pcs.</string>
+    <string name="onboarding_feat_title_1_1">Minimal Order</string>
+    <string name="onboarding_feat_tag_1_1">Mulai 1 Pcs</string>
+    <string name="onboarding_feat_desc_1_1">Cocok untuk kebutuhan pribadi, komunitas, hingga usaha.</string>
+    <string name="onboarding_feat_title_1_2">Hasil Cetak Rapi</string>
+    <string name="onboarding_feat_tag_1_2">Sablon DTF</string>
+    <string name="onboarding_feat_desc_1_2">Warna tajam dan nyaman dipakai untuk aktivitas harian.</string>
+
+    <!-- Onboarding Halaman 2 -->
+    <string name="onboarding_tag_2">PILIHAN BAHAN</string>
+    <string name="onboarding_title_2">Bahan Kaos Pilihan</string>
+    <string name="onboarding_desc_2">Tersedia pilihan bahan katun combed hingga polo yang adem dan nyaman dipakai.</string>
+    <string name="onboarding_feat_title_2_1">Warna Sesuai Desain</string>
+    <string name="onboarding_feat_tag_2_1">Cetak DTF</string>
+    <string name="onboarding_feat_desc_2_1">Hasil cetak disesuaikan dengan file desain yang Anda kirim.</string>
+    <string name="onboarding_feat_title_2_2">Banyak Pilihan</string>
+    <string name="onboarding_feat_tag_2_2">Ready Stock</string>
+    <string name="onboarding_feat_desc_2_2">Tersedia kaos combed 24s/30s, oversize, dan wangki polo.</string>
+
+    <!-- Onboarding Halaman 3 -->
+    <string name="onboarding_tag_3">STATUS PESANAN</string>
+    <string name="onboarding_title_3">Cek Progres Kapan Saja</string>
+    <string name="onboarding_desc_3">Pantau pesanan Anda dari proses cetak hingga barang siap diambil atau dikirim.</string>
+    <string name="onboarding_feat_title_3_1">Update Pesanan</string>
+    <string name="onboarding_feat_tag_3_1">Notifikasi</string>
+    <string name="onboarding_feat_desc_3_1">Dapatkan informasi status pesanan langsung lewat aplikasi dan WhatsApp.</string>
+    <string name="onboarding_feat_title_3_2">Pengecekan hasil</string>
+    <string name="onboarding_feat_tag_3_2">Standar Studio</string>
+    <string name="onboarding_feat_desc_3_2">Setiap hasil cetak dicek sebelum diserahkan kepada pelanggan.</string>
+
+    <!-- Welcome Screen -->
+    <string name="welcome_badge_title">GeCe • SCREEN PRINTING</string>
+    <string name="welcome_studio_spec">Studio Spec</string>
+    <string name="welcome_high_precision">HIGH PRECISION • SABLON DTF</string>
+    <string name="welcome_title">Sablon DTF Kaos &amp; Baju Polo</string>
+    <string name="welcome_subtitle">Spesialis cetak sablon DTF presisi untuk Kaos Custom, Kaos Oversize, dan Baju Polo premium.</string>
+    <string name="welcome_chip_1">Kaos &amp; Polo Premium</string>
+    <string name="welcome_chip_2">DTF Detail &amp; Tajam</string>
+    <string name="welcome_chip_3">Tanpa Minimum Order</string>
+    <string name="welcome_btn_login">Masuk</string>
+    <string name="welcome_btn_register">Daftar</string>
+    <string name="welcome_btn_guest">Jelajahi sebagai Tamu</string>
+    <string name="welcome_footer">v%1$s • GeCe Screen Printing Studio</string>
+    <string name="welcome_debug_panel_title">DEBUG BYPASS (Tahap 2)</string>
+    <string name="welcome_debug_customer">Debug: Pelanggan</string>
+    <string name="welcome_debug_admin">Debug: Admin</string>
+    <string name="welcome_debug_owner">Debug: Owner</string>
+
+    <!-- Judul Halaman / Screen Titles -->
+    <string name="title_home">Beranda</string>
+    <string name="title_catalog">Katalog</string>
+    <string name="title_order">Pesan</string>
+    <string name="title_contact">Kontak Workshop</string>
+    <string name="title_admin_dashboard">Dashboard Admin</string>
+    <string name="title_admin_account">Akun Admin</string>
+    <string name="title_owner_dashboard">Dashboard Owner</string>
+    <string name="title_owner_finance">Keuangan</string>
+    <string name="title_owner_account">Akun Owner</string>
+    <string name="title_staff_orders">Daftar Pesanan</string>
+    <string name="title_staff_process">Proses Workshop</string>
+    <string name="title_login">Masuk</string>
+    <string name="title_register">Daftar</string>
+    <string name="title_about">Tentang Aplikasi</string>
+
+    <!-- Tentang Aplikasi (About) -->
+    <string name="about_app_name">GeCe Screen Printing</string>
+    <string name="about_version">Versi %1$s</string>
+    <string name="about_description">Aplikasi mobile operasional dan pemesanan sablon DTF presisi untuk UMKM GeCe Screen Printing. Mendukung pemesanan custom, pemantauan tahapan produksi sablon, manajemen stok, dan laporan operasional.</string>
+    <string name="about_workshop_info_title">Informasi Workshop</string>
+    <string name="about_workshop_wa_label">WhatsApp Workshop</string>
+    <string name="about_whatsapp_not_found">Aplikasi WhatsApp tidak ditemukan di perangkat ini.</string>
 </resources>
