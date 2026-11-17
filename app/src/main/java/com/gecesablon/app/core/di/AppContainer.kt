@@ -4,7 +4,9 @@ import android.content.Context
 import com.gecesablon.app.core.datastore.SessionStore
 import com.gecesablon.app.data.repository.AuthRepository
 import com.gecesablon.app.data.repository.FakeAuthRepository
+import com.gecesablon.app.data.repository.FakeOrderRepository
 import com.gecesablon.app.data.repository.FakeProductRepository
+import com.gecesablon.app.data.repository.OrderRepository
 import com.gecesablon.app.data.repository.ProductRepository
 
 /**
@@ -31,5 +33,13 @@ class AppContainer(private val context: Context) {
      */
     val productRepository: ProductRepository by lazy {
         FakeProductRepository()
+    }
+
+    /**
+     * Repository pesanan.
+     * TODO: ganti ke Retrofit di Tahap 8
+     */
+    val orderRepository: OrderRepository by lazy {
+        FakeOrderRepository()
     }
 }

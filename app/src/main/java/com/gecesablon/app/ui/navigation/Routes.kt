@@ -31,6 +31,13 @@ object Routes {
     const val CUSTOMER_PROFILE = "customer_profile"
     const val CUSTOMER_PRODUCT_DETAIL = "product_detail/{productId}"
 
+    // Alur Pemesanan Pelanggan (Tahap 4B)
+    const val ORDER_FLOW_GRAPH = "order_flow/{productId}"
+    const val ORDER_FORM = "order_form"
+    const val ORDER_CONFIRM = "order_confirm"
+    const val ORDER_SUCCESS = "order_success/{orderId}"
+    const val ORDER_DETAIL = "order_detail/{orderId}"
+
     // Admin Workshop
     const val ADMIN_ROOT = "admin_root"
     const val ADMIN_HOME = "admin_home"
@@ -48,6 +55,11 @@ object Routes {
 
     // Helper: bangun rute Detail Produk
     fun productDetailRoute(productId: String): String = "product_detail/$productId"
+
+    // Helper: alur pemesanan
+    fun orderFlowRoute(productId: String): String = "order_flow/$productId"
+    fun orderSuccessRoute(orderId: String): String = "order_success/$orderId"
+    fun orderDetailRoute(orderId: String): String = "order_detail/$orderId"
 
     // Helper: bangun rute Login/Register dengan redirect dan productId opsional
     fun loginRoute(redirect: String? = null, productId: String? = null): String =

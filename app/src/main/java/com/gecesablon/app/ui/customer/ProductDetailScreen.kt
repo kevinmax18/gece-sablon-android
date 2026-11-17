@@ -101,13 +101,13 @@ fun ProductDetailScreen(
     onNavigateBack: () -> Unit,
     onProfileClick: () -> Unit,
     onRequireLogin: (productId: String) -> Unit,
+    onNavigateToOrderFlow: (productId: String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
-    val comingSoonMsg = stringResource(R.string.detail_product_order_coming_soon)
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -214,9 +214,7 @@ fun ProductDetailScreen(
                                 if (isGuest) {
                                     onRequireLogin(product.id)
                                 } else {
-                                    coroutineScope.launch {
-                                        snackbarHostState.showSnackbar(comingSoonMsg)
-                                    }
+                                    onNavigateToOrderFlow(product.id)
                                 }
                             },
                             shape = ShapeControl,

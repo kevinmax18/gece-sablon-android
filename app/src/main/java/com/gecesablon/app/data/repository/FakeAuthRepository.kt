@@ -19,6 +19,7 @@ class FakeAuthRepository : AuthRepository {
     // TODO: Hapus di Tahap 8 saat integrasi API.
     // ---------------------------------------------------------------------------
     private data class FakeAccount(
+        val id: String,
         val name: String,
         val email: String,
         val phone: String,
@@ -28,6 +29,7 @@ class FakeAuthRepository : AuthRepository {
 
     private val accounts: MutableList<FakeAccount> = mutableListOf(
         FakeAccount(
+            id = "user-cust-001",
             name = "Pelanggan Demo",
             email = "pelanggan@gece.test",
             phone = "081234567890",
@@ -35,6 +37,7 @@ class FakeAuthRepository : AuthRepository {
             role = Role.CUSTOMER
         ),
         FakeAccount(
+            id = "user-admin-001",
             name = "Admin Workshop",
             email = "admin@gece.test",
             phone = "082000000001",
@@ -42,6 +45,7 @@ class FakeAuthRepository : AuthRepository {
             role = Role.ADMIN
         ),
         FakeAccount(
+            id = "user-owner-001",
             name = "Owner GeCe",
             email = "owner@gece.test",
             phone = "082000000002",
@@ -71,7 +75,8 @@ class FakeAuthRepository : AuthRepository {
             Session(
                 token = UUID.randomUUID().toString(),
                 role = account.role,
-                name = account.name
+                name = account.name,
+                userId = account.id
             )
         )
     }
@@ -96,6 +101,7 @@ class FakeAuthRepository : AuthRepository {
 
         // Tambahkan akun baru — role SELALU CUSTOMER, tidak menerima role dari UI
         val newAccount = FakeAccount(
+            id = "user-cust-${UUID.randomUUID().toString().take(8)}",
             name = name.trim(),
             email = email.trim().lowercase(),
             phone = phone.trim(),
@@ -108,7 +114,8 @@ class FakeAuthRepository : AuthRepository {
             Session(
                 token = UUID.randomUUID().toString(),
                 role = Role.CUSTOMER,
-                name = newAccount.name
+                name = newAccount.name,
+                userId = newAccount.id
             )
         )
     }

@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
     <string name="app_name">GeCe Sablon</string>
 
     <!-- Tombol & Aksi -->
@@ -59,8 +59,8 @@
     <string name="splash_brand_title">GeCe</string>
     <string name="splash_studio_pill">SCREEN PRINTING</string>
     <string name="splash_tagline">Spesialis Sablon DTF &amp; Kaos Custom Berkualitas</string>
-    <string name="splash_loading">Menyiapkan Bengkel Sablon…</string>
-    <string name="splash_footer">v%1$s • GeCe Studio Platform</string>
+    <string name="splash_loading">Menyiapkan Bengkel Sablonâ€¦</string>
+    <string name="splash_footer">v%1$s â€¢ GeCe Studio Platform</string>
 
     <!-- Onboarding Screen -->
     <string name="onboarding_studio_badge">GECE STUDIO</string>
@@ -107,9 +107,9 @@
     <string name="onboarding_feat_desc_3_2">Setiap hasil cetak dicek sebelum diserahkan kepada pelanggan.</string>
 
     <!-- Welcome Screen -->
-    <string name="welcome_badge_title">GeCe • SCREEN PRINTING</string>
+    <string name="welcome_badge_title">GeCe â€¢ SCREEN PRINTING</string>
     <string name="welcome_studio_spec">Studio Spec</string>
-    <string name="welcome_high_precision">HIGH PRECISION • SABLON DTF</string>
+    <string name="welcome_high_precision">HIGH PRECISION â€¢ SABLON DTF</string>
     <string name="welcome_title">Sablon DTF Kaos &amp; Baju Polo</string>
     <string name="welcome_subtitle">Spesialis cetak sablon DTF presisi untuk Kaos Custom, Kaos Oversize, dan Baju Polo premium.</string>
     <string name="welcome_chip_1">Kaos &amp; Polo Premium</string>
@@ -118,7 +118,7 @@
     <string name="welcome_btn_login">Masuk</string>
     <string name="welcome_btn_register">Daftar</string>
     <string name="welcome_btn_guest">Jelajahi sebagai Tamu</string>
-    <string name="welcome_footer">v%1$s • GeCe Screen Printing Studio</string>
+    <string name="welcome_footer">v%1$s â€¢ GeCe Screen Printing Studio</string>
     <string name="welcome_about_link">Tentang Aplikasi</string>
 
     <!-- Header Beranda (Home) -->
@@ -173,7 +173,7 @@
     <string name="profile_role_owner">Owner GeCe Studio</string>
     <string name="profile_label_phone">Nomor HP / WhatsApp</string>
     <string name="profile_label_email">Email</string>
-    <string name="profile_placeholder_contact">—</string>
+    <string name="profile_placeholder_contact">â€”</string>
     <string name="menu_about_app">Tentang Aplikasi</string>
     <string name="menu_logout">Keluar</string>
     <string name="profile_logout_dialog_title">Konfirmasi Keluar</string>
@@ -224,7 +224,7 @@
     <string name="home_badge_specialist">SPESIALIS SABLON DTF KAOS &amp; BAJU POLO PRESISI</string>
     <string name="home_welcome_title">Selamat Datang di GeCe</string>
     <string name="home_welcome_subtitle">Wujudkan Kaos &amp; Baju Polo kustom berkualitas dengan cetak DTF presisi tanpa minimal order.</string>
-    <string name="home_banner_badge">★ SPESIALIS DTF PREMIUM</string>
+    <string name="home_banner_badge">â˜… SPESIALIS DTF PREMIUM</string>
     <string name="home_banner_title">Sablon DTF Kaos\n&amp; Polo</string>
     <string name="home_banner_subtitle">Presisi tinggi, warna tajam, langsung pesan sekarang.</string>
     <string name="home_banner_btn">Pesan Sekarang</string>
@@ -244,15 +244,15 @@
     <!-- Katalog Produk -->
     <string name="catalog_badge">KATALOG RESMI</string>
     <string name="catalog_title">Katalog Produk</string>
-    <string name="catalog_subtitle">Cetak DTF Presisi Tinggi • Tinta Premium • Mulai 1 Pcs</string>
+    <string name="catalog_subtitle">Cetak DTF Presisi Tinggi â€¢ Tinta Premium â€¢ Mulai 1 Pcs</string>
     <string name="catalog_search_placeholder">Cari produk sablon...</string>
     <string name="catalog_filter_desc">Filter kategori</string>
     <string name="catalog_custom_spec_badge">BESPOKE TEXTILE STUDIO</string>
     <string name="catalog_custom_spec_title">Punya Spek Custom\nSendiri?</string>
     <string name="catalog_custom_spec_desc">Konsultasikan kebutuhan cetak DTF khusus kaos dan baju polo Anda. Master printer GeCe siap bantu setting resolusi desain, color management, dan tes print presisi.</string>
     <string name="catalog_custom_spec_btn">Diskusi via WhatsApp</string>
-    <string name="catalog_badge_mockup">✓ Free Mockup</string>
-    <string name="catalog_badge_guarantee">✓ Garansi Sablon Presisi</string>
+    <string name="catalog_badge_mockup">âœ“ Free Mockup</string>
+    <string name="catalog_badge_guarantee">âœ“ Garansi Sablon Presisi</string>
     <string name="catalog_empty_title">Produk Tidak Ditemukan</string>
     <string name="catalog_empty_desc">Tidak ada produk sablon yang sesuai dengan kata kunci atau filter yang Anda pilih.</string>
 
@@ -260,7 +260,7 @@
     <string name="detail_product_title">Detail Produk</string>
     <string name="detail_product_badge_dtf">CETAK DTF PRESISI</string>
     <string name="detail_product_tag_exclusive">Eksklusif Cetak DTF</string>
-    <string name="detail_product_meta">4.9 (120+ Ulasan) • Tanpa Minimal Order</string>
+    <string name="detail_product_meta">4.9 (120+ Ulasan) â€¢ Tanpa Minimal Order</string>
     <string name="detail_product_fabric_title">Pilihan Bahan</string>
     <string name="detail_product_fabric_desc">Tentukan ketebalan katun sesuai kebutuhan</string>
     <string name="detail_product_fabric_sub">Bahan standar distro, sejuk dan nyaman dipakai</string>
@@ -279,4 +279,102 @@
     <!-- Pesan WhatsApp Default -->
     <string name="whatsapp_msg_consultation">Halo GeCe Sablon, saya ingin berkonsultasi mengenai pemesanan sablon DTF.</string>
     <string name="whatsapp_msg_product">Halo GeCe Sablon, saya tertarik dengan produk %1$s. Mohon info lebih lanjut.</string>
+    <string name="whatsapp_msg_order_status">Halo GeCe Sablon, saya ingin menanyakan status pesanan %1$s.</string>
+
+    <!-- ========================================================================= -->
+    <!-- FITUR PEMESANAN PELANGGAN (TAHAP 4B) -->
+    <!-- ========================================================================= -->
+
+    <!-- Tab Pesan (Order List) -->
+    <string name="order_tab_all">Semua</string>
+    <string name="order_tab_active">Aktif</string>
+    <string name="order_tab_completed">Selesai</string>
+    <string name="order_btn_create_new">Buat Pesanan Baru</string>
+    <string name="order_empty_all_title">Belum Ada Pesanan</string>
+    <string name="order_empty_all_desc">Anda belum pernah membuat pesanan sablon. Mulai pesan kaos atau polo custom sekarang!</string>
+    <string name="order_empty_active_title">Tidak Ada Pesanan Aktif</string>
+    <string name="order_empty_active_desc">Semua pesanan Anda telah selesai diproduksi atau dibatalkan.</string>
+    <string name="order_empty_completed_title">Belum Ada Pesanan Selesai</string>
+    <string name="order_empty_completed_desc">Pesanan yang telah selesai atau dibatalkan akan tercatat di sini.</string>
+
+    <!-- Formulir Pemesanan (Order Form) -->
+    <string name="order_form_title">Formulir Pemesanan</string>
+    <string name="order_form_summary_badge">Ringkasan Produk</string>
+    <string name="order_form_spec_title">Detail Spesifikasi Sablon</string>
+    <string name="order_form_spec_tech_label">Teknik Sablon</string>
+    <string name="order_form_spec_tech_value">Teknik Cetak: DTF (Direct to Film) Presisi</string>
+    <string name="order_form_spec_tech_desc">Warna raster multi-gradasi presisi tinggi, tahan cuci, standar apparel modern</string>
+    <string name="order_form_spec_auto">Otomatis</string>
+    <string name="order_form_upload_title">Unggah Desain / Mockup</string>
+    <string name="order_form_upload_max_size">Maks. 10 MB</string>
+    <string name="order_form_upload_drag_title">Pilih file mockup atau artwork</string>
+    <string name="order_form_upload_formats">Format didukung: PNG, JPG, WEBP</string>
+    <string name="order_form_btn_upload">Unggah Desain</string>
+    <string name="order_form_btn_change_file">Ganti File</string>
+    <string name="order_form_btn_delete_file">Hapus</string>
+    <string name="order_form_uploaded_success">File desain berhasil dipilih</string>
+    <string name="order_form_notes_title">Catatan Tambahan Produksi</string>
+    <string name="order_form_notes_placeholder">Tulis catatan pesanan... (contoh: Posisi sablon dada kiri A6 &amp; punggung belakang A3, tinta doff matte pekat).</string>
+    <string name="order_form_notes_char_counter">%1$d / 500</string>
+    <string name="order_form_cost_title">Estimasi Biaya</string>
+    <string name="order_form_cost_subtotal_label">Subtotal Produk (%1$d pcs Ã— %2$s)</string>
+    <string name="order_form_cost_free_proof">Proofing Sample Digital</string>
+    <string name="order_form_cost_free_label">Gratis</string>
+    <string name="order_form_cost_total_label">Total Estimasi</string>
+    <string name="order_form_cost_disclaimer">Belum termasuk ongkos kirim (jika ada). Total disesuaikan dengan variasi dan spesifikasi.</string>
+    <string name="order_form_guarantee_title">Jaminan Presisi GeCe</string>
+    <string name="order_form_guarantee_desc">Jaminan cetak DTF presisi tinggi dengan transfer film premium &amp; heat press oven garmen.</string>
+    <string name="order_form_btn_continue">Lanjut ke Konfirmasi</string>
+
+    <!-- Validasi Formulir -->
+    <string name="order_error_color_required">Pilih varian warna produk.</string>
+    <string name="order_error_size_required">Pilih ukuran produk.</string>
+    <string name="order_error_quantity_invalid">Jumlah pesanan harus antara 1 sampai 999 pcs.</string>
+    <string name="order_error_design_or_note_required">Wajib mengunggah file desain ATAU mengisi catatan posisi sablon.</string>
+    <string name="order_error_file_size_exceeded">Ukuran file terlalu besar (maksimal 10 MB).</string>
+    <string name="order_error_file_not_image">Format file tidak valid. Pilih file gambar (JPG, PNG, atau WEBP).</string>
+
+    <!-- Review & Konfirmasi (Order Confirm) -->
+    <string name="order_confirm_step">LANGKAH 2 DARI 2</string>
+    <string name="order_confirm_step_title">Review &amp; Konfirmasi</string>
+    <string name="order_confirm_badge_check">Cek Detail</string>
+    <string name="order_confirm_banner_title">Validasi Akhir Produksi</string>
+    <string name="order_confirm_banner_desc">Mohon periksa kembali detail pesanan Anda sebelum dikirim ke tim produksi GeCe untuk approval mock-up final.</string>
+    <string name="order_confirm_product_section">Ringkasan Produk Apparel</string>
+    <string name="order_confirm_design_section">Berkas Desain &amp; Mockup</string>
+    <string name="order_confirm_design_ready">File desain siap diproses</string>
+    <string name="order_confirm_design_none">Tidak ada file desain terlampir (hanya instruksi catatan)</string>
+    <string name="order_confirm_notes_section">Catatan Khusus Sablon</string>
+    <string name="order_confirm_notes_empty">Tidak ada catatan tambahan</string>
+    <string name="order_confirm_btn_edit">Ubah</string>
+    <string name="order_confirm_btn_submit">Konfirmasi &amp; Kirim Pesanan</string>
+    <string name="order_confirm_submitting">Mengirim pesananâ€¦</string>
+
+    <!-- Pesanan Berhasil (Order Success) -->
+    <string name="order_success_title">Pesanan Berhasil!</string>
+    <string name="order_success_desc">Terima kasih telah memesan di GeCe. Pesanan Anda telah tersimpan dan segera diperiksa oleh tim kami.</string>
+    <string name="order_success_code_label">NOMOR PESANAN</string>
+    <string name="order_success_btn_copy">Salin</string>
+    <string name="order_success_code_copied">Nomor pesanan berhasil disalin</string>
+    <string name="order_success_status_label">STATUS PEMESANAN</string>
+    <string name="order_success_time_label">WAKTU SUBMIT</string>
+    <string name="order_success_next_steps_title">Langkah Selanjutnya</string>
+    <string name="order_success_next_steps_desc">Tim GeCe akan memeriksa detail spesifikasi dan mengonfirmasi pesanan Anda melalui WhatsApp untuk validasi layout cetak.</string>
+    <string name="order_success_btn_see_detail">Lihat Status Pesanan</string>
+    <string name="order_success_btn_home">Kembali ke Beranda</string>
+
+    <!-- Detail Pesanan Pelanggan (Order Detail) -->
+    <string name="order_detail_title">Detail Pesanan</string>
+    <string name="order_detail_badge">Ringkasan</string>
+    <string name="order_detail_code_label">NOMOR PESANAN</string>
+    <string name="order_detail_timeline_title">Linimasa Progres Pesanan</string>
+    <string name="order_detail_product_section">Detail Produk</string>
+    <string name="order_detail_cost_section">Rincian Estimasi Biaya</string>
+    <string name="order_detail_btn_cancel">Batalkan Pesanan</string>
+    <string name="order_detail_cancel_dialog_title">Batalkan Pesanan?</string>
+    <string name="order_detail_cancel_dialog_desc">Apakah Anda yakin ingin membatalkan pesanan %1$s? Aksi ini tidak dapat diurungkan.</string>
+    <string name="order_detail_cancel_dialog_confirm">Ya, Batalkan</string>
+    <string name="order_detail_cancel_dialog_dismiss">Kembali</string>
+    <string name="order_detail_cancel_success">Pesanan berhasil dibatalkan.</string>
+    <string name="order_detail_whatsapp_btn">Hubungi Admin via WhatsApp</string>
 </resources>

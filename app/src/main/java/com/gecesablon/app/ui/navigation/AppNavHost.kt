@@ -339,10 +339,12 @@ fun AppNavHost(
             }
 
             // 6. NavGraph masing-masing peran
+            val currentUserId = currentSession?.userId ?: ""
             customerNavGraph(
                 appContainer = appContainer,
                 navController = navController,
                 isGuest = isGuest,
+                currentUserId = currentUserId,
                 accountViewModel = accountViewModel,
                 onNavigateToLogin = { redirect, productId ->
                     navController.navigate(Routes.loginRoute(redirect, productId))

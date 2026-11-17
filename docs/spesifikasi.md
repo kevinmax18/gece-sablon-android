@@ -89,8 +89,8 @@ Pemetaan tahapan internal ke status pelanggan:
 
 ## Aturan pemesanan (Tahap 4)
 - Satu pesanan = satu produk. Model data mendukung banyak item, tetapi UI hanya membuat satu item.
-- Harga satuan = harga dasar + tambahan ukuran + jumlah tambahan semua area cetak yang dipilih (jika ada di Figma).
-  Total = harga satuan x jumlah. Jumlah 1-999, tanpa minimum order.
+- Harga satuan = harga dasar produk + tambahan harga ukuran. Total = harga satuan x jumlah.
+  Jumlah 1-999, tanpa minimum order. Posisi dan ukuran sablon ditulis pelanggan di catatan (tidak ada pilihan area cetak).
   Rumus hanya ada di core/util/PriceCalculator.kt (fungsi murni), tidak boleh di UI.
 - Wajib diisi: warna, ukuran, jumlah, dan minimal salah satu dari file desain atau catatan.
   Desain: gambar jpg/png/webp, maksimal 10 MB. Catatan maksimal 500 karakter.

@@ -5,12 +5,14 @@ package com.gecesablon.app.data.model
  * Disimpan di SessionStore; hanya berisi data yang diperlukan navigasi dan UI.
  * Email dan nomor HP tidak disimpan di sini (akan diambil dari API saat Tahap 8).
  *
- * @param token  Token autentikasi (string acak di Tahap 3; Bearer token di Tahap 8)
- * @param role   Peran pengguna, selalu berasal dari server / repository
- * @param name   Nama tampilan pengguna
+ * @param token   Token autentikasi (string acak di Tahap 3; Bearer token di Tahap 8)
+ * @param role    Peran pengguna, selalu berasal dari server / repository
+ * @param name    Nama tampilan pengguna
+ * @param userId  ID pengguna (di API asli diambil dari token/profil)
  */
 data class Session(
     val token: String,
     val role: Role,
-    val name: String
+    val name: String,
+    val userId: String = ""
 )
