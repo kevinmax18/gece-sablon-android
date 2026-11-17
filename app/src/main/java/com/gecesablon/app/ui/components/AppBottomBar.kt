@@ -9,10 +9,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalanceWallet
@@ -38,8 +41,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.gecesablon.app.R
 import com.gecesablon.app.ui.theme.GeceColors
 import com.gecesablon.app.ui.theme.GeceSablonTheme
@@ -71,7 +76,11 @@ fun AppBottomBar(
         modifier = modifier.fillMaxWidth(),
         color = GeceColors.Background
     ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .windowInsetsPadding(WindowInsets.navigationBars)
+        ) {
             HorizontalDivider(
                 thickness = 1.dp,
                 color = MaterialTheme.colorScheme.outline
@@ -80,8 +89,8 @@ fun AppBottomBar(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(68.dp)
-                    .padding(horizontal = 8.dp, vertical = 6.dp),
+                    .height(54.dp)
+                    .padding(horizontal = 4.dp, vertical = 2.dp),
                 horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -103,11 +112,11 @@ fun AppBottomBar(
                         // Wadah Ikon dengan aksen kuning saat aktif
                         Box(
                             modifier = Modifier
-                                .clip(RoundedCornerShape(12.dp))
+                                .clip(RoundedCornerShape(10.dp))
                                 .background(
                                     if (isSelected) GeceColors.Accent else Color.Transparent
                                 )
-                                .padding(horizontal = 16.dp, vertical = 4.dp),
+                                .padding(horizontal = 12.dp, vertical = 2.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             BadgedBox(
@@ -130,7 +139,7 @@ fun AppBottomBar(
                                     } else {
                                         MaterialTheme.colorScheme.onSurfaceVariant
                                     },
-                                    modifier = Modifier.size(22.dp)
+                                    modifier = Modifier.size(20.dp)
                                 )
                             }
                         }
@@ -140,11 +149,10 @@ fun AppBottomBar(
                         // Label teks navigasi
                         Text(
                             text = stringResource(item.labelResId),
-                            style = if (isSelected) {
-                                MaterialTheme.typography.labelSmall
-                            } else {
-                                MaterialTheme.typography.bodySmall
-                            },
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontSize = 10.sp,
+                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                            ),
                             color = if (isSelected) {
                                 MaterialTheme.colorScheme.onBackground
                             } else {

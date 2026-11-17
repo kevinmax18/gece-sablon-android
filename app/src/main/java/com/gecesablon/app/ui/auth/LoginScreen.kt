@@ -79,9 +79,9 @@ import com.gecesablon.app.ui.theme.GeceColors
 fun LoginScreen(
     viewModel: LoginViewModel,
     onNavigateBack: () -> Unit,
-    onNavigateToRegister: (redirect: String?) -> Unit,
+    onNavigateToRegister: (redirect: String?, productId: String?) -> Unit,
     onExploreAsGuest: () -> Unit,
-    onLoginSuccess: (session: Session, redirect: String?) -> Unit,
+    onLoginSuccess: (session: Session, redirect: String?, productId: String?) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -93,7 +93,7 @@ fun LoginScreen(
     LaunchedEffect(uiState.loginSuccess) {
         val session = uiState.loginSuccess ?: return@LaunchedEffect
         viewModel.onNavigated()
-        onLoginSuccess(session, uiState.redirect)
+        onLoginSuccess(session, uiState.redirect, uiState.productId)
     }
 
     Scaffold(
@@ -340,7 +340,9 @@ fun LoginScreen(
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .clip(RoundedCornerShape(4.dp))
-                        .clickable { onNavigateToRegister(viewModel.currentRedirect()) }
+                        .clickable {
+                            onNavigateToRegister(viewModel.currentRedirect(), viewModel.currentProductId())
+                        }
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
                     Text(

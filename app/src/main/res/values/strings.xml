@@ -204,4 +204,79 @@
     <string name="about_workshop_info_title">Informasi Workshop</string>
     <string name="about_workshop_wa_label">WhatsApp Workshop</string>
     <string name="about_whatsapp_not_found">Aplikasi WhatsApp tidak ditemukan di perangkat ini.</string>
+
+    <!-- Kategori Produk -->
+    <string name="category_all">Semua</string>
+    <string name="category_kaos_custom">Kaos Custom</string>
+    <string name="category_kaos_oversize">Kaos Oversize</string>
+    <string name="category_baju_polo">Baju Polo</string>
+
+    <!-- Kontak Workshop -->
+    <string name="contact_workshop_name">GeCe Screen Printing</string>
+    <string name="contact_studio_pill">STUDIO &amp; WORKSHOP</string>
+    <string name="contact_workshop_address_label">Alamat Workshop</string>
+    <string name="contact_workshop_address">[Alamat workshop GeCe]</string>
+    <string name="contact_workshop_hours_label">Jam Operasional</string>
+    <string name="contact_workshop_hours">[Jam operasional]</string>
+    <string name="contact_whatsapp_btn">Hubungi via WhatsApp</string>
+
+    <!-- Beranda Pelanggan -->
+    <string name="home_badge_specialist">SPESIALIS SABLON DTF KAOS &amp; BAJU POLO PRESISI</string>
+    <string name="home_welcome_title">Selamat Datang di GeCe</string>
+    <string name="home_welcome_subtitle">Wujudkan Kaos &amp; Baju Polo kustom berkualitas dengan cetak DTF presisi tanpa minimal order.</string>
+    <string name="home_banner_badge">★ SPESIALIS DTF PREMIUM</string>
+    <string name="home_banner_title">Sablon DTF Kaos\n&amp; Polo</string>
+    <string name="home_banner_subtitle">Presisi tinggi, warna tajam, langsung pesan sekarang.</string>
+    <string name="home_banner_btn">Pesan Sekarang</string>
+    <string name="home_banner_tag">DTF POLO</string>
+    <string name="home_category_title">Kategori Produk</string>
+    <string name="home_category_subtitle">Fokus Kaos &amp; Baju Polo Sablon DTF Presisi.</string>
+    <string name="home_category_kaos_custom_desc">Cotton Combed, DTF</string>
+    <string name="home_category_kaos_oversize_desc">Heavyweight, DTF</string>
+    <string name="home_category_baju_polo_desc">Lacoste CVC, DTF</string>
+    <string name="home_portfolio_title">Portofolio Kami</string>
+    <string name="home_portfolio_subtitle">Hasil nyata sablon DTF presisi Kaos &amp; Baju Polo.</string>
+    <string name="home_see_all">Lihat Semua</string>
+    <string name="home_consultation_title">Konsultasi Gratis</string>
+    <string name="home_consultation_subtitle">Bahas ide &amp; kalkulasi bahan</string>
+    <string name="home_consultation_btn">Tanya CS</string>
+
+    <!-- Katalog Produk -->
+    <string name="catalog_badge">KATALOG RESMI</string>
+    <string name="catalog_title">Katalog Produk</string>
+    <string name="catalog_subtitle">Cetak DTF Presisi Tinggi • Tinta Premium • Mulai 1 Pcs</string>
+    <string name="catalog_search_placeholder">Cari produk sablon...</string>
+    <string name="catalog_filter_desc">Filter kategori</string>
+    <string name="catalog_custom_spec_badge">BESPOKE TEXTILE STUDIO</string>
+    <string name="catalog_custom_spec_title">Punya Spek Custom\nSendiri?</string>
+    <string name="catalog_custom_spec_desc">Konsultasikan kebutuhan cetak DTF khusus kaos dan baju polo Anda. Master printer GeCe siap bantu setting resolusi desain, color management, dan tes print presisi.</string>
+    <string name="catalog_custom_spec_btn">Diskusi via WhatsApp</string>
+    <string name="catalog_badge_mockup">✓ Free Mockup</string>
+    <string name="catalog_badge_guarantee">✓ Garansi Sablon Presisi</string>
+    <string name="catalog_empty_title">Produk Tidak Ditemukan</string>
+    <string name="catalog_empty_desc">Tidak ada produk sablon yang sesuai dengan kata kunci atau filter yang Anda pilih.</string>
+
+    <!-- Detail Produk -->
+    <string name="detail_product_title">Detail Produk</string>
+    <string name="detail_product_badge_dtf">CETAK DTF PRESISI</string>
+    <string name="detail_product_tag_exclusive">Eksklusif Cetak DTF</string>
+    <string name="detail_product_meta">4.9 (120+ Ulasan) • Tanpa Minimal Order</string>
+    <string name="detail_product_fabric_title">Pilihan Bahan</string>
+    <string name="detail_product_fabric_desc">Tentukan ketebalan katun sesuai kebutuhan</string>
+    <string name="detail_product_fabric_sub">Bahan standar distro, sejuk dan nyaman dipakai</string>
+    <string name="detail_product_color_title">Pilihan Warna: %1$s</string>
+    <string name="detail_product_color_count">%1$d Opsi Warna</string>
+    <string name="detail_product_size_title">Pilihan Ukuran</string>
+    <string name="detail_product_size_guide">Panduan Ukuran</string>
+    <string name="detail_product_spec_dtf_title">Teknik Cetak: DTF (Direct to Film) Presisi</string>
+    <string name="detail_product_spec_dtf_desc">Semua pesanan dicetak menggunakan teknologi DTF kualitas tinggi, tahan retak, dan warna bergradasi tajam.</string>
+    <string name="detail_product_spec_mockup_title">Gratis Mockup &amp; Setting File</string>
+    <string name="detail_product_spec_mockup_desc">Bebas biaya persiapan cetak dan konsultasi desain untuk setiap pemesanan.</string>
+    <string name="detail_product_price_note">*Tergantung jumlah &amp; variasi ukuran</string>
+    <string name="detail_product_per_pcs">/pcs</string>
+    <string name="detail_product_order_coming_soon">Formulir pemesanan akan segera hadir pada Tahap 4B!</string>
+
+    <!-- Pesan WhatsApp Default -->
+    <string name="whatsapp_msg_consultation">Halo GeCe Sablon, saya ingin berkonsultasi mengenai pemesanan sablon DTF.</string>
+    <string name="whatsapp_msg_product">Halo GeCe Sablon, saya tertarik dengan produk %1$s. Mohon info lebih lanjut.</string>
 </resources>

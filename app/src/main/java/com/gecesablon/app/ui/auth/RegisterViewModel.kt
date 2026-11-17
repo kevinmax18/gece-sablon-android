@@ -41,7 +41,8 @@ data class RegisterUiState(
 
     val globalError: String? = null,
     val registerSuccess: Session? = null,
-    val redirect: String? = null
+    val redirect: String? = null,
+    val productId: String? = null
 )
 
 /**
@@ -60,7 +61,8 @@ class RegisterViewModel(
     init {
         val raw = savedStateHandle.get<String>("redirect")
         val safeRedirect = if (raw != null && raw in Routes.VALID_REDIRECTS) raw else null
-        _uiState.update { it.copy(redirect = safeRedirect) }
+        val rawProductId = savedStateHandle.get<String>("productId")
+        _uiState.update { it.copy(redirect = safeRedirect, productId = rawProductId) }
     }
 
     fun onNameChange(value: String) = _uiState.update { it.copy(name = value, nameError = null) }
@@ -123,6 +125,8 @@ class RegisterViewModel(
     }
 
     fun currentRedirect(): String? = _uiState.value.redirect
+
+    fun currentProductId(): String? = _uiState.value.productId
 
     // ---------------------------------------------------------------------------
     // Validasi

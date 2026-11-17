@@ -81,8 +81,8 @@ import androidx.compose.ui.text.withStyle
 fun RegisterScreen(
     viewModel: RegisterViewModel,
     onNavigateBack: () -> Unit,
-    onNavigateToLogin: (redirect: String?) -> Unit,
-    onRegisterSuccess: (session: Session, redirect: String?) -> Unit,
+    onNavigateToLogin: (redirect: String?, productId: String?) -> Unit,
+    onRegisterSuccess: (session: Session, redirect: String?, productId: String?) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -93,7 +93,7 @@ fun RegisterScreen(
     LaunchedEffect(uiState.registerSuccess) {
         val session = uiState.registerSuccess ?: return@LaunchedEffect
         viewModel.onNavigated()
-        onRegisterSuccess(session, uiState.redirect)
+        onRegisterSuccess(session, uiState.redirect, uiState.productId)
     }
 
     // Dialog Syarat & Ketentuan / Kebijakan Privasi (sementara)
@@ -367,7 +367,9 @@ fun RegisterScreen(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .clip(RoundedCornerShape(4.dp))
-                    .clickable { onNavigateToLogin(viewModel.currentRedirect()) }
+                    .clickable {
+                        onNavigateToLogin(viewModel.currentRedirect(), viewModel.currentProductId())
+                    }
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             ) {
                 Text(

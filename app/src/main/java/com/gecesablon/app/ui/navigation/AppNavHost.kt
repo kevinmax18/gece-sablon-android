@@ -5,6 +5,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -15,6 +16,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.gecesablon.app.core.di.AppContainer
+import com.gecesablon.app.core.util.Resource
 import com.gecesablon.app.data.model.Role
 import com.gecesablon.app.data.model.Session
 import com.gecesablon.app.ui.about.AboutScreen
@@ -27,6 +29,7 @@ import com.gecesablon.app.ui.components.AppBottomBar
 import com.gecesablon.app.ui.onboarding.OnboardingScreen
 import com.gecesablon.app.ui.splash.SplashScreen
 import com.gecesablon.app.ui.welcome.WelcomeScreen
+import kotlinx.coroutines.launch
 
 /**
  * Host navigasi utama aplikasi yang mengatur navigasi berbasis autentikasi,
@@ -44,6 +47,7 @@ fun AppNavHost(
     // Pantau sesi saat ini untuk menentukan apakah pengguna dalam mode tamu
     val currentSession by appContainer.sessionStore.session.collectAsState(initial = null)
     val isGuest = currentSession == null
+    val coroutineScope = rememberCoroutineScope()
 
     // ViewModel bersama untuk pengelolaan profil/akun dan logout
     val accountViewModel: AccountViewModel = viewModel(
@@ -70,15 +74,31 @@ fun AppNavHost(
 
     /**
      * Menangani navigasi setelah login atau register berhasil:
-     * - Role CUSTOMER: jika ada redirect "order", kembali ke tab Pesan di CustomerNavGraph.
-     *   Jika tidak, masuk CustomerNavGraph dari awal (bersihkan Welcome).
+     * - Role CUSTOMER:
+     *   - jika redirect "product" dan productId valid di repository -> kembali ke Detail Produk.
+     *   - jika ada redirect "order", kembali ke tab Pesan di CustomerNavGraph.
+     *   - jika tidak, masuk CustomerNavGraph dari awal (bersihkan Welcome).
      * - Role ADMIN / OWNER: abaikan redirect dan bersihkan seluruh back stack.
      */
-    fun handleAuthSuccess(session: Session, redirect: String?) {
+    fun handleAuthSuccess(session: Session, redirect: String?, productId: String?) {
         val safeRedirect = if (redirect != null && redirect in Routes.VALID_REDIRECTS) redirect else null
         when (session.role) {
             Role.CUSTOMER -> {
-                if (safeRedirect == "order") {
+                if (safeRedirect == "product" && !productId.isNullOrBlank()) {
+                    coroutineScope.launch {
+                        val productResult = appContainer.productRepository.getProductById(productId)
+                        if (productResult is Resource.Success) {
+                            navController.navigate(Routes.productDetailRoute(productId)) {
+                                popUpTo(Routes.WELCOME) { inclusive = true }
+                                launchSingleTop = true
+                            }
+                        } else {
+                            navController.navigate(Routes.CUSTOMER_ROOT) {
+                                popUpTo(Routes.WELCOME) { inclusive = true }
+                            }
+                        }
+                    }
+                } else if (safeRedirect == "order") {
                     navController.navigate(Routes.CUSTOMER_ORDER) {
                         popUpTo(Routes.CUSTOMER_HOME) {
                             inclusive = false
@@ -237,6 +257,11 @@ fun AppNavHost(
                         type = NavType.StringType
                         nullable = true
                         defaultValue = null
+                    },
+                    navArgument("productId") {
+                        type = NavType.StringType
+                        nullable = true
+                        defaultValue = null
                     }
                 )
             ) {
@@ -251,8 +276,8 @@ fun AppNavHost(
                     onNavigateBack = {
                         navController.popBackStack()
                     },
-                    onNavigateToRegister = { redirect ->
-                        navController.navigate(Routes.registerRoute(redirect)) {
+                    onNavigateToRegister = { redirect, productId ->
+                        navController.navigate(Routes.registerRoute(redirect, productId)) {
                             popUpTo(Routes.LOGIN_WITH_REDIRECT) { inclusive = true }
                         }
                     },
@@ -261,8 +286,8 @@ fun AppNavHost(
                             popUpTo(Routes.WELCOME) { inclusive = true }
                         }
                     },
-                    onLoginSuccess = { session, redirect ->
-                        handleAuthSuccess(session, redirect)
+                    onLoginSuccess = { session, redirect, productId ->
+                        handleAuthSuccess(session, redirect, productId)
                     }
                 )
             }
@@ -271,6 +296,11 @@ fun AppNavHost(
                 route = Routes.REGISTER_WITH_REDIRECT,
                 arguments = listOf(
                     navArgument("redirect") {
+                        type = NavType.StringType
+                        nullable = true
+                        defaultValue = null
+                    },
+                    navArgument("productId") {
                         type = NavType.StringType
                         nullable = true
                         defaultValue = null
@@ -288,13 +318,13 @@ fun AppNavHost(
                     onNavigateBack = {
                         navController.popBackStack()
                     },
-                    onNavigateToLogin = { redirect ->
-                        navController.navigate(Routes.loginRoute(redirect)) {
+                    onNavigateToLogin = { redirect, productId ->
+                        navController.navigate(Routes.loginRoute(redirect, productId)) {
                             popUpTo(Routes.REGISTER_WITH_REDIRECT) { inclusive = true }
                         }
                     },
-                    onRegisterSuccess = { session, redirect ->
-                        handleAuthSuccess(session, redirect)
+                    onRegisterSuccess = { session, redirect, productId ->
+                        handleAuthSuccess(session, redirect, productId)
                     }
                 )
             }
@@ -310,11 +340,12 @@ fun AppNavHost(
 
             // 6. NavGraph masing-masing peran
             customerNavGraph(
+                appContainer = appContainer,
                 navController = navController,
                 isGuest = isGuest,
                 accountViewModel = accountViewModel,
-                onNavigateToLogin = {
-                    navController.navigate(Routes.loginRoute())
+                onNavigateToLogin = { redirect, productId ->
+                    navController.navigate(Routes.loginRoute(redirect, productId))
                 },
                 onNavigateToAbout = handleNavigateToAbout,
                 onLogout = handleLogout

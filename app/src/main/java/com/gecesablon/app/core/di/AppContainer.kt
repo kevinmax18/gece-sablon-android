@@ -4,6 +4,8 @@ import android.content.Context
 import com.gecesablon.app.core.datastore.SessionStore
 import com.gecesablon.app.data.repository.AuthRepository
 import com.gecesablon.app.data.repository.FakeAuthRepository
+import com.gecesablon.app.data.repository.FakeProductRepository
+import com.gecesablon.app.data.repository.ProductRepository
 
 /**
  * AppContainer menyediakan dependency injection manual (service locator) untuk
@@ -21,5 +23,13 @@ class AppContainer(private val context: Context) {
      */
     val authRepository: AuthRepository by lazy {
         FakeAuthRepository()
+    }
+
+    /**
+     * Repository produk.
+     * TODO: ganti ke Retrofit di Tahap 8
+     */
+    val productRepository: ProductRepository by lazy {
+        FakeProductRepository()
     }
 }

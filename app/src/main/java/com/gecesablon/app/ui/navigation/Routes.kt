@@ -4,8 +4,8 @@ package com.gecesablon.app.ui.navigation
  * Mendefinisikan konstanta rute navigasi untuk seluruh layar di aplikasi.
  *
  * Argumen opsional redirect di Login/Register:
- *   "login?redirect={redirect}" atau "register?redirect={redirect}"
- * Nilai redirect yang valid saat ini hanya "order" (tab Pesan pelanggan).
+ *   "login?redirect={redirect}&productId={productId}" atau "register?redirect={redirect}&productId={productId}"
+ * Nilai redirect yang valid saat ini: "order" (tab Pesan pelanggan) dan "product" (kembali ke Detail Produk).
  * Nilai lain diabaikan.
  */
 object Routes {
@@ -14,13 +14,13 @@ object Routes {
     const val ONBOARDING = "onboarding"
     const val WELCOME = "welcome"
     const val LOGIN = "login"
-    const val LOGIN_WITH_REDIRECT = "login?redirect={redirect}"
+    const val LOGIN_WITH_REDIRECT = "login?redirect={redirect}&productId={productId}"
     const val REGISTER = "register"
-    const val REGISTER_WITH_REDIRECT = "register?redirect={redirect}"
+    const val REGISTER_WITH_REDIRECT = "register?redirect={redirect}&productId={productId}"
     const val ABOUT = "about"
 
     /** Daftar nilai redirect yang diizinkan. Nilai lain diabaikan. */
-    val VALID_REDIRECTS = setOf("order")
+    val VALID_REDIRECTS = setOf("order", "product")
 
     // Pelanggan (dan Tamu)
     const val CUSTOMER_ROOT = "customer_root"
@@ -29,6 +29,7 @@ object Routes {
     const val CUSTOMER_ORDER = "customer_order"
     const val CUSTOMER_CONTACT = "customer_contact"
     const val CUSTOMER_PROFILE = "customer_profile"
+    const val CUSTOMER_PRODUCT_DETAIL = "product_detail/{productId}"
 
     // Admin Workshop
     const val ADMIN_ROOT = "admin_root"
@@ -45,10 +46,29 @@ object Routes {
     const val OWNER_FINANCE = "owner_finance"
     const val OWNER_ACCOUNT = "owner_account"
 
-    // Helper: bangun rute Login/Register dengan redirect opsional
-    fun loginRoute(redirect: String? = null): String =
-        if (redirect != null && redirect in VALID_REDIRECTS) "login?redirect=$redirect" else LOGIN
+    // Helper: bangun rute Detail Produk
+    fun productDetailRoute(productId: String): String = "product_detail/$productId"
 
-    fun registerRoute(redirect: String? = null): String =
-        if (redirect != null && redirect in VALID_REDIRECTS) "register?redirect=$redirect" else REGISTER
+    // Helper: bangun rute Login/Register dengan redirect dan productId opsional
+    fun loginRoute(redirect: String? = null, productId: String? = null): String =
+        if (redirect != null && redirect in VALID_REDIRECTS) {
+            if (!productId.isNullOrBlank()) {
+                "login?redirect=$redirect&productId=$productId"
+            } else {
+                "login?redirect=$redirect"
+            }
+        } else {
+            LOGIN
+        }
+
+    fun registerRoute(redirect: String? = null, productId: String? = null): String =
+        if (redirect != null && redirect in VALID_REDIRECTS) {
+            if (!productId.isNullOrBlank()) {
+                "register?redirect=$redirect&productId=$productId"
+            } else {
+                "register?redirect=$redirect"
+            }
+        } else {
+            REGISTER
+        }
 }

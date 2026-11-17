@@ -28,7 +28,8 @@ data class LoginUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val loginSuccess: Session? = null,
-    val redirect: String? = null
+    val redirect: String? = null,
+    val productId: String? = null
 )
 
 /**
@@ -48,7 +49,8 @@ class LoginViewModel(
         // Validasi redirect — hanya nilai dalam VALID_REDIRECTS yang diterima
         val raw = savedStateHandle.get<String>("redirect")
         val safeRedirect = if (raw != null && raw in Routes.VALID_REDIRECTS) raw else null
-        _uiState.update { it.copy(redirect = safeRedirect) }
+        val rawProductId = savedStateHandle.get<String>("productId")
+        _uiState.update { it.copy(redirect = safeRedirect, productId = rawProductId) }
     }
 
     fun onIdentifierChange(value: String) {
@@ -88,6 +90,9 @@ class LoginViewModel(
 
     /** Redirect saat ini — diteruskan ke Register jika pengguna berpindah ke Register. */
     fun currentRedirect(): String? = _uiState.value.redirect
+
+    /** ProductId saat ini — diteruskan ke Register jika pengguna berpindah ke Register. */
+    fun currentProductId(): String? = _uiState.value.productId
 
     companion object {
         fun factory(

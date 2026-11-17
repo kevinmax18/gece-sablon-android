@@ -87,6 +87,18 @@ Pemetaan tahapan internal ke status pelanggan:
 - Integrasi IoT dan AI (opsional dari kampus, tidak diambil).
 - Fitur chat dalam aplikasi (cukup tombol WhatsApp).
 
-## Pertanyaan terbuka (konfirmasi sebelum dikerjakan)
-- Apakah pelanggan bisa membatalkan pesanan? Sampai tahap apa?
-- Format ekspor PDF/XLSX: kolom apa saja yang dimuat?
+## Aturan pemesanan (Tahap 4)
+- Satu pesanan = satu produk. Model data mendukung banyak item, tetapi UI hanya membuat satu item.
+- Harga satuan = harga dasar + tambahan ukuran + jumlah tambahan semua area cetak yang dipilih (jika ada di Figma).
+  Total = harga satuan x jumlah. Jumlah 1-999, tanpa minimum order.
+  Rumus hanya ada di core/util/PriceCalculator.kt (fungsi murni), tidak boleh di UI.
+- Wajib diisi: warna, ukuran, jumlah, dan minimal salah satu dari file desain atau catatan.
+  Desain: gambar jpg/png/webp, maksimal 10 MB. Catatan maksimal 500 karakter.
+- Kode pesanan format GEC-YYYYMMDD-NNN. Status awal DITERIMA.
+- Status: DITERIMA, SEDANG_DIPROSES, CETAK_DTF, PRESSING, SIAP_DIAMBIL, SELESAI, DIBATALKAN.
+  Pelanggan hanya boleh membatalkan saat DITERIMA.
+- Tab Pesan menampilkan daftar pesanan milik pelanggan (filter Semua/Aktif/Selesai) dan tombol Buat Pesanan Baru.
+- Tamu boleh melihat Beranda, Katalog, Detail Produk, Kontak. Tombol Pesan Sekarang untuk tamu membuka Login,
+  lalu kembali ke Detail Produk yang sama.
+- Semua data produk, harga, warna, dan pesanan di fake repository hanyalah data contoh.
+- Tidak boleh ada teks atau UI yang menyatakan pelanggan bisa memesan tanpa login.
