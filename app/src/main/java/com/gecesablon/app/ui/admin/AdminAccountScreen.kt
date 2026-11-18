@@ -39,7 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.gecesablon.app.R
 import com.gecesablon.app.ui.account.AccountViewModel
-import com.gecesablon.app.ui.components.AppTopBar
+import com.gecesablon.app.ui.components.AdminTopBar
 import com.gecesablon.app.ui.theme.GeceColors
 
 /**
@@ -85,7 +85,7 @@ fun AdminAccountScreen(
         modifier = modifier.fillMaxSize(),
         containerColor = GeceColors.Background,
         topBar = {
-            AppTopBar(title = stringResource(R.string.title_admin_account))
+            AdminTopBar(tabName = "Akun")
         }
     ) { innerPadding ->
         Column(

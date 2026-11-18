@@ -42,6 +42,11 @@ import androidx.compose.ui.unit.dp
 import com.gecesablon.app.R
 import com.gecesablon.app.ui.theme.GeceColors
 import com.gecesablon.app.ui.theme.GeceSablonTheme
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import com.gecesablon.app.ui.theme.ShapeBadge
 
 /**
  * Tombol aksi ikon top bar dengan lingkaran 36 dp dan ikon 18-20 dp sesuai Figma.
@@ -74,6 +79,113 @@ fun TopBarActionButton(
             contentDescription = contentDescription,
             tint = iconTint,
             modifier = Modifier.size(18.dp)
+        )
+    }
+}
+
+/**
+ * Top Bar khusus alur Admin Workshop sesuai Figma:
+ * - Logo GeCe di kiri
+ * - Judul "GeCe Sablon" + Subtitle nama tab (Beranda / Pesanan / Proses / Akun)
+ * - Badge kuning role "ADMIN WORKSHOP"
+ * - Tombol Notifikasi & Tombol Profil di kanan
+ */
+@Composable
+fun AdminTopBar(
+    tabName: String,
+    modifier: Modifier = Modifier,
+    roleBadge: String = stringResource(R.string.admin_role_badge),
+    onNotificationClick: () -> Unit = {},
+    onProfileClick: () -> Unit = {}
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(GeceColors.Background)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Logo GeCe
+            Image(
+                painter = painterResource(id = R.drawable.logo_gece),
+                contentDescription = "Logo GeCe",
+                modifier = Modifier
+                    .size(34.dp)
+                    .clip(CircleShape)
+            )
+
+            Spacer(modifier = Modifier.width(10.dp))
+
+            // Brand Title & Tab Name
+            Column {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "GeCe Sablon",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = GeceColors.PrimaryInk,
+                        fontSize = 15.sp
+                    )
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    // Badge Kuning Role
+                    Box(
+                        modifier = Modifier
+                            .clip(ShapeBadge)
+                            .background(GeceColors.Accent)
+                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                    ) {
+                        Text(
+                            text = roleBadge,
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = GeceColors.PrimaryInk,
+                            fontSize = 9.sp
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(1.dp))
+
+                Text(
+                    text = tabName,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = GeceColors.TextMuted,
+                    fontSize = 12.sp
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            // Action: Notifikasi
+            TopBarActionButton(
+                icon = Icons.Default.Notifications,
+                contentDescription = stringResource(R.string.content_desc_notifications),
+                onClick = onNotificationClick,
+                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                iconTint = MaterialTheme.colorScheme.onBackground
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            // Action: Profil Pengguna
+            TopBarActionButton(
+                icon = Icons.Default.Person,
+                contentDescription = stringResource(R.string.content_desc_profile),
+                onClick = onProfileClick,
+                backgroundColor = GeceColors.PrimaryInk,
+                iconTint = GeceColors.Background
+            )
+        }
+
+        HorizontalDivider(
+            thickness = 1.dp,
+            color = GeceColors.Border
         )
     }
 }

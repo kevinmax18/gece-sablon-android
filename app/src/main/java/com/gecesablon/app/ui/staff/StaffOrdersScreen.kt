@@ -41,6 +41,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gecesablon.app.GeceApp
 import com.gecesablon.app.R
 import com.gecesablon.app.core.util.Formatter
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.RoundedCornerShape
+import com.gecesablon.app.ui.components.AdminTopBar
 import com.gecesablon.app.ui.components.EmptyState
 import com.gecesablon.app.ui.components.ErrorView
 import com.gecesablon.app.ui.components.LoadingView
@@ -48,6 +60,7 @@ import com.gecesablon.app.ui.components.OrderCard
 import com.gecesablon.app.ui.theme.GeceColors
 import com.gecesablon.app.ui.theme.ShapeBadge
 import com.gecesablon.app.ui.theme.ShapeControl
+import androidx.compose.foundation.layout.width
 
 /**
  * Layar Daftar Manajemen Pesanan yang digunakan bersama oleh Admin Workshop dan Owner.
@@ -56,6 +69,7 @@ import com.gecesablon.app.ui.theme.ShapeControl
 @Composable
 fun StaffOrdersScreen(
     onNavigateToDetail: (String) -> Unit = {},
+    onNavigateToAccount: () -> Unit = {},
     modifier: Modifier = Modifier,
     viewModel: StaffOrdersViewModel = viewModel(
         factory = StaffOrdersViewModel.factory(
@@ -68,6 +82,12 @@ fun StaffOrdersScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
+        topBar = {
+            AdminTopBar(
+                tabName = "Pesanan",
+                onProfileClick = onNavigateToAccount
+            )
+        },
         containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         Column(
@@ -75,12 +95,6 @@ fun StaffOrdersScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            // Header Top Bar Netral Peran
-            StaffHeaderSection(
-                title = stringResource(R.string.staff_orders_title),
-                subtitle = stringResource(R.string.staff_orders_subtitle)
-            )
-
             // Kolom Pencarian
             StaffSearchBar(
                 query = uiState.searchQuery,
@@ -90,13 +104,23 @@ fun StaffOrdersScreen(
                     .padding(horizontal = 16.dp, vertical = 8.dp)
             )
 
-            // Baris Chip Filter Kategori
+            // Baris Chip Filter Kategori Status
             StaffFilterChips(
                 selectedFilter = uiState.selectedFilter,
                 onFilterSelected = viewModel::onFilterSelected,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
+            )
+
+            // Baris Filter Tanggal & Hitungan Pesanan (Sesuai Figma 22)
+            StaffDateFilterRow(
+                selectedDateFilter = uiState.selectedDateFilter,
+                onDateFilterSelected = viewModel::onDateFilterSelected,
+                totalCount = uiState.filteredOrders.size,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 6.dp)
             )
 
             // Konten Daftar Pesanan / State Views
@@ -301,5 +325,86 @@ fun StaffFilterChips(
                 )
             )
         }
+    }
+}
+
+@Composable
+fun StaffDateFilterRow(
+    selectedDateFilter: StaffDateFilter,
+    onDateFilterSelected: (StaffDateFilter) -> Unit,
+    totalCount: Int,
+    modifier: Modifier = Modifier
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Tombol Dropdown Filter Tanggal
+        Box {
+            Surface(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .clickable { expanded = true },
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.CalendarToday,
+                        contentDescription = null,
+                        modifier = Modifier.size(14.dp),
+                        tint = GeceColors.PrimaryInk
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = stringResource(selectedDateFilter.labelRes),
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = GeceColors.PrimaryInk
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Icon(
+                        imageVector = Icons.Default.ArrowDropDown,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp),
+                        tint = GeceColors.PrimaryInk
+                    )
+                }
+            }
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                StaffDateFilter.entries.forEach { filter ->
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                text = stringResource(filter.labelRes),
+                                fontWeight = if (filter == selectedDateFilter) FontWeight.Bold else FontWeight.Normal
+                            )
+                        },
+                        onClick = {
+                            onDateFilterSelected(filter)
+                            expanded = false
+                        }
+                    )
+                }
+            }
+        }
+
+        // Teks Keterangan Jumlah Antrean
+        Text(
+            text = stringResource(R.string.staff_orders_count_format, totalCount),
+            style = MaterialTheme.typography.bodySmall,
+            color = GeceColors.TextMuted,
+            fontWeight = FontWeight.Medium
+        )
     }
 }

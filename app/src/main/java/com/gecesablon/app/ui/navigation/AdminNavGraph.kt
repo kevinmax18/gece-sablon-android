@@ -57,6 +57,9 @@ fun NavGraphBuilder.adminNavGraph(
                 },
                 onNavigateToOrderDetail = { orderId ->
                     navController.navigate(Routes.staffOrderDetailRoute(orderId))
+                },
+                onNavigateToAccount = {
+                    navController.navigate(Routes.ADMIN_ACCOUNT)
                 }
             )
         }
@@ -71,6 +74,9 @@ fun NavGraphBuilder.adminNavGraph(
                 viewModel = ordersViewModel,
                 onNavigateToDetail = { orderId ->
                     navController.navigate(Routes.staffOrderDetailRoute(orderId))
+                },
+                onNavigateToAccount = {
+                    navController.navigate(Routes.ADMIN_ACCOUNT)
                 }
             )
         }
@@ -85,6 +91,9 @@ fun NavGraphBuilder.adminNavGraph(
                 viewModel = processViewModel,
                 onNavigateToDetail = { orderId ->
                     navController.navigate(Routes.staffOrderDetailRoute(orderId))
+                },
+                onNavigateToAccount = {
+                    navController.navigate(Routes.ADMIN_ACCOUNT)
                 }
             )
         }

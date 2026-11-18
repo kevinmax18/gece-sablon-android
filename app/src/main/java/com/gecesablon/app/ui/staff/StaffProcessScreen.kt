@@ -50,6 +50,7 @@ import com.gecesablon.app.R
 import com.gecesablon.app.core.util.ProductionRules
 import com.gecesablon.app.data.model.Order
 import com.gecesablon.app.data.model.ProductionStage
+import com.gecesablon.app.ui.components.AdminTopBar
 import com.gecesablon.app.ui.components.EmptyState
 import com.gecesablon.app.ui.components.ErrorView
 import com.gecesablon.app.ui.components.LoadingView
@@ -67,6 +68,7 @@ import com.gecesablon.app.ui.theme.ShapeControl
 @Composable
 fun StaffProcessScreen(
     onNavigateToDetail: (String) -> Unit = {},
+    onNavigateToAccount: () -> Unit = {},
     modifier: Modifier = Modifier,
     viewModel: StaffProcessViewModel = viewModel(
         factory = StaffProcessViewModel.factory(
@@ -79,6 +81,12 @@ fun StaffProcessScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
+        topBar = {
+            AdminTopBar(
+                tabName = "Proses",
+                onProfileClick = onNavigateToAccount
+            )
+        },
         containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         Column(
@@ -86,12 +94,6 @@ fun StaffProcessScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            // Header Netral Peran
-            StaffHeaderSection(
-                title = stringResource(R.string.staff_process_title),
-                subtitle = stringResource(R.string.staff_process_subtitle)
-            )
-
             // Kolom Pencarian
             StaffSearchBar(
                 query = uiState.searchQuery,

@@ -53,6 +53,7 @@ import com.gecesablon.app.core.util.Formatter
 import com.gecesablon.app.data.model.Order
 import com.gecesablon.app.data.model.OrderStatus
 import com.gecesablon.app.data.model.StockItem
+import com.gecesablon.app.ui.components.AdminTopBar
 import com.gecesablon.app.ui.components.ErrorView
 import com.gecesablon.app.ui.components.LoadingView
 import com.gecesablon.app.ui.components.OrderCard
@@ -73,6 +74,7 @@ fun AdminDashboardScreen(
     onNavigateToOrders: () -> Unit,
     onNavigateToStock: () -> Unit,
     onNavigateToOrderDetail: (String) -> Unit,
+    onNavigateToAccount: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -80,23 +82,9 @@ fun AdminDashboardScreen(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(
-                title = {
-                    Column {
-                        Text(
-                            text = stringResource(R.string.title_admin_dashboard),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = InkBlack
-                        )
-                        Text(
-                            text = "GeCe Screen Printing Workshop",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = GeceColors.TextMuted
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = GeceColors.Background)
+            AdminTopBar(
+                tabName = "Beranda",
+                onProfileClick = onNavigateToAccount
             )
         },
         containerColor = GeceColors.Background

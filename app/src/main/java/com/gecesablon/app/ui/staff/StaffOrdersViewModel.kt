@@ -20,6 +20,8 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+import java.util.Calendar
+
 /**
  * Filter kategori pesanan untuk tampilan staf workshop sesuai alur Figma.
  */
@@ -31,12 +33,23 @@ enum class StaffOrderFilter(@StringRes val labelRes: Int) {
     SELESAI(R.string.staff_orders_filter_done)
 }
 
+/**
+ * Filter rentang tanggal pesanan sesuai desain antarmuka Figma 22-manajemen-pesanan.
+ */
+enum class StaffDateFilter(@StringRes val labelRes: Int) {
+    SEMUA(R.string.staff_orders_date_all),
+    HARI_INI(R.string.staff_orders_date_today),
+    TUJUH_HARI(R.string.staff_orders_date_7days),
+    BULAN_INI(R.string.staff_orders_date_this_month)
+}
+
 data class StaffOrdersUiState(
     val isLoading: Boolean = true,
     val orders: List<Order> = emptyList(),
     val filteredOrders: List<Order> = emptyList(),
     val searchQuery: String = "",
     val selectedFilter: StaffOrderFilter = StaffOrderFilter.SEMUA,
+    val selectedDateFilter: StaffDateFilter = StaffDateFilter.SEMUA,
     val errorMessage: String? = null
 )
 
@@ -78,7 +91,8 @@ class StaffOrdersViewModel(
                                 filteredOrders = applyFilterAndSearch(
                                     orders = allOrders,
                                     query = current.searchQuery,
-                                    filter = current.selectedFilter
+                                    filter = current.selectedFilter,
+                                    dateFilter = current.selectedDateFilter
                                 ),
                                 errorMessage = null
                             )
@@ -107,7 +121,8 @@ class StaffOrdersViewModel(
                 filteredOrders = applyFilterAndSearch(
                     orders = current.orders,
                     query = newQuery,
-                    filter = current.selectedFilter
+                    filter = current.selectedFilter,
+                    dateFilter = current.selectedDateFilter
                 )
             )
         }
@@ -120,7 +135,22 @@ class StaffOrdersViewModel(
                 filteredOrders = applyFilterAndSearch(
                     orders = current.orders,
                     query = current.searchQuery,
-                    filter = filter
+                    filter = filter,
+                    dateFilter = current.selectedDateFilter
+                )
+            )
+        }
+    }
+
+    fun onDateFilterSelected(dateFilter: StaffDateFilter) {
+        _uiState.update { current ->
+            current.copy(
+                selectedDateFilter = dateFilter,
+                filteredOrders = applyFilterAndSearch(
+                    orders = current.orders,
+                    query = current.searchQuery,
+                    filter = current.selectedFilter,
+                    dateFilter = dateFilter
                 )
             )
         }
@@ -129,9 +159,35 @@ class StaffOrdersViewModel(
     private fun applyFilterAndSearch(
         orders: List<Order>,
         query: String,
-        filter: StaffOrderFilter
+        filter: StaffOrderFilter,
+        dateFilter: StaffDateFilter
     ): List<Order> {
         val trimmedQuery = query.trim().lowercase()
+
+        // Perhitungan awal hari (00:00:00) untuk filter tanggal
+        val now = Calendar.getInstance()
+        val startOfToday = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }.timeInMillis
+
+        val startOf7Days = Calendar.getInstance().apply {
+            add(Calendar.DAY_OF_YEAR, -7)
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }.timeInMillis
+
+        val startOfMonth = Calendar.getInstance().apply {
+            set(Calendar.DAY_OF_MONTH, 1)
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }.timeInMillis
 
         return orders.filter { order ->
             // Filter query
@@ -158,7 +214,15 @@ class StaffOrdersViewModel(
                 )
             }
 
-            matchesSearch && matchesFilter
+            // Filter tanggal
+            val matchesDate = when (dateFilter) {
+                StaffDateFilter.SEMUA -> true
+                StaffDateFilter.HARI_INI -> order.dibuatPada >= startOfToday
+                StaffDateFilter.TUJUH_HARI -> order.dibuatPada >= startOf7Days
+                StaffDateFilter.BULAN_INI -> order.dibuatPada >= startOfMonth
+            }
+
+            matchesSearch && matchesFilter && matchesDate
         }
     }
 
