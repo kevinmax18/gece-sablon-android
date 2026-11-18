@@ -34,7 +34,7 @@ Minggu 11 (4 November 2026). Perancangan UI/UX di Figma dan flowchart alur pengg
 
 | Flowchart | Desain Figma |
 |---|---|
-| x` | <img src="docs/screenshots/minggu-11/02-figma.png" width="360"> |
+| <img src="docs/screenshots/minggu-11/01-flowchart.png" width="360">  | <img src="docs/screenshots/minggu-11/02-figma.png" width="360"> |
 
 ### Minggu 12: Layar awal, autentikasi, dan navigasi
 Minggu 12 (11 November 2026). Splash, onboarding, welcome, login, register, navigasi per peran, dan logout.
