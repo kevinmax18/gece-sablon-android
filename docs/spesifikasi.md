@@ -102,3 +102,22 @@ Pemetaan tahapan internal ke status pelanggan:
   lalu kembali ke Detail Produk yang sama.
 - Semua data produk, harga, warna, dan pesanan di fake repository hanyalah data contoh.
 - Tidak boleh ada teks atau UI yang menyatakan pelanggan bisa memesan tanpa login.
+
+## Aturan produksi (Tahap 5)
+Tahapan produksi (urut, selesai berurutan): Desain & Mockup, Pengadaan Baju Polos, Cetak DTF & Material,
+Penyablonan Workshop, Pemeriksaan QC.
+Aksi material: Baju tiba, DTF tiba, Siap disablon.
+- Pesanan berstatus DITERIMA sampai staff menekan "Terima & Mulai Proses" (jadi SEDANG_DIPROSES).
+- Tahapan hanya boleh dicentang berurutan. Yang boleh dibatalkan centangnya hanya tahapan terakhir yang selesai.
+- Prasyarat: Pengadaan Baju butuh Baju tiba. Cetak DTF & Material butuh DTF tiba. "Siap disablon" butuh Baju tiba
+  dan DTF tiba, dan menjadi prasyarat Penyablonan. Baju tiba/DTF tiba/Siap disablon tidak bisa dibatalkan bila
+  tahapan yang bergantung padanya sudah selesai.
+- Status pelanggan diturunkan dari tahapan aktif (tahapan pertama yang belum selesai):
+  Desain atau Pengadaan -> SEDANG_DIPROSES; Cetak DTF & Material -> CETAK_DTF; Penyablonan atau QC -> PRESSING;
+  kelima tahapan selesai -> SIAP_DIAMBIL. "Tandai Selesai (sudah diambil)" -> SELESAI.
+- Perubahan tahapan disimpan lewat tombol "Simpan Perubahan" (bukan per centang). Repository memvalidasi ulang
+  semua aturan, tidak memercayai UI.
+- Setiap perubahan dicatat di riwayat aktivitas (waktu, nama staff, aksi).
+- Hanya ADMIN dan OWNER yang boleh memakai fungsi staff. Pelanggan hanya melihat statusnya.
+- Pesanan DIBATALKAN tidak bisa diproses. Admin tidak membatalkan pesanan di tahap ini.
+- Pesanan menyimpan salinan nama dan no HP pelanggan, serta asalnya (pelanggan atau staff/manual).

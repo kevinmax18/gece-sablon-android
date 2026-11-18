@@ -354,6 +354,7 @@ fun AppNavHost(
             )
 
             adminNavGraph(
+                appContainer = appContainer,
                 navController = navController,
                 accountViewModel = accountViewModel,
                 onNavigateToAbout = handleNavigateToAbout,
@@ -365,6 +366,13 @@ fun AppNavHost(
                 accountViewModel = accountViewModel,
                 onNavigateToAbout = handleNavigateToAbout,
                 onLogout = handleLogout
+            )
+
+            // 7. Rute Detail Pesanan Staf (didaftarkan sekali di level AppNavHost)
+            staffOrderRoutes(
+                appContainer = appContainer,
+                navController = navController,
+                currentSession = currentSession
             )
         }
     }

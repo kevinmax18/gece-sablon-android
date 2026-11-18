@@ -26,10 +26,18 @@ fun NavGraphBuilder.ownerNavGraph(
             OwnerDashboardScreen()
         }
         composable(Routes.OWNER_ORDERS) {
-            StaffOrdersScreen()
+            StaffOrdersScreen(
+                onNavigateToDetail = { orderId ->
+                    navController.navigate(Routes.staffOrderDetailRoute(orderId))
+                }
+            )
         }
         composable(Routes.OWNER_PROCESS) {
-            StaffProcessScreen()
+            StaffProcessScreen(
+                onNavigateToDetail = { orderId ->
+                    navController.navigate(Routes.staffOrderDetailRoute(orderId))
+                }
+            )
         }
         composable(Routes.OWNER_FINANCE) {
             OwnerFinanceScreen()

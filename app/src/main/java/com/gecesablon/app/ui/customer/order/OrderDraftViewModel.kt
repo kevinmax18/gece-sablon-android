@@ -5,7 +5,9 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.gecesablon.app.GeceApp
 import com.gecesablon.app.R
+import com.gecesablon.app.core.datastore.SessionStore
 import com.gecesablon.app.core.util.PriceCalculator
 import com.gecesablon.app.core.util.Resource
 import com.gecesablon.app.data.model.Order
@@ -17,6 +19,7 @@ import com.gecesablon.app.data.repository.ProductRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -54,7 +57,8 @@ data class OrderDraftUiState(
 class OrderDraftViewModel(
     private val productId: String,
     private val productRepository: ProductRepository,
-    private val orderRepository: OrderRepository
+    private val orderRepository: OrderRepository,
+    private val sessionStore: SessionStore? = try { GeceApp.instance.container.sessionStore } catch (e: Exception) { null }
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(OrderDraftUiState())
@@ -249,14 +253,21 @@ class OrderDraftViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isSubmitting = true, generalError = null) }
 
+            // Baca sesi pemesan (nama dan userId) langsung dari SessionStore
+            val currentSession = sessionStore?.session?.firstOrNull()
+            val finalUserId = currentSession?.userId?.ifBlank { null } ?: userId
+            val customerName = currentSession?.name?.ifBlank { null } ?: "Pelanggan GeCe"
+
             val result = orderRepository.createOrder(
-                userId = userId,
+                userId = finalUserId,
                 product = product,
                 color = color,
                 size = size,
                 quantity = current.quantity,
                 catatan = current.catatan,
-                uriDesain = current.designUri?.toString()
+                uriDesain = current.designUri?.toString(),
+                namaPelanggan = customerName,
+                noHpPelanggan = null
             )
 
             when (result) {

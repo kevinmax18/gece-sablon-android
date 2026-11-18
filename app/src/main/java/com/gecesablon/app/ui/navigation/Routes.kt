@@ -53,6 +53,9 @@ object Routes {
     const val OWNER_FINANCE = "owner_finance"
     const val OWNER_ACCOUNT = "owner_account"
 
+    // Staf Workshop (Netral Peran - Admin & Owner)
+    const val STAFF_ORDER_DETAIL = "staff_order_detail/{orderId}"
+
     // Helper: bangun rute Detail Produk
     fun productDetailRoute(productId: String): String = "product_detail/$productId"
 
@@ -60,6 +63,9 @@ object Routes {
     fun orderFlowRoute(productId: String): String = "order_flow/$productId"
     fun orderSuccessRoute(orderId: String): String = "order_success/$orderId"
     fun orderDetailRoute(orderId: String): String = "order_detail/$orderId"
+
+    // Helper: rute detail pesanan staf
+    fun staffOrderDetailRoute(orderId: String): String = "staff_order_detail/$orderId"
 
     // Helper: bangun rute Login/Register dengan redirect dan productId opsional
     fun loginRoute(redirect: String? = null, productId: String? = null): String =

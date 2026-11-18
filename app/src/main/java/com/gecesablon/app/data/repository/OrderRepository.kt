@@ -5,6 +5,8 @@ import com.gecesablon.app.data.model.Order
 import com.gecesablon.app.data.model.Product
 import com.gecesablon.app.data.model.ProductColor
 import com.gecesablon.app.data.model.ProductSize
+import com.gecesablon.app.data.model.ProductionState
+import com.gecesablon.app.data.model.Session
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -14,6 +16,10 @@ import kotlinx.coroutines.flow.Flow
  * TODO: ganti ke Retrofit di Tahap 8
  */
 interface OrderRepository {
+
+    // =========================================================================
+    // Fungsi Pelanggan
+    // =========================================================================
 
     /**
      * Mengalirkan daftar pesanan milik pengguna tertentu secara reaktif.
@@ -32,13 +38,15 @@ interface OrderRepository {
     /**
      * Membuat pesanan baru pelanggan.
      *
-     * @param userId ID pembuat pesanan (TODO: di API asli diambil dari token)
-     * @param product Produk yang dipesan
-     * @param color Varian warna terpilih
-     * @param size Varian ukuran terpilih
-     * @param quantity Jumlah pesanan dalam pcs
-     * @param catatan Catatan tambahan/posisi cetak dari pelanggan
-     * @param uriDesain URI file desain pratinjau yang diunggah
+     * @param userId         ID pembuat pesanan (TODO: di API asli diambil dari token)
+     * @param product        Produk yang dipesan
+     * @param color          Varian warna terpilih
+     * @param size           Varian ukuran terpilih
+     * @param quantity       Jumlah pesanan dalam pcs
+     * @param catatan        Catatan tambahan/posisi cetak dari pelanggan
+     * @param uriDesain      URI file desain pratinjau yang diunggah
+     * @param namaPelanggan  Nama pelanggan pemesan
+     * @param noHpPelanggan  Nomor kontak WhatsApp/HP pelanggan (opsional)
      */
     suspend fun createOrder(
         userId: String,
@@ -47,14 +55,68 @@ interface OrderRepository {
         size: ProductSize,
         quantity: Int,
         catatan: String,
-        uriDesain: String?
+        uriDesain: String?,
+        namaPelanggan: String = "Pelanggan GeCe",
+        noHpPelanggan: String? = null
     ): Resource<Order>
 
     /**
      * Membatalkan pesanan. Hanya diizinkan jika status pesanan adalah DITERIMA.
      *
      * @param orderId ID pesanan yang akan dibatalkan
-     * @param userId ID pengguna pemohon pembatalan (TODO: di API asli diambil dari token)
+     * @param userId  ID pengguna pemohon pembatalan (TODO: di API asli diambil dari token)
      */
     suspend fun cancelOrder(orderId: String, userId: String): Resource<Unit>
+
+    // =========================================================================
+    // Fungsi Staf Workshop (Admin & Owner)
+    // =========================================================================
+
+    /**
+     * Mengalirkan seluruh pesanan workshop secara reaktif.
+     *
+     * @param actor Sesi pengguna yang sedang aktif (hanya ADMIN atau OWNER)
+     * // TODO: di API asli aktor dari token
+     */
+    fun getAllOrders(actor: Session): Flow<Resource<List<Order>>>
+
+    /**
+     * Mengambil detail pesanan untuk tampilan staf.
+     *
+     * @param orderId ID pesanan
+     * @param actor   Sesi pengguna yang sedang aktif (hanya ADMIN atau OWNER)
+     * // TODO: di API asli aktor dari token
+     */
+    suspend fun getStaffOrderDetail(orderId: String, actor: Session): Resource<Order>
+
+    /**
+     * Menerima pesanan berstatus DITERIMA dan memulai proses produksi internal (menjadi SEDANG_DIPROSES).
+     *
+     * @param orderId ID pesanan
+     * @param actor   Sesi staf yang menerima
+     * // TODO: di API asli aktor dari token
+     */
+    suspend fun acceptAndStartProcess(orderId: String, actor: Session): Resource<Order>
+
+    /**
+     * Memperbarui kondisi tahapan produksi internal pesanan.
+     * Menghitung penurunan status pelanggan secara otomatis dan memvalidasi aturan produksi.
+     * Menolak pesanan yang masih berstatus DITERIMA, DIBATALKAN, atau SELESAI.
+     *
+     * @param orderId  ID pesanan
+     * @param newState Kondisi produksi baru
+     * @param actor    Sesi staf yang melakukan pembaruan
+     * // TODO: di API asli aktor dari token
+     */
+    suspend fun updateProductionState(orderId: String, newState: ProductionState, actor: Session): Resource<Order>
+
+    /**
+     * Menandai pesanan telah diambil dan selesai secara tuntas (menjadi SELESAI).
+     * Hanya diizinkan jika status pesanan saat ini adalah SIAP_DIAMBIL.
+     *
+     * @param orderId ID pesanan
+     * @param actor   Sesi staf yang menyerahkan pesanan
+     * // TODO: di API asli aktor dari token
+     */
+    suspend fun markOrderCompleted(orderId: String, actor: Session): Resource<Order>
 }

@@ -54,7 +54,8 @@ fun OrderCard(
     quantityPcs: Int,
     footerInfo: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    customerName: String? = null
 ) {
     Card(
         modifier = modifier
@@ -112,8 +113,9 @@ fun OrderCard(
             Spacer(modifier = Modifier.height(10.dp))
 
             // Nama Pemesan / Judul Pesanan
+            val displayName = customerName?.takeIf { it.isNotBlank() } ?: title
             Text(
-                text = title,
+                text = displayName,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
