@@ -10,15 +10,6 @@ memesan, dan memantau status pesanan; admin workshop mengelola pesanan dan produ
 Proyek ini dikerjakan sebagai tugas Project-Based Learning (PjBL), Teknik Komputer dan Jaringan,
 Politeknik Negeri Ujung Pandang.
 
-## Status
-
-| Bagian | Status |
-|---|---|
-| UI/UX (Figma) dan alur (draw.io) | Selesai |
-| Tampilan Aplikasi Android | selesai |
-| Backend Laravel + MySQL | selesai |
-| Integrasi API | selesai |
-
 ## Teknologi
 
 | Bagian | Teknologi |
