@@ -64,7 +64,7 @@ Katalog dan pemesanan pelanggan, pesanan dan proses produksi staff, dashboard ad
 | <img src="docs/screenshots/minggu-13/11-owner-dashboard.png" width="150"> | <img src="docs/screenshots/minggu-13/12-ringkasan-keuangan.png" width="150"> | <img src="docs/screenshots/minggu-13/13-laporan-keuangan.png" width="150"> |
 
 ### ERD Database
-<img src="docs/screenshots/minggu-13/ERD-database.png" width="150">
+<img src="docs/screenshots/minggu-13/ERD-database.png">
 
 ## Struktur proyek
 
