@@ -28,11 +28,55 @@ import com.gecesablon.app.ui.theme.ShapeControl
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.foundation.layout.size
+
 enum class AppButtonVariant {
     Primary,
     Accent,
     Secondary,
     Text
+}
+
+/**
+ * Komponen tombol GeCeButton yang kompatibel dengan state loading.
+ */
+@Composable
+fun GeceButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    variant: AppButtonVariant = AppButtonVariant.Primary,
+    loading: Boolean = false,
+    enabled: Boolean = true,
+    leadingIcon: (@Composable () -> Unit)? = null,
+    trailingIcon: (@Composable () -> Unit)? = null,
+    fullWidth: Boolean = true
+) {
+    AppButton(
+        text = text,
+        onClick = onClick,
+        modifier = modifier,
+        variant = variant,
+        enabled = enabled && !loading,
+        leadingIcon = leadingIcon,
+        trailingIcon = if (loading) {
+            {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(18.dp),
+                    strokeWidth = 2.dp,
+                    color = when (variant) {
+                        AppButtonVariant.Primary -> MaterialTheme.colorScheme.onPrimary
+                        AppButtonVariant.Accent -> GeceColors.OnAccent
+                        else -> MaterialTheme.colorScheme.primary
+                    }
+                )
+            }
+        } else {
+            trailingIcon
+        },
+        fullWidth = fullWidth
+    )
 }
 
 /**

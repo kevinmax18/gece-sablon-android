@@ -32,12 +32,14 @@ import java.util.UUID
  *
  * TODO: ganti ke Retrofit di Tahap 8
  */
-class FakeOrderRepository : OrderRepository {
+class FakeOrderRepository(
+    private val productRepository: ProductRepository = FakeProductRepository()
+) : OrderRepository {
 
     private val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.US)
-    private var orderCounter = 10 // Dimulai setelah 9 pesanan seed awal
+    private var orderCounter = 11 // Dimulai setelah 10 pesanan seed awal
 
-    // Seed 9 pesanan contoh dari 5 pelanggan mencakup semua variasi status
+    // Seed 10 pesanan contoh dari 5 pelanggan mencakup semua variasi status
     private val ordersStateFlow = MutableStateFlow<List<Order>>(
         listOf(
             // Seed 001: Pelanggan Demo (user-cust-001) - SEDANG_DIPROSES
@@ -447,6 +449,40 @@ class FakeOrderRepository : OrderRepository {
                         aksi = "Pesanan dibatalkan oleh pemesan"
                     )
                 )
+            ),
+
+            // Seed 010: Pelanggan Demo (user-cust-001) - DITERIMA (untuk uji pembatalan staf/pelanggan)
+            Order(
+                id = "order-seed-010",
+                kode = "GEC-20261103-010",
+                namaPelanggan = "Pelanggan Demo",
+                noHpPelanggan = "081200000010",
+                dibuatOleh = OrderCreator.CUSTOMER,
+                userId = "user-cust-001",
+                status = OrderStatus.DITERIMA,
+                total = 325_000L,
+                catatan = "Coba sablon logo kecil di dada kiri.",
+                uriDesain = null,
+                dibuatPada = System.currentTimeMillis() - (1 * 60 * 60 * 1000), // 1 jam lalu
+                items = listOf(
+                    OrderItem(
+                        id = "item-010",
+                        productId = "prod-kaos-custom",
+                        namaProduk = "Kaos Custom Cotton Combed",
+                        warnaNama = "Hitam Pekat",
+                        ukuranLabel = "L",
+                        jumlah = 5,
+                        hargaSatuan = 65_000L
+                    )
+                ),
+                produksi = ProductionState(),
+                riwayat = listOf(
+                    ActivityLogEntry(
+                        waktu = System.currentTimeMillis() - (1 * 60 * 60 * 1000),
+                        aktor = "Pelanggan Demo",
+                        aksi = "Pesanan dibuat melalui aplikasi"
+                    )
+                )
             )
         )
     )
@@ -716,7 +752,7 @@ class FakeOrderRepository : OrderRepository {
 
         val newLog = ActivityLogEntry(
             waktu = System.currentTimeMillis(),
-            aktor = actor.name,
+            aktor = "${actor.name} (${if (actor.role == Role.ADMIN) "Admin" else "Owner"})",
             aksi = "Pesanan telah diambil oleh pemesan (Selesai)"
         )
         val updatedOrder = target.copy(
@@ -732,5 +768,94 @@ class FakeOrderRepository : OrderRepository {
         ordersStateFlow.value = currentList
 
         return Resource.Success(updatedOrder)
+    }
+
+    override suspend fun createManualOrder(
+        actor: Session,
+        namaPelanggan: String,
+        noHpPelanggan: String,
+        productId: String,
+        colorName: String,
+        sizeLabel: String,
+        quantity: Int,
+        catatan: String,
+        uriDesain: String?
+    ): Resource<Order> {
+        delay(600)
+        // TODO: di API asli aktor dari token
+        if (actor.role != Role.ADMIN && actor.role != Role.OWNER) {
+            return Resource.Error("Akses ditolak. Fitur ini hanya untuk staf workshop (Admin atau Owner).")
+        }
+
+        if (namaPelanggan.isBlank()) {
+            return Resource.Error("Nama pelanggan wajib diisi.")
+        }
+        val cleanPhone = noHpPelanggan.trim()
+        val isValidPhone = (cleanPhone.startsWith("08") || cleanPhone.startsWith("628")) &&
+                cleanPhone.length in 10..14 && cleanPhone.all { it.isDigit() }
+        if (!isValidPhone) {
+            return Resource.Error("Nomor HP tidak valid. Gunakan format Indonesia (misal: 08123456789).")
+        }
+        if (quantity !in 1..999) {
+            return Resource.Error("Jumlah pesanan harus antara 1 sampai 999 pcs.")
+        }
+
+        val productRes = productRepository.getProductById(productId)
+        if (productRes !is Resource.Success) {
+            return Resource.Error("Produk tidak ditemukan.")
+        }
+        val product = productRes.data
+
+        val color = product.daftarWarna.find { it.nama.equals(colorName, ignoreCase = true) }
+            ?: return Resource.Error("Varian warna tidak ditemukan pada produk ini.")
+
+        val size = product.daftarUkuran.find { it.label.equals(sizeLabel, ignoreCase = true) }
+            ?: return Resource.Error("Varian ukuran tidak ditemukan pada produk ini.")
+
+        val unitPrice = PriceCalculator.calculateUnitPrice(product.hargaDasar, size.tambahanHarga)
+        val totalPrice = PriceCalculator.calculateTotalPrice(unitPrice, quantity)
+
+        val dateString = dateFormat.format(Date())
+        val orderCode = String.format(Locale.US, "GEC-%s-%03d", dateString, orderCounter++)
+
+        val orderItem = OrderItem(
+            id = UUID.randomUUID().toString(),
+            productId = product.id,
+            namaProduk = product.nama,
+            warnaNama = color.nama,
+            ukuranLabel = size.label,
+            jumlah = quantity,
+            hargaSatuan = unitPrice
+        )
+
+        val peranLabel = if (actor.role == Role.ADMIN) "Admin" else "Owner"
+        val initialLog = ActivityLogEntry(
+            waktu = System.currentTimeMillis(),
+            aktor = "${actor.name} ($peranLabel)",
+            aksi = "Pesanan manual dicatat oleh staf"
+        )
+
+        val manualOrder = Order(
+            id = UUID.randomUUID().toString(),
+            kode = orderCode,
+            namaPelanggan = namaPelanggan.trim(),
+            noHpPelanggan = cleanPhone,
+            dibuatOleh = OrderCreator.STAFF,
+            userId = null,
+            status = OrderStatus.DITERIMA,
+            total = totalPrice,
+            catatan = catatan.trim(),
+            uriDesain = uriDesain,
+            dibuatPada = System.currentTimeMillis(),
+            items = listOf(orderItem),
+            produksi = ProductionState(),
+            riwayat = listOf(initialLog)
+        )
+
+        val currentList = ordersStateFlow.value.toMutableList()
+        currentList.add(0, manualOrder)
+        ordersStateFlow.value = currentList
+
+        return Resource.Success(manualOrder)
     }
 }

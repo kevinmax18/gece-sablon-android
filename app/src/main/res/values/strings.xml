@@ -393,7 +393,7 @@
     <!-- Tahap 5A: Manajemen Pesanan Staff (StaffOrdersScreen) -->
     <string name="staff_orders_title">Manajemen Pesanan</string>
     <string name="staff_orders_subtitle">Pantau antrean pesanan &amp; produksi sablon DTF</string>
-    <string name="staff_orders_search_hint">Cari nomor pesanan atau nama pelanggan...</string>
+    <string name="staff_orders_search_hint">Cari kode atau nama pelanggan</string>
     <string name="staff_orders_filter_all">Semua</string>
     <string name="staff_orders_filter_new">Baru</string>
     <string name="staff_orders_filter_processing">Diproses</string>
@@ -446,4 +446,92 @@
     <string name="staff_detail_dialog_complete_confirm">Ya, Tandai Selesai</string>
     <string name="staff_detail_dialog_complete_dismiss">Batal</string>
     <string name="staff_detail_diterima_hint">Pesanan berstatus Diterima. Klik \"Terima &amp; Mulai Proses\" di bawah untuk memulai tahapan produksi internal.</string>
+
+    <!-- Tahap 5B: Manajemen Stok Workshop -->
+    <string name="admin_stock_title">Manajemen Stok</string>
+    <string name="admin_stock_subtitle">Kelola ketersediaan kaos polos dan material sablon</string>
+    <string name="admin_stock_search_hint">Cari nama barang atau material...</string>
+    <string name="admin_stock_filter_all">Semua</string>
+    <string name="admin_stock_filter_baju">Baju Polos</string>
+    <string name="admin_stock_filter_material">Material DTF</string>
+    <string name="admin_stock_filter_lainnya">Lainnya</string>
+    <string name="admin_stock_btn_add">Tambah Stok</string>
+    <string name="admin_stock_badge_low">Menipis</string>
+    <string name="admin_stock_empty_title">Stok Tidak Ditemukan</string>
+    <string name="admin_stock_empty_desc">Belum ada item stok yang sesuai dengan filter atau pencarian ini.</string>
+    <string name="admin_stock_min_threshold">Batas Min: %1$d %2$s</string>
+    <string name="admin_stock_btn_adjust">Ubah Jumlah</string>
+    <string name="admin_stock_dialog_adjust_title">Ubah Jumlah Stok</string>
+    <string name="admin_stock_dialog_adjust_item">Item: %1$s</string>
+    <string name="admin_stock_dialog_adjust_current">Stok saat ini: %1$d %2$s</string>
+    <string name="admin_stock_dialog_adjust_type_add">Tambah Stok (+)</string>
+    <string name="admin_stock_dialog_adjust_type_reduce">Kurangi Stok (-)</string>
+    <string name="admin_stock_dialog_adjust_qty_label">Jumlah Perubahan</string>
+    <string name="admin_stock_dialog_adjust_notes_label">Keterangan / Alasan (Opsional)</string>
+    <string name="admin_stock_dialog_adjust_confirm">Simpan Perubahan</string>
+    <string name="admin_stock_dialog_adjust_cancel">Batal</string>
+    <string name="admin_stock_dialog_delete_title">Hapus Item Stok</string>
+    <string name="admin_stock_dialog_delete_desc">Apakah Anda yakin ingin menghapus \"%1$s\" dari inventaris stok workshop?</string>
+    <string name="admin_stock_dialog_delete_confirm">Hapus Item</string>
+
+    <!-- Tahap 5B: Form Tambah & Ubah Stok -->
+    <string name="admin_stock_form_title_add">Tambah Item Stok</string>
+    <string name="admin_stock_form_title_edit">Ubah Data Stok</string>
+    <string name="admin_stock_form_name_label">Nama Item / Material</string>
+    <string name="admin_stock_form_name_hint">Contoh: Cotton Combed 24s Hitam</string>
+    <string name="admin_stock_form_category_label">Kategori Barang</string>
+    <string name="admin_stock_form_unit_label">Satuan</string>
+    <string name="admin_stock_form_qty_label">Jumlah Stok Fisik</string>
+    <string name="admin_stock_form_min_label">Batas Minimum Stok Menipis</string>
+    <string name="admin_stock_form_btn_save">Simpan Data Stok</string>
+    <string name="admin_stock_form_err_name">Nama item wajib diisi.</string>
+    <string name="admin_stock_form_err_qty">Jumlah stok harus berupa bilangan bulat positif.</string>
+    <string name="admin_stock_form_err_min">Batas minimum harus berupa bilangan bulat positif.</string>
+
+    <!-- Tahap 5B: Pesanan Manual Staf -->
+    <string name="admin_manual_order_title">Buat Pesanan Manual</string>
+    <string name="admin_manual_order_subtitle">Catat pesanan pelanggan walk-in atau offline</string>
+    <string name="admin_manual_order_cust_name_label">Nama Pelanggan</string>
+    <string name="admin_manual_order_cust_name_hint">Nama lengkap pemesan</string>
+    <string name="admin_manual_order_phone_label">Nomor WhatsApp / HP</string>
+    <string name="admin_manual_order_phone_hint">Format: 08123456789 atau 62812...</string>
+    <string name="admin_manual_order_product_label">Pilih Produk Tekstil</string>
+    <string name="admin_manual_order_color_label">Varian Warna</string>
+    <string name="admin_manual_order_size_label">Varian Ukuran</string>
+    <string name="admin_manual_order_qty_label">Jumlah (Pcs)</string>
+    <string name="admin_manual_order_notes_label">Catatan Sablon / Posisi Cetak</string>
+    <string name="admin_manual_order_notes_hint">Contoh: Dada kiri A6 dan punggung A3</string>
+    <string name="admin_manual_order_design_url_label">Link / URI File Desain (Opsional)</string>
+    <string name="admin_manual_order_design_url_hint">Link Google Drive atau URL gambar artwork</string>
+    <string name="admin_manual_order_summary_title">Ringkasan Biaya</string>
+    <string name="admin_manual_order_unit_price">Harga Satuan: %1$s</string>
+    <string name="admin_manual_order_total_price">Total Estimasi: %1$s</string>
+    <string name="admin_manual_order_btn_submit">Simpan &amp; Buat Pesanan</string>
+    <string name="admin_manual_order_err_name">Nama pelanggan wajib diisi.</string>
+    <string name="admin_manual_order_err_phone">Nomor HP harus format Indonesia (08/628, 10–14 digit).</string>
+    <string name="admin_manual_order_err_qty">Jumlah pesanan harus antara 1 sampai 999 pcs.</string>
+    <string name="admin_manual_order_err_product">Silakan pilih produk sablon.</string>
+    <string name="admin_manual_order_err_color">Silakan pilih warna.</string>
+    <string name="admin_manual_order_err_size">Silakan pilih ukuran.</string>
+
+    <!-- Tahap 5B: Dashboard Admin -->
+    <string name="admin_dashboard_summary_title">Ringkasan Workshop Hari Ini</string>
+    <string name="admin_dashboard_stat_new">Baru</string>
+    <string name="admin_dashboard_stat_process">Diproses</string>
+    <string name="admin_dashboard_stat_ready">Siap Diambil</string>
+    <string name="admin_dashboard_stat_stock_low">Stok Menipis</string>
+    <string name="admin_dashboard_quick_actions">Aksi Cepat</string>
+    <string name="admin_dashboard_action_create_order">Buat Order</string>
+    <string name="admin_dashboard_action_manage_orders">Kelola Pesanan</string>
+    <string name="admin_dashboard_action_manage_stock">Kelola Stok</string>
+    <string name="admin_dashboard_need_action">Perlu Tindak Lanjut</string>
+    <string name="admin_dashboard_need_action_empty">Tidak ada pesanan yang memerlukan tindak lanjut darurat.</string>
+    <string name="admin_dashboard_recent_orders">Pesanan Terbaru</string>
+    <string name="admin_dashboard_see_all">Lihat Semua</string>
+    <string name="admin_dashboard_stock_info">Informasi Stok Workshop</string>
+    <string name="admin_dashboard_stock_all_safe">Seluruh stok bahan baku sablon dalam batas aman.</string>
+
+    <!-- Tombol Aksi Umum -->
+    <string name="action_back">Kembali</string>
+    <string name="action_cancel">Batal</string>
 </resources>

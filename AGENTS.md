@@ -65,3 +65,5 @@ Komponen yang dipakai dua peran atau lebih (daftar pesanan, detail pesanan, taha
 - Jangan menjalankan git commit, git push, build, atau perintah yang menghapus file. Saya yang melakukannya.
 - Jika spesifikasi kurang jelas, tanyakan, jangan menebak. Lihat bagian "Pertanyaan terbuka" di spesifikasi.
 - Setelah selesai, sebutkan file apa saja yang diubah dan apa yang perlu saya tes di emulator.
+- - Sebelum memakai komponen, warna, ikon, atau fungsi yang sudah ada, buka definisinya dan pakai nama serta
+    parameter yang benar. Jangan menebak. Jangan membuat class, warna, atau fungsi baru bila yang setara sudah ada.

@@ -56,6 +56,11 @@ object Routes {
     // Staf Workshop (Netral Peran - Admin & Owner)
     const val STAFF_ORDER_DETAIL = "staff_order_detail/{orderId}"
 
+    // Tahap 5B: Admin Stock & Manual Order
+    const val ADMIN_STOCK = "admin_stock"
+    const val ADMIN_STOCK_FORM = "admin_stock_form?stockId={stockId}"
+    const val ADMIN_MANUAL_ORDER = "admin_manual_order"
+
     // Helper: bangun rute Detail Produk
     fun productDetailRoute(productId: String): String = "product_detail/$productId"
 
@@ -66,6 +71,10 @@ object Routes {
 
     // Helper: rute detail pesanan staf
     fun staffOrderDetailRoute(orderId: String): String = "staff_order_detail/$orderId"
+
+    // Helper: rute form stok
+    fun adminStockFormRoute(stockId: String? = null): String =
+        if (!stockId.isNullOrBlank()) "admin_stock_form?stockId=$stockId" else "admin_stock_form"
 
     // Helper: bangun rute Login/Register dengan redirect dan productId opsional
     fun loginRoute(redirect: String? = null, productId: String? = null): String =

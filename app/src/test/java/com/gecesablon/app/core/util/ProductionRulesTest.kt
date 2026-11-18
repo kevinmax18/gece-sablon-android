@@ -361,5 +361,28 @@ class ProductionRulesTest {
         assertTrue("Seed 009 valid", ProductionRules.validasiKeadaan(seed009State).diizinkan)
         assertEquals(OrderStatus.DIBATALKAN,
             ProductionRules.turunkanStatus(OrderStatus.DIBATALKAN, seed009State))
+
+        // Seed 010 (Pelanggan Demo - user-cust-001): DITERIMA
+        val seed010State = ProductionState()
+        assertTrue("Seed 010 valid", ProductionRules.validasiKeadaan(seed010State).diizinkan)
+        assertEquals(OrderStatus.DITERIMA,
+            ProductionRules.turunkanStatus(OrderStatus.DITERIMA, seed010State))
+    }
+
+    @Test
+    fun testSemuaKodeSeedUnik() {
+        val seedCodes = listOf(
+            "GEC-20261103-001",
+            "GEC-20261102-005",
+            "GEC-20261101-012",
+            "GEC-20261103-004",
+            "GEC-20261102-008",
+            "GEC-20261101-015",
+            "GEC-20261102-002",
+            "GEC-20261101-003",
+            "GEC-20261030-019",
+            "GEC-20261103-010"
+        )
+        assertEquals("Semua 10 kode seed harus unik", seedCodes.size, seedCodes.toSet().size)
     }
 }

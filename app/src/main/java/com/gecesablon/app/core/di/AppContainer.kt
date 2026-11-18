@@ -6,8 +6,10 @@ import com.gecesablon.app.data.repository.AuthRepository
 import com.gecesablon.app.data.repository.FakeAuthRepository
 import com.gecesablon.app.data.repository.FakeOrderRepository
 import com.gecesablon.app.data.repository.FakeProductRepository
+import com.gecesablon.app.data.repository.FakeStockRepository
 import com.gecesablon.app.data.repository.OrderRepository
 import com.gecesablon.app.data.repository.ProductRepository
+import com.gecesablon.app.data.repository.StockRepository
 
 /**
  * AppContainer menyediakan dependency injection manual (service locator) untuk
@@ -40,6 +42,14 @@ class AppContainer(private val context: Context) {
      * TODO: ganti ke Retrofit di Tahap 8
      */
     val orderRepository: OrderRepository by lazy {
-        FakeOrderRepository()
+        FakeOrderRepository(productRepository = productRepository)
+    }
+
+    /**
+     * Repository stok persediaan dan bahan baku sablon.
+     * TODO: ganti ke Retrofit di Tahap 8
+     */
+    val stockRepository: StockRepository by lazy {
+        FakeStockRepository()
     }
 }

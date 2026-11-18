@@ -119,4 +119,30 @@ interface OrderRepository {
      * // TODO: di API asli aktor dari token
      */
     suspend fun markOrderCompleted(orderId: String, actor: Session): Resource<Order>
+
+    /**
+     * Membuat pesanan manual baru oleh staf (Admin/Owner) untuk pelanggan tamu / walk-in.
+     *
+     * @param actor         Sesi staf pembuat pesanan
+     * @param namaPelanggan Nama lengkap pelanggan
+     * @param noHpPelanggan Nomor WhatsApp pelanggan (format 08... / 628...)
+     * @param productId     ID produk tekstil yang dipesan
+     * @param colorName     Nama warna yang dipilih
+     * @param sizeLabel     Label ukuran yang dipilih
+     * @param quantity      Jumlah pesanan (1..999 pcs)
+     * @param catatan       Instruksi atau catatan khusus sablon
+     * @param uriDesain     URI file artwork atau mockup terunggah (opsional)
+     * // TODO: di API asli aktor dari token
+     */
+    suspend fun createManualOrder(
+        actor: Session,
+        namaPelanggan: String,
+        noHpPelanggan: String,
+        productId: String,
+        colorName: String,
+        sizeLabel: String,
+        quantity: Int,
+        catatan: String,
+        uriDesain: String?
+    ): Resource<Order>
 }

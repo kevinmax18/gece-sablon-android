@@ -7,6 +7,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -361,47 +362,50 @@ fun ProcessOrderCard(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Baris Penanda Kesiapan Material
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // Baris Penanda Kesiapan Material (FlowRow agar bisa melipat rapi di layar sempit 320-360 dp)
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                MaterialBadge(
+                    label = stringResource(R.string.staff_process_mat_shirt),
+                    isReady = order.produksi.bajuTiba
+                )
+                MaterialBadge(
+                    label = stringResource(R.string.staff_process_mat_dtf),
+                    isReady = order.produksi.dtfTiba
+                )
+                MaterialBadge(
+                    label = stringResource(R.string.staff_process_mat_ready),
+                    isReady = order.produksi.siapDisablon
+                )
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // Baris Sendiri: "Lihat Detail" Rata Kanan (maxLines = 1, softWrap = false)
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    MaterialBadge(
-                        label = stringResource(R.string.staff_process_mat_shirt),
-                        isReady = order.produksi.bajuTiba
-                    )
-                    MaterialBadge(
-                        label = stringResource(R.string.staff_process_mat_dtf),
-                        isReady = order.produksi.dtfTiba
-                    )
-                    MaterialBadge(
-                        label = stringResource(R.string.staff_process_mat_ready),
-                        isReady = order.produksi.siapDisablon
-                    )
-                }
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(start = 4.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.order_action_detail),
-                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Spacer(modifier = Modifier.width(2.dp))
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.size(12.dp)
-                    )
-                }
+                Text(
+                    text = stringResource(R.string.order_action_detail),
+                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    softWrap = false
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.size(12.dp)
+                )
             }
         }
     }
