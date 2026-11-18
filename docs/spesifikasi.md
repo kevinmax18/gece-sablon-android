@@ -121,3 +121,25 @@ Aksi material: Baju tiba, DTF tiba, Siap disablon.
 - Hanya ADMIN dan OWNER yang boleh memakai fungsi staff. Pelanggan hanya melihat statusnya.
 - Pesanan DIBATALKAN tidak bisa diproses. Admin tidak membatalkan pesanan di tahap ini.
 - Pesanan menyimpan salinan nama dan no HP pelanggan, serta asalnya (pelanggan atau staff/manual).
+
+## Aturan owner (Tahap 6)
+Keuangan (hanya OWNER; repository menolak role lain):
+- Transaksi: id, tipe (PEMASUKAN/PENGELUARAN), kategori, nominal (bulat, > 0, maks 1.000.000.000), tanggal,
+  keterangan (maks 200), sumber (MANUAL atau PESANAN), orderId (hanya untuk sumber PESANAN), dibuat oleh.
+- Pengeluaran: Bahan Baku (baju), Material DTF, Operasional, Gaji, Lainnya.
+  Pemasukan manual: Penjualan Lain, Lainnya (di luar pesanan aplikasi).
+- Pesanan berstatus SELESAI dihitung sebagai pemasukan otomatis (kategori "Pesanan") sebesar totalnya, tanggal
+  = saat ditandai selesai. Tidak disimpan sebagai transaksi, hanya dihitung. Pesanan DIBATALKAN tidak dihitung.
+- Laba/rugi = total pemasukan (manual + pesanan) - total pengeluaran. Nilai negatif ditampilkan sebagai rugi.
+- Periode: Bulan Ini, Bulan Lalu, 7 Hari Terakhir, 30 Hari Terakhir, Pilih Tanggal (rentang). Batas periode
+  memakai awal hari (00:00) sampai akhir hari (23:59:59) zona waktu perangkat.
+- Transaksi manual boleh diubah dan dihapus (dengan konfirmasi). Transaksi sumber PESANAN hanya dilihat.
+  Produk (OWNER): nama (3-60), kategori, bahan, deskripsi (maks 500), harga dasar (1.000 - 10.000.000),
+  minimal 1 warna (nama + kode #RRGGBB) dan 1 ukuran (S-XXXL) dengan tambahan harga >= 0. Status aktif/nonaktif;
+  produk nonaktif tidak tampil di katalog pelanggan. Pesanan lama tidak berubah karena menyimpan salinan.
+  Akun admin (OWNER): nama, email unik, password awal (minimal 8, ada huruf dan angka). Role selalu ADMIN. Akun
+  nonaktif tidak bisa login. Akun owner tidak bisa dinonaktifkan atau dihapus lewat aplikasi. Password tidak
+  pernah ditampilkan ulang atau dicatat di log.
+  Pesanan manual dibuat dari Dashboard Owner memakai layar yang sama dengan Admin (rute staff bersama).
+  Tanggal: gunakan java.util.Calendar/SimpleDateFormat (Locale id-ID); jangan java.time.
+- Tanggal transaksi manual tidak boleh melewati hari ini.
