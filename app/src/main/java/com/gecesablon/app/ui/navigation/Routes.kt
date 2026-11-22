@@ -53,13 +53,22 @@ object Routes {
     const val OWNER_FINANCE = "owner_finance"
     const val OWNER_ACCOUNT = "owner_account"
 
+    // Owner – Sub-rute Keuangan (Tahap 6A)
+    const val OWNER_FINANCE_DETAIL = "owner_finance_detail"
+    const val OWNER_TRANSACTION_FORM = "owner_transaction_form?transactionId={transactionId}&type={type}"
+    const val OWNER_TRANSACTION_DETAIL = "owner_transaction_detail/{transactionId}"
+    const val OWNER_REPORT = "owner_report"
+
     // Staf Workshop (Netral Peran - Admin & Owner)
     const val STAFF_ORDER_DETAIL = "staff_order_detail/{orderId}"
 
-    // Tahap 5B: Admin Stock & Manual Order
+    // Tahap 5B: Admin Stock (tetap) – Pesanan Manual dipindah ke rute Staff Bersama (Tahap 6A)
     const val ADMIN_STOCK = "admin_stock"
     const val ADMIN_STOCK_FORM = "admin_stock_form?stockId={stockId}"
-    const val ADMIN_MANUAL_ORDER = "admin_manual_order"
+
+    // Rute Staf Bersama (Admin & Owner) – Tahap 6A
+    // Menggantikan ADMIN_MANUAL_ORDER; didaftarkan di level AppNavHost melalui staffOrderRoutes
+    const val STAFF_MANUAL_ORDER = "staff_manual_order"
 
     // Helper: bangun rute Detail Produk
     fun productDetailRoute(productId: String): String = "product_detail/$productId"
@@ -75,6 +84,19 @@ object Routes {
     // Helper: rute form stok
     fun adminStockFormRoute(stockId: String? = null): String =
         if (!stockId.isNullOrBlank()) "admin_stock_form?stockId=$stockId" else "admin_stock_form"
+
+    // Helper: rute form transaksi owner
+    fun ownerTransactionFormRoute(transactionId: String? = null, type: String? = null): String {
+        val params = buildString {
+            if (!transactionId.isNullOrBlank()) append("transactionId=$transactionId&")
+            if (!type.isNullOrBlank()) append("type=$type")
+        }.trimEnd('&')
+        return if (params.isNotEmpty()) "owner_transaction_form?$params" else "owner_transaction_form"
+    }
+
+    // Helper: rute detail transaksi owner
+    fun ownerTransactionDetailRoute(transactionId: String): String =
+        "owner_transaction_detail/$transactionId"
 
     // Helper: bangun rute Login/Register dengan redirect dan productId opsional
     fun loginRoute(redirect: String? = null, productId: String? = null): String =

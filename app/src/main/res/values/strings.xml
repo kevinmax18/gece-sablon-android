@@ -543,4 +543,103 @@
     <string name="staff_orders_date_this_month">Bulan Ini</string>
     <string name="staff_orders_count_format">Menampilkan %1$d pesanan</string>
     <string name="content_desc_notifications">Notifikasi</string>
+
+    <!-- Tahap 6A: Dashboard Owner -->
+    <!-- <string name="title_owner_dashboard">Dashboard</string> -->
+    <string name="owner_dashboard_finance_this_month">Keuangan Bulan Ini</string>
+    <string name="owner_dashboard_income">Pemasukan</string>
+    <string name="owner_dashboard_expense">Pengeluaran</string>
+    <string name="owner_dashboard_profit">Laba Bersih</string>
+    <string name="owner_dashboard_loss">Rugi Bersih</string>
+    <string name="owner_dashboard_order_status">Status Pesanan</string>
+    <string name="owner_dashboard_stat_new">Baru</string>
+    <string name="owner_dashboard_stat_process">Diproses</string>
+    <string name="owner_dashboard_stat_ready">Siap Diambil</string>
+    <string name="owner_dashboard_quick_actions">Aksi Cepat</string>
+    <string name="owner_dashboard_action_create_order">Buat\nPesanan</string>
+    <string name="owner_dashboard_action_record_expense">Catat\nPengeluaran</string>
+    <string name="owner_dashboard_action_catalog">Katalog\nProduk</string>
+    <string name="owner_dashboard_action_team">Tim\nSablon</string>
+    <string name="owner_dashboard_attention">Perlu Perhatian</string>
+    <string name="owner_dashboard_recent_orders">Pesanan Terbaru</string>
+    <string name="owner_dashboard_see_all">Lihat Semua</string>
+    <string name="owner_dashboard_coming_soon">Segera hadir di versi berikutnya</string>
+
+    <!-- Tahap 6A: Keuangan Owner -->
+    <!-- <string name="title_owner_finance">Keuangan</string> -->
+    <string name="owner_finance_period_this_month">Bulan Ini</string>
+    <string name="owner_finance_period_last_month">Bulan Lalu</string>
+    <string name="owner_finance_period_7days">7 Hari</string>
+    <string name="owner_finance_period_30days">30 Hari</string>
+    <string name="owner_finance_period_custom">Pilih Tanggal</string>
+    <string name="owner_finance_summary">Ringkasan Keuangan</string>
+    <string name="owner_finance_btn_income">Catat Pemasukan</string>
+    <string name="owner_finance_btn_expense">Catat Pengeluaran</string>
+    <string name="owner_finance_recent_tx">Transaksi Terbaru</string>
+    <string name="owner_finance_see_all">Lihat Semua</string>
+    <string name="owner_finance_report">Laporan</string>
+    <string name="owner_finance_no_transactions">Belum ada transaksi pada periode ini.</string>
+
+    <!-- Tahap 6A: Detail Keuangan -->
+    <string name="owner_finance_detail_title">Semua Transaksi</string>
+    <string name="owner_finance_detail_filter_all">Semua</string>
+    <string name="owner_finance_detail_filter_income">Pemasukan</string>
+    <string name="owner_finance_detail_filter_expense">Pengeluaran</string>
+    <string name="owner_finance_detail_search_hint">Cari keterangan…</string>
+    <string name="owner_finance_detail_empty">Tidak ada transaksi ditemukan.</string>
+    <string name="owner_finance_badge_order">PESANAN</string>
+
+    <!-- Tahap 6A: Form Transaksi -->
+    <string name="owner_tx_form_title_income">Catat Pemasukan</string>
+    <string name="owner_tx_form_title_expense">Catat Pengeluaran</string>
+    <string name="owner_tx_form_title_edit">Ubah Transaksi</string>
+    <string name="owner_tx_form_type_income">Pemasukan</string>
+    <string name="owner_tx_form_type_expense">Pengeluaran</string>
+    <string name="owner_tx_form_category_label">Kategori</string>
+    <string name="owner_tx_form_nominal_label">Nominal</string>
+    <string name="owner_tx_form_nominal_prefix">Rp</string>
+    <string name="owner_tx_form_date_label">Tanggal</string>
+    <string name="owner_tx_form_note_label">Keterangan</string>
+    <string name="owner_tx_form_note_hint">Deskripsi transaksi (maks 200 karakter)</string>
+    <string name="owner_tx_form_btn_save">Simpan</string>
+    <string name="owner_tx_form_err_nominal">Nominal harus lebih dari Rp0 dan tidak melebihi Rp1.000.000.000.</string>
+    <string name="owner_tx_form_err_note_long">Keterangan maksimal 200 karakter.</string>
+
+    <!-- Tahap 6A: Kategori Transaksi -->
+    <string name="tx_category_bahan_baku">Bahan Baku</string>
+    <string name="tx_category_material_dtf">Material DTF</string>
+    <string name="tx_category_operasional">Operasional</string>
+    <string name="tx_category_gaji">Gaji</string>
+    <string name="tx_category_pengeluaran_lainnya">Pengeluaran Lainnya</string>
+    <string name="tx_category_penjualan_lain">Penjualan Lain</string>
+    <string name="tx_category_pemasukan_lainnya">Pemasukan Lainnya</string>
+    <string name="tx_category_pesanan">Pesanan</string>
+
+    <!-- Tahap 6A: Detail Transaksi -->
+    <string name="owner_tx_detail_title">Detail Transaksi</string>
+    <string name="owner_tx_detail_type">Tipe</string>
+    <string name="owner_tx_detail_category">Kategori</string>
+    <string name="owner_tx_detail_nominal">Nominal</string>
+    <string name="owner_tx_detail_date">Tanggal</string>
+    <string name="owner_tx_detail_note">Keterangan</string>
+    <string name="owner_tx_detail_source">Sumber</string>
+    <string name="owner_tx_detail_created_by">Dicatat Oleh</string>
+    <string name="owner_tx_detail_source_manual">Manual</string>
+    <string name="owner_tx_detail_source_order">Otomatis dari Pesanan</string>
+    <string name="owner_tx_detail_btn_edit">Ubah</string>
+    <string name="owner_tx_detail_btn_delete">Hapus</string>
+    <string name="owner_tx_detail_btn_view_order">Lihat Pesanan</string>
+    <string name="owner_tx_detail_delete_confirm_title">Hapus Transaksi?</string>
+    <string name="owner_tx_detail_delete_confirm_msg">Transaksi ini akan dihapus secara permanen.</string>
+    <string name="owner_tx_detail_delete_btn_confirm">Hapus</string>
+    <string name="owner_tx_detail_delete_btn_cancel">Batal</string>
+
+    <!-- Tahap 6A: Laporan -->
+    <string name="owner_report_title">Laporan Keuangan</string>
+    <string name="owner_report_summary">Ringkasan Laba/Rugi</string>
+    <string name="owner_report_completed_orders">Pesanan Selesai</string>
+    <string name="owner_report_income_by_category">Rincian Pemasukan per Kategori</string>
+    <string name="owner_report_expense_by_category">Rincian Pengeluaran per Kategori</string>
+    <string name="owner_report_no_income">Tidak ada pemasukan pada periode ini.</string>
+    <string name="owner_report_no_expense">Tidak ada pengeluaran pada periode ini.</string>
 </resources>

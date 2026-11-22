@@ -14,6 +14,7 @@ package com.gecesablon.app.data.model
  * @param catatan        Catatan instruksi pelanggan (posisi cetak, referensi, dll)
  * @param uriDesain      String URI atau path file desain yang diunggah
  * @param dibuatPada     Timestamp epoch millisecond saat pesanan dibuat
+ * @param selesaiPada    Timestamp epoch millisecond saat pesanan ditandai selesai (nullable)
  * @param items          Daftar item pesanan (OrderItem)
  * @param produksi       Kondisi tahapan produksi internal (ProductionState)
  * @param riwayat        Daftar linimasa aktivitas pesanan (ActivityLogEntry)
@@ -30,7 +31,30 @@ data class Order(
     val catatan: String = "",
     val uriDesain: String? = null,
     val dibuatPada: Long = System.currentTimeMillis(),
+    val selesaiPada: Long? = null,
     val items: List<OrderItem> = emptyList(),
     val produksi: ProductionState = ProductionState(),
     val riwayat: List<ActivityLogEntry> = emptyList()
 )
+
+/**
+ * Membentuk entitas [Transaction] virtual dari pesanan berstatus SELESAI.
+ * Mengembalikan null jika pesanan bukan berstatus SELESAI atau [Order.selesaiPada] adalah null.
+ * Memakai prefix ID "order-<orderId>".
+ */
+fun Order.toVirtualTransactionOrNull(): Transaction? {
+    if (this.status != OrderStatus.SELESAI) return null
+    val timestampSelesai = this.selesaiPada ?: return null
+
+    return Transaction(
+        id = "order-${this.id}",
+        tipe = TransactionType.PEMASUKAN,
+        kategori = TransactionCategory.PESANAN,
+        nominal = this.total,
+        tanggal = timestampSelesai,
+        keterangan = "Pesanan ${this.kode} - ${this.namaPelanggan}",
+        sumber = TransactionSource.PESANAN,
+        orderId = this.id,
+        dibuatOleh = "Sistem (Pesanan Selesai)"
+    )
+}

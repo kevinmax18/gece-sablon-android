@@ -363,6 +363,7 @@ fun AppNavHost(
 
             ownerNavGraph(
                 navController = navController,
+                appContainer = appContainer,
                 accountViewModel = accountViewModel,
                 onNavigateToAbout = handleNavigateToAbout,
                 onLogout = handleLogout
