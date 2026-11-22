@@ -37,7 +37,7 @@ class FakeOrderRepository(
 ) : OrderRepository {
 
     private val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.US)
-    private var orderCounter = 11 // Dimulai setelah 10 pesanan seed awal
+    private var orderCounter = 14 // Dimulai setelah 13 pesanan seed awal
 
     // Seed 10 pesanan contoh dari 5 pelanggan mencakup semua variasi status
     private val ordersStateFlow = MutableStateFlow<List<Order>>(
@@ -152,6 +152,7 @@ class FakeOrderRepository(
                 catatan = "Sablon depan tengah A4. Pembelian kaos sampel komunitas.",
                 uriDesain = "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80",
                 dibuatPada = System.currentTimeMillis() - (10L * 24 * 60 * 60 * 1000), // 10 hari lalu
+                selesaiPada = System.currentTimeMillis() - (7L * 24 * 60 * 60 * 1000), // 7 hari lalu (bulan ini)
                 items = listOf(
                     OrderItem(
                         id = "item-003",
@@ -483,6 +484,147 @@ class FakeOrderRepository(
                         aksi = "Pesanan dibuat melalui aplikasi"
                     )
                 )
+            ),
+
+            // Seed 011: Budi Santoso (Pesanan Manual Selesai - Bulan Ini)
+            Order(
+                id = "order-seed-011",
+                kode = "GEC-20261102-021",
+                namaPelanggan = "Budi Santoso",
+                noHpPelanggan = "081234567011",
+                dibuatOleh = OrderCreator.STAFF,
+                userId = null,
+                status = OrderStatus.SELESAI,
+                total = 1_950_000L,
+                catatan = "Seragam panitia dies natalis, sablon depan dada kiri dan punggung A3.",
+                uriDesain = null,
+                dibuatPada = System.currentTimeMillis() - (5L * 24 * 60 * 60 * 1000), // 5 hari lalu
+                selesaiPada = System.currentTimeMillis() - (2L * 24 * 60 * 60 * 1000), // 2 hari lalu (bulan ini)
+                items = listOf(
+                    OrderItem(
+                        id = "item-011",
+                        productId = "prod-combed-24s",
+                        namaProduk = "Kaos Custom Cotton Combed 24s",
+                        warnaNama = "Hitam Solid",
+                        ukuranLabel = "L",
+                        jumlah = 30,
+                        hargaSatuan = 65_000L
+                    )
+                ),
+                produksi = ProductionState(
+                    tahapanSelesai = ProductionStage.orderedStages.toSet(),
+                    bajuTiba = true,
+                    dtfTiba = true,
+                    siapDisablon = true,
+                    updatedAt = System.currentTimeMillis() - (2L * 24 * 60 * 60 * 1000),
+                    updatedBy = "Admin Workshop"
+                ),
+                riwayat = listOf(
+                    ActivityLogEntry(
+                        waktu = System.currentTimeMillis() - (5L * 24 * 60 * 60 * 1000),
+                        aktor = "Admin Workshop",
+                        aksi = "Pesanan manual dicatat staf"
+                    ),
+                    ActivityLogEntry(
+                        waktu = System.currentTimeMillis() - (2L * 24 * 60 * 60 * 1000),
+                        aktor = "Admin Workshop",
+                        aksi = "Pesanan telah diambil oleh pemesan"
+                    )
+                )
+            ),
+
+            // Seed 012: Maya Indah (Selesai - Bulan Lalu)
+            Order(
+                id = "order-seed-012",
+                kode = "GEC-20261015-015",
+                namaPelanggan = "Maya Indah",
+                noHpPelanggan = "081234567012",
+                dibuatOleh = OrderCreator.CUSTOMER,
+                userId = "user-cust-002",
+                status = OrderStatus.SELESAI,
+                total = 2_600_000L,
+                catatan = "Kaos gathering alumni angkatan 2020 sablon emas DTF.",
+                uriDesain = "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80",
+                dibuatPada = System.currentTimeMillis() - (38L * 24 * 60 * 60 * 1000), // 38 hari lalu
+                selesaiPada = System.currentTimeMillis() - (32L * 24 * 60 * 60 * 1000), // 32 hari lalu (bulan lalu)
+                items = listOf(
+                    OrderItem(
+                        id = "item-012",
+                        productId = "prod-combed-24s",
+                        namaProduk = "Kaos Custom Cotton Combed 24s",
+                        warnaNama = "Navy Blue",
+                        ukuranLabel = "XL",
+                        jumlah = 40,
+                        hargaSatuan = 65_000L
+                    )
+                ),
+                produksi = ProductionState(
+                    tahapanSelesai = ProductionStage.orderedStages.toSet(),
+                    bajuTiba = true,
+                    dtfTiba = true,
+                    siapDisablon = true,
+                    updatedAt = System.currentTimeMillis() - (32L * 24 * 60 * 60 * 1000),
+                    updatedBy = "Owner GeCe"
+                ),
+                riwayat = listOf(
+                    ActivityLogEntry(
+                        waktu = System.currentTimeMillis() - (38L * 24 * 60 * 60 * 1000),
+                        aktor = "Maya Indah",
+                        aksi = "Pesanan dibuat melalui aplikasi"
+                    ),
+                    ActivityLogEntry(
+                        waktu = System.currentTimeMillis() - (32L * 24 * 60 * 60 * 1000),
+                        aktor = "Owner GeCe",
+                        aksi = "Pesanan telah diambil oleh pemesan"
+                    )
+                )
+            ),
+
+            // Seed 013: Komunitas Sepeda Lipat (Selesai - Bulan Lalu)
+            Order(
+                id = "order-seed-013",
+                kode = "GEC-20261005-007",
+                namaPelanggan = "Komunitas Sepeda Lipat",
+                noHpPelanggan = "081234567013",
+                dibuatOleh = OrderCreator.CUSTOMER,
+                userId = "user-cust-003",
+                status = OrderStatus.SELESAI,
+                total = 3_900_000L,
+                catatan = "Kaos gowes santai warna hijau army, sablon reflektif belakang.",
+                uriDesain = "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80",
+                dibuatPada = System.currentTimeMillis() - (45L * 24 * 60 * 60 * 1000), // 45 hari lalu
+                selesaiPada = System.currentTimeMillis() - (40L * 24 * 60 * 60 * 1000), // 40 hari lalu (bulan lalu)
+                items = listOf(
+                    OrderItem(
+                        id = "item-013",
+                        productId = "prod-combed-24s",
+                        namaProduk = "Kaos Custom Cotton Combed 24s",
+                        warnaNama = "Forest Green",
+                        ukuranLabel = "L",
+                        jumlah = 60,
+                        hargaSatuan = 65_000L
+                    )
+                ),
+                produksi = ProductionState(
+                    tahapanSelesai = ProductionStage.orderedStages.toSet(),
+                    bajuTiba = true,
+                    dtfTiba = true,
+                    siapDisablon = true,
+                    updatedAt = System.currentTimeMillis() - (40L * 24 * 60 * 60 * 1000),
+                    updatedBy = "Owner GeCe"
+                ),
+                riwayat = listOf(
+                    ActivityLogEntry(
+                        waktu = System.currentTimeMillis() - (45L * 24 * 60 * 60 * 1000),
+                        aktor = "Komunitas Sepeda Lipat",
+                        aksi = "Pesanan dibuat melalui aplikasi"
+                    ),
+                    ActivityLogEntry(
+                        waktu = System.currentTimeMillis() - (40L * 24 * 60 * 60 * 1000),
+                        aktor = "Owner GeCe",
+                        aksi = "Pesanan telah diambil oleh pemesan"
+                    )
+                )
             )
         )
     )
@@ -755,10 +897,12 @@ class FakeOrderRepository(
             aktor = "${actor.name} (${if (actor.role == Role.ADMIN) "Admin" else "Owner"})",
             aksi = "Pesanan telah diambil oleh pemesan (Selesai)"
         )
+        val nowMillis = System.currentTimeMillis()
         val updatedOrder = target.copy(
             status = OrderStatus.SELESAI,
+            selesaiPada = nowMillis,
             produksi = target.produksi.copy(
-                updatedAt = System.currentTimeMillis(),
+                updatedAt = nowMillis,
                 updatedBy = actor.name
             ),
             riwayat = target.riwayat + newLog

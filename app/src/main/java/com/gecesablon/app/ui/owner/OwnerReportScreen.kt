@@ -1,12 +1,4 @@
 package com.gecesablon.app.ui.owner
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-
-/**
- * Layar Laporan Owner untuk rekapitulasi penjualan, laba rugi, dan performa produksi berkala.
- */
-@Composable
-fun OwnerReportScreen(modifier: Modifier = Modifier) {
-    // Stub layar laporan owner
-}
+// Layar laporan dipindah ke ui/owner/finance/OwnerReportScreen.kt (Tahap 6A)
+// File ini sengaja dikosongkan; tidak ada composable di sini.

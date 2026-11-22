@@ -12,8 +12,6 @@ import com.gecesablon.app.ui.account.AccountViewModel
 import com.gecesablon.app.ui.admin.AdminAccountScreen
 import com.gecesablon.app.ui.admin.AdminDashboardScreen
 import com.gecesablon.app.ui.admin.AdminDashboardViewModel
-import com.gecesablon.app.ui.admin.order.AdminManualOrderScreen
-import com.gecesablon.app.ui.admin.order.AdminManualOrderViewModel
 import com.gecesablon.app.ui.admin.stock.AdminStockFormScreen
 import com.gecesablon.app.ui.admin.stock.AdminStockFormViewModel
 import com.gecesablon.app.ui.admin.stock.AdminStockScreen
@@ -26,7 +24,9 @@ import com.gecesablon.app.ui.staff.StaffProcessViewModel
 /**
  * NavGraph untuk alur peran Admin Workshop:
  * - Tab Beranda, Pesanan, Proses, Akun
- * - Sub-rute: Stok (Daftar & Form), Pesanan Manual
+ * - Sub-rute: Stok (Daftar & Form)
+ * Pesanan Manual sekarang didaftarkan di level AppNavHost melalui staffOrderRoutes
+ * dengan rute bersama Routes.STAFF_MANUAL_ORDER (dapat diakses Admin & Owner).
  */
 fun NavGraphBuilder.adminNavGraph(
     appContainer: AppContainer,
@@ -47,7 +47,8 @@ fun NavGraphBuilder.adminNavGraph(
             AdminDashboardScreen(
                 viewModel = dashboardViewModel,
                 onNavigateToCreateManualOrder = {
-                    navController.navigate(Routes.ADMIN_MANUAL_ORDER)
+                    // Pindah ke rute Staff Bersama (Tahap 6A)
+                    navController.navigate(Routes.STAFF_MANUAL_ORDER)
                 },
                 onNavigateToOrders = {
                     navController.navigate(Routes.ADMIN_ORDERS)
@@ -144,26 +145,6 @@ fun NavGraphBuilder.adminNavGraph(
                 viewModel = formViewModel,
                 onNavigateBack = { navController.popBackStack() },
                 onSuccess = { navController.popBackStack() }
-            )
-        }
-
-        // Sub-rute: Pesanan Manual
-        composable(Routes.ADMIN_MANUAL_ORDER) {
-            val manualOrderViewModel: AdminManualOrderViewModel = viewModel(
-                factory = AdminManualOrderViewModel.factory(
-                    orderRepository = appContainer.orderRepository,
-                    productRepository = appContainer.productRepository,
-                    sessionStore = appContainer.sessionStore
-                )
-            )
-            AdminManualOrderScreen(
-                viewModel = manualOrderViewModel,
-                onNavigateBack = { navController.popBackStack() },
-                onOrderCreated = { createdOrder ->
-                    navController.navigate(Routes.staffOrderDetailRoute(createdOrder.id)) {
-                        popUpTo(Routes.ADMIN_ORDERS) { inclusive = false }
-                    }
-                }
             )
         }
     }
