@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.LockReset
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
@@ -52,6 +53,7 @@ import com.gecesablon.app.ui.theme.GeceColors
  *
  * @param viewModel       AccountViewModel bersama.
  * @param onNavigateBack  Kembali ke Beranda.
+ * @param onNavigateToChangePassword Buka layar Ubah Kata Sandi.
  * @param onNavigateToAbout Buka layar Tentang Aplikasi.
  * @param onLogout        Dipanggil setelah sesi dihapus; navigasi ke Welcome.
  */
@@ -59,6 +61,7 @@ import com.gecesablon.app.ui.theme.GeceColors
 fun ProfileScreen(
     viewModel: AccountViewModel,
     onNavigateBack: () -> Unit,
+    onNavigateToChangePassword: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onLogout: () -> Unit,
     modifier: Modifier = Modifier
@@ -184,6 +187,13 @@ fun ProfileScreen(
                 color = MaterialTheme.colorScheme.surface
             ) {
                 Column(modifier = Modifier.padding(vertical = 4.dp)) {
+                    // Ubah Kata Sandi
+                    ProfileMenuRow(
+                        icon = { Icon(Icons.Default.LockReset, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp)) },
+                        label = stringResource(R.string.account_menu_change_password),
+                        onClick = onNavigateToChangePassword
+                    )
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
                     // Tentang Aplikasi
                     ProfileMenuRow(
                         icon = { Icon(Icons.Default.Info, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp)) },

@@ -101,6 +101,9 @@ fun NavGraphBuilder.adminNavGraph(
         composable(Routes.ADMIN_ACCOUNT) {
             AdminAccountScreen(
                 viewModel = accountViewModel,
+                onNavigateToChangePassword = {
+                    navController.navigate(Routes.CHANGE_PASSWORD)
+                },
                 onNavigateToAbout = onNavigateToAbout,
                 onLogout = onLogout
             )

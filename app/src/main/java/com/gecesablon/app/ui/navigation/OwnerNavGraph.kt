@@ -152,6 +152,9 @@ fun NavGraphBuilder.ownerNavGraph(
         composable(Routes.OWNER_ACCOUNT) {
             OwnerAccountScreen(
                 viewModel = accountViewModel,
+                onNavigateToChangePassword = {
+                    navController.navigate(Routes.CHANGE_PASSWORD)
+                },
                 onNavigateToAbout = onNavigateToAbout,
                 onLogout = onLogout
             )

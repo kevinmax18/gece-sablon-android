@@ -158,6 +158,9 @@ fun NavGraphBuilder.customerNavGraph(
                 onNavigateBack = {
                     navController.popBackStack()
                 },
+                onNavigateToChangePassword = {
+                    navController.navigate(Routes.CHANGE_PASSWORD)
+                },
                 onNavigateToAbout = onNavigateToAbout,
                 onLogout = onLogout
             )

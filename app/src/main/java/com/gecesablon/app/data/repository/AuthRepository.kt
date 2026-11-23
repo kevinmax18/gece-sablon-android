@@ -28,4 +28,17 @@ interface AuthRepository {
 
     /** Logout: implementasi nyata akan membatalkan token di server (Tahap 8). */
     suspend fun logout()
+
+    /**
+     * Mengubah kata sandi akun pengguna yang sedang login.
+     * @param actor Sesi pengguna yang meminta perubahan kata sandi
+     * @param oldPassword Kata sandi saat ini
+     * @param newPassword Kata sandi baru
+     * @return Resource.Success jika berhasil, Resource.Error jika gagal
+     */
+    suspend fun changePassword(
+        actor: Session,
+        oldPassword: String,
+        newPassword: String
+    ): Resource<Unit>
 }

@@ -722,4 +722,30 @@
     <string name="owner_finance_btn_load_more">Muat Lebih Banyak Transaksi</string>
     <string name="owner_finance_btn_view_report">Lihat Laporan Keuangan</string>
     <string name="owner_report_financial_perf_title">Kinerja Finansial</string>
+
+    <!-- P3: Akun Owner & Admin, dan Ubah Kata Sandi -->
+    <string name="account_header_gece">GECE</string>
+    <string name="account_header_title">Akun</string>
+    <string name="account_badge_owner">OWNER</string>
+    <string name="account_badge_admin">ADMIN</string>
+    <string name="account_access_owner">Hak Akses: Penuh (Owner)\nMemiliki otoritas penuh atas modul Manajemen, Laporan Keuangan, dan Pengawasan Produksi GeCe Screen Printing.</string>
+    <string name="account_access_admin">Hak Akses: Admin Workshop\nMengelola pesanan, produksi, dan stok workshop.</string>
+    <string name="account_section_info">INFORMASI AKUN</string>
+    <string name="account_menu_change_password">Ubah Kata Sandi</string>
+    <string name="account_menu_change_password_sub">Perbarui kata sandi akun Anda</string>
+    <string name="account_section_help">BANTUAN &amp; LEGAL</string>
+    <string name="account_menu_about">Tentang Aplikasi</string>
+    <string name="account_btn_logout">Keluar dari Akun</string>
+
+    <string name="change_password_title">Ubah Kata Sandi</string>
+    <string name="change_password_subtitle">Perbarui kata sandi akun Anda untuk menjaga keamanan akses.</string>
+    <string name="change_password_old_label">Kata Sandi Lama</string>
+    <string name="change_password_old_placeholder">Masukkan kata sandi lama</string>
+    <string name="change_password_new_label">Kata Sandi Baru</string>
+    <string name="change_password_new_placeholder">Masukkan kata sandi baru</string>
+    <string name="change_password_confirm_label">Konfirmasi Kata Sandi Baru</string>
+    <string name="change_password_confirm_placeholder">Ulangi kata sandi baru</string>
+    <string name="change_password_hint_rules">Kata sandi minimal 8 karakter, mengandung kombinasi huruf dan angka, serta tidak boleh sama dengan kata sandi lama.</string>
+    <string name="change_password_btn_submit">Simpan Kata Sandi</string>
+    <string name="change_password_success">Kata sandi diperbarui</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.gecesablon.app.data.repository
 
+import com.gecesablon.app.core.util.PasswordRules
 import com.gecesablon.app.core.util.Resource
 import com.gecesablon.app.data.model.Role
 import com.gecesablon.app.data.model.Session
@@ -123,6 +124,37 @@ class FakeAuthRepository : AuthRepository {
     override suspend fun logout() {
         // Fake: tidak ada token di server yang perlu dibatalkan.
         // Tahap 8: panggil API untuk invalidate token.
+    }
+
+    override suspend fun changePassword(
+        actor: Session,
+        oldPassword: String,
+        newPassword: String
+    ): Resource<Unit> {
+        delay(600) // meniru latensi jaringan
+
+        // Cari akun berdasarkan userId sesi atau nama
+        val index = accounts.indexOfFirst { it.id == actor.userId || it.name.equals(actor.name, ignoreCase = true) }
+        if (index == -1) {
+            return Resource.Error("Akun tidak ditemukan atau sesi tidak valid.")
+        }
+
+        val account = accounts[index]
+        if (account.passwordHash != hash(oldPassword)) {
+            return Resource.Error("Kata sandi lama salah.")
+        }
+
+        val validation = PasswordRules.validasiBaru(oldPassword, newPassword, newPassword)
+        if (!validation.isValid) {
+            val errorMsg = validation.newPasswordError
+                ?: validation.oldPasswordError
+                ?: "Format kata sandi baru tidak memenuhi syarat."
+            return Resource.Error(errorMsg)
+        }
+
+        // TODO: di API asli server memverifikasi dan menyimpan hash
+        accounts[index] = account.copy(passwordHash = hash(newPassword))
+        return Resource.Success(Unit)
     }
 
     // ---------------------------------------------------------------------------

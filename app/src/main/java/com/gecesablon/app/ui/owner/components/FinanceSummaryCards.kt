@@ -68,7 +68,7 @@ fun FinanceSummaryCards(
                         text = stringResource(R.string.owner_dashboard_total_income),
                         style = MaterialTheme.typography.labelSmall.copy(
                             fontWeight = FontWeight.Bold,
-                            fontSize = 10.sp
+                            fontSize = 9.sp
                         ),
                         color = TextSecondary,
                         maxLines = 2,
@@ -130,7 +130,7 @@ fun FinanceSummaryCards(
                         text = stringResource(R.string.owner_dashboard_total_expense),
                         style = MaterialTheme.typography.labelSmall.copy(
                             fontWeight = FontWeight.Bold,
-                            fontSize = 10.sp
+                            fontSize = 9.sp
                         ),
                         color = TextSecondary,
                         maxLines = 2,

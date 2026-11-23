@@ -21,6 +21,8 @@ import com.gecesablon.app.data.model.Role
 import com.gecesablon.app.data.model.Session
 import com.gecesablon.app.ui.about.AboutScreen
 import com.gecesablon.app.ui.account.AccountViewModel
+import com.gecesablon.app.ui.auth.ChangePasswordScreen
+import com.gecesablon.app.ui.auth.ChangePasswordViewModel
 import com.gecesablon.app.ui.auth.LoginScreen
 import com.gecesablon.app.ui.auth.LoginViewModel
 import com.gecesablon.app.ui.auth.RegisterScreen
@@ -332,6 +334,22 @@ fun AppNavHost(
             // 5. Layar Tentang Aplikasi
             composable(Routes.ABOUT) {
                 AboutScreen(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+            // Layar Ubah Kata Sandi (Semua peran dengan sesi login valid)
+            composable(Routes.CHANGE_PASSWORD) {
+                val changePasswordViewModel: ChangePasswordViewModel = viewModel(
+                    factory = ChangePasswordViewModel.factory(
+                        authRepository = appContainer.authRepository,
+                        sessionStore = appContainer.sessionStore
+                    )
+                )
+                ChangePasswordScreen(
+                    viewModel = changePasswordViewModel,
                     onNavigateBack = {
                         navController.popBackStack()
                     }
