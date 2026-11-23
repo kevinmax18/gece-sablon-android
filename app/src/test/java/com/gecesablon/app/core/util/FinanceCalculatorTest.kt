@@ -10,7 +10,10 @@ import com.gecesablon.app.data.model.toVirtualTransactionOrNull
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.util.Calendar
+import java.util.TimeZone
 
 /**
  * Unit test untuk [FinanceCalculator] yang memverifikasi kalkulasi keuangan murni.
@@ -186,5 +189,158 @@ class FinanceCalculatorTest {
 
         val ratioPenuh = FinanceCalculator.calculateCategoryRatio(1_000_000L, 1_000_000L)
         assertEquals(1.0f, ratioPenuh, 0.001f)
+    }
+
+    @Test
+    fun testBuildMonthlyTrend_lintasTahunDesemberJanuari() {
+        val tz = TimeZone.getTimeZone("Asia/Jakarta")
+        // Misalkan waktu acuan adalah 15 Januari 2027
+        val cal = Calendar.getInstance(tz).apply {
+            clear()
+            set(2027, Calendar.JANUARY, 15, 10, 0, 0)
+        }
+        val now = cal.timeInMillis
+
+        val trend = FinanceCalculator.buildMonthlyTrend(now, tz, emptyList(), emptyList())
+        assertEquals(6, trend.monthlyBars.size)
+
+        // Urutan 6 bulan: Agu 2026, Sep 2026, Okt 2026, Nov 2026, Des 2026, Jan 2027
+        val expectedMonths = listOf(
+            Calendar.AUGUST to 2026,
+            Calendar.SEPTEMBER to 2026,
+            Calendar.OCTOBER to 2026,
+            Calendar.NOVEMBER to 2026,
+            Calendar.DECEMBER to 2026,
+            Calendar.JANUARY to 2027
+        )
+
+        for (i in 0 until 6) {
+            val bar = trend.monthlyBars[i]
+            assertEquals(expectedMonths[i].first, bar.monthIndex)
+            assertEquals(expectedMonths[i].second, bar.year)
+        }
+        assertTrue(trend.monthlyBars.last().isCurrentMonth)
+        assertEquals(false, trend.monthlyBars.first().isCurrentMonth)
+    }
+
+    @Test
+    fun testBuildMonthlyTrend_februariKabisatDanBiasa() {
+        val tz = TimeZone.getTimeZone("Asia/Jakarta")
+        // 2024 adalah tahun kabisat (Februari = 29 hari)
+        val leapFebRange = FinanceCalculator.getMonthRange(2024, Calendar.FEBRUARY, tz)
+        val cal = Calendar.getInstance(tz).apply { timeInMillis = leapFebRange.endMillis }
+        assertEquals(29, cal.get(Calendar.DAY_OF_MONTH))
+
+        // 2025 adalah tahun biasa (Februari = 28 hari)
+        val nonLeapFebRange = FinanceCalculator.getMonthRange(2025, Calendar.FEBRUARY, tz)
+        cal.timeInMillis = nonLeapFebRange.endMillis
+        assertEquals(28, cal.get(Calendar.DAY_OF_MONTH))
+    }
+
+    @Test
+    fun testBuildMonthlyTrend_nilaiTepatDiBatasAwalDanAkhirBulan() {
+        val tz = TimeZone.getTimeZone("Asia/Jakarta")
+        val febRange = FinanceCalculator.getMonthRange(2026, Calendar.FEBRUARY, tz)
+
+        val txStart = Transaction(
+            id = "tx-start",
+            tipe = TransactionType.PEMASUKAN,
+            kategori = TransactionCategory.PENJUALAN_LAIN,
+            nominal = 100_000L,
+            tanggal = febRange.startMillis, // Tepat 00:00:00.000
+            keterangan = "Awal bulan",
+            dibuatOleh = "Owner"
+        )
+        val txEnd = Transaction(
+            id = "tx-end",
+            tipe = TransactionType.PENGELUARAN,
+            kategori = TransactionCategory.OPERASIONAL,
+            nominal = 50_000L,
+            tanggal = febRange.endMillis, // Tepat 23:59:59.999
+            keterangan = "Akhir bulan",
+            dibuatOleh = "Owner"
+        )
+
+        val cal = Calendar.getInstance(tz).apply {
+            clear()
+            set(2026, Calendar.FEBRUARY, 10, 12, 0, 0)
+        }
+        val now = cal.timeInMillis
+
+        val trend = FinanceCalculator.buildMonthlyTrend(now, tz, listOf(txStart, txEnd), emptyList())
+        val febBar = trend.monthlyBars.last()
+
+        assertEquals(100_000L, febBar.totalIncome)
+        assertEquals(50_000L, febBar.totalExpense)
+        assertEquals(50_000L, febBar.netProfit)
+        assertEquals(50.0, febBar.marginPercentage!!, 0.001)
+    }
+
+    @Test
+    fun testBuildMonthlyTrend_bulanTanpaDataDanPendapatanBulanLaluNol() {
+        val tz = TimeZone.getTimeZone("Asia/Jakarta")
+        val cal = Calendar.getInstance(tz).apply {
+            clear()
+            set(2026, Calendar.NOVEMBER, 15, 12, 0, 0)
+        }
+        val now = cal.timeInMillis
+
+        // Tidak ada transaksi sama sekali
+        val trend = FinanceCalculator.buildMonthlyTrend(now, tz, emptyList(), emptyList())
+        assertEquals(6, trend.monthlyBars.size)
+
+        for (bar in trend.monthlyBars) {
+            assertEquals(0L, bar.totalIncome)
+            assertEquals(0L, bar.totalExpense)
+            assertEquals(0L, bar.netProfit)
+            assertNull("Margin harus null jika pemasukan 0", bar.marginPercentage)
+        }
+
+        assertNull("Rata-rata margin harus null jika total pemasukan 6 bulan 0", trend.averageMarginPercentage)
+        assertNull("Pertumbuhan pendapatan harus null jika pendapatan bulan lalu 0", trend.incomeGrowthPercentage)
+    }
+
+    @Test
+    fun testBuildMonthlyTrend_bulanRugiDanMarginRataRataBerbobot() {
+        val tz = TimeZone.getTimeZone("Asia/Jakarta")
+        // Acuan: Oktober 2026
+        val cal = Calendar.getInstance(tz).apply {
+            clear()
+            set(2026, Calendar.OCTOBER, 20, 12, 0, 0)
+        }
+        val now = cal.timeInMillis
+
+        val sepRange = FinanceCalculator.getMonthRange(2026, Calendar.SEPTEMBER, tz)
+        val oktRange = FinanceCalculator.getMonthRange(2026, Calendar.OCTOBER, tz)
+
+        // September: Pemasukan 1.000.000, Pengeluaran 1.500.000 -> Rugi -500.000 (margin = -50%)
+        val txSepIn = Transaction(id = "s1", tipe = TransactionType.PEMASUKAN, kategori = TransactionCategory.PENJUALAN_LAIN, nominal = 1_000_000L, tanggal = sepRange.startMillis + 1000L, keterangan = "Sep", dibuatOleh = "Owner")
+        val txSepOut = Transaction(id = "s2", tipe = TransactionType.PENGELUARAN, kategori = TransactionCategory.OPERASIONAL, nominal = 1_500_000L, tanggal = sepRange.startMillis + 2000L, keterangan = "Sep", dibuatOleh = "Owner")
+
+        // Oktober: Pemasukan 3.000.000, Pengeluaran 1.000.000 -> Laba 2.000.000 (margin = 66.67%)
+        val txOktIn = Transaction(id = "o1", tipe = TransactionType.PEMASUKAN, kategori = TransactionCategory.PENJUALAN_LAIN, nominal = 3_000_000L, tanggal = oktRange.startMillis + 1000L, keterangan = "Okt", dibuatOleh = "Owner")
+        val txOktOut = Transaction(id = "o2", tipe = TransactionType.PENGELUARAN, kategori = TransactionCategory.OPERASIONAL, nominal = 1_000_000L, tanggal = oktRange.startMillis + 2000L, keterangan = "Okt", dibuatOleh = "Owner")
+
+        val trend = FinanceCalculator.buildMonthlyTrend(now, tz, listOf(txSepIn, txSepOut, txOktIn, txOktOut), emptyList())
+
+        val sepBar = trend.monthlyBars[trend.monthlyBars.size - 2]
+        val oktBar = trend.monthlyBars.last()
+
+        assertEquals(-500_000L, sepBar.netProfit)
+        assertEquals(-50.0, sepBar.marginPercentage!!, 0.001)
+
+        assertEquals(2_000_000L, oktBar.netProfit)
+        assertEquals(66.666, oktBar.marginPercentage!!, 0.01)
+
+        // Rata-rata margin berbobot:
+        // Total Income = 1.000.000 + 3.000.000 = 4.000.000
+        // Total Profit = -500.000 + 2.000.000 = 1.500.000
+        // Avg Margin = 1.500.000 / 4.000.000 * 100 = 37.5%
+        assertNotNull(trend.averageMarginPercentage)
+        assertEquals(37.5, trend.averageMarginPercentage!!, 0.001)
+
+        // Pertumbuhan: dari 1.000.000 ke 3.000.000 = +200%
+        assertNotNull(trend.incomeGrowthPercentage)
+        assertEquals(200.0, trend.incomeGrowthPercentage!!, 0.001)
     }
 }

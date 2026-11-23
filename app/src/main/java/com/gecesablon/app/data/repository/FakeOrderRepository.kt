@@ -37,7 +37,7 @@ class FakeOrderRepository(
 ) : OrderRepository {
 
     private val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.US)
-    private var orderCounter = 14 // Dimulai setelah 13 pesanan seed awal
+    private var orderCounter = 20 // Dimulai setelah 19 pesanan seed awal
 
     // Seed 10 pesanan contoh dari 5 pelanggan mencakup semua variasi status
     private val ordersStateFlow = MutableStateFlow<List<Order>>(
@@ -622,6 +622,258 @@ class FakeOrderRepository(
                     ActivityLogEntry(
                         waktu = System.currentTimeMillis() - (40L * 24 * 60 * 60 * 1000),
                         aktor = "Owner GeCe",
+                        aksi = "Pesanan telah diambil oleh pemesan"
+                    )
+                )
+            ),
+
+            // Seed 014: Sanggar Tari Melati (Selesai - 2 Bulan Lalu / September)
+            Order(
+                id = "order-seed-014",
+                kode = "GEC-20260915-001",
+                namaPelanggan = "Sanggar Tari Melati",
+                noHpPelanggan = "081234567014",
+                dibuatOleh = OrderCreator.CUSTOMER,
+                userId = "user-cust-004",
+                status = OrderStatus.SELESAI,
+                total = 2_800_000L,
+                catatan = "Kaos pentas seni sablon warna emas dan ungu.",
+                uriDesain = "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80",
+                dibuatPada = System.currentTimeMillis() - (75L * 24 * 60 * 60 * 1000),
+                selesaiPada = System.currentTimeMillis() - (70L * 24 * 60 * 60 * 1000),
+                items = listOf(
+                    OrderItem(
+                        id = "item-014",
+                        productId = "prod-combed-24s",
+                        namaProduk = "Kaos Custom Cotton Combed 24s",
+                        warnaNama = "Hitam Solid",
+                        ukuranLabel = "M",
+                        jumlah = 40,
+                        hargaSatuan = 70_000L
+                    )
+                ),
+                produksi = ProductionState(
+                    tahapanSelesai = ProductionStage.orderedStages.toSet(),
+                    bajuTiba = true,
+                    dtfTiba = true,
+                    siapDisablon = true,
+                    updatedAt = System.currentTimeMillis() - (70L * 24 * 60 * 60 * 1000),
+                    updatedBy = "Admin Workshop"
+                ),
+                riwayat = listOf(
+                    ActivityLogEntry(
+                        waktu = System.currentTimeMillis() - (70L * 24 * 60 * 60 * 1000),
+                        aktor = "Admin Workshop",
+                        aksi = "Pesanan telah diambil oleh pemesan"
+                    )
+                )
+            ),
+
+            // Seed 015: Futsal Squad Delta (Selesai - 3 Bulan Lalu / Agustus)
+            Order(
+                id = "order-seed-015",
+                kode = "GEC-20260818-002",
+                namaPelanggan = "Futsal Squad Delta",
+                noHpPelanggan = "081234567015",
+                dibuatOleh = OrderCreator.CUSTOMER,
+                userId = "user-cust-005",
+                status = OrderStatus.SELESAI,
+                total = 3_250_000L,
+                catatan = "Jersey sablon nomor punggung dan logo tim depan.",
+                uriDesain = "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80",
+                dibuatPada = System.currentTimeMillis() - (105L * 24 * 60 * 60 * 1000),
+                selesaiPada = System.currentTimeMillis() - (100L * 24 * 60 * 60 * 1000),
+                items = listOf(
+                    OrderItem(
+                        id = "item-015",
+                        productId = "prod-combed-30s",
+                        namaProduk = "Kaos Custom Cotton Combed 30s",
+                        warnaNama = "Navy Blue",
+                        ukuranLabel = "L",
+                        jumlah = 50,
+                        hargaSatuan = 65_000L
+                    )
+                ),
+                produksi = ProductionState(
+                    tahapanSelesai = ProductionStage.orderedStages.toSet(),
+                    bajuTiba = true,
+                    dtfTiba = true,
+                    siapDisablon = true,
+                    updatedAt = System.currentTimeMillis() - (100L * 24 * 60 * 60 * 1000),
+                    updatedBy = "Admin Workshop"
+                ),
+                riwayat = listOf(
+                    ActivityLogEntry(
+                        waktu = System.currentTimeMillis() - (100L * 24 * 60 * 60 * 1000),
+                        aktor = "Admin Workshop",
+                        aksi = "Pesanan telah diambil oleh pemesan"
+                    )
+                )
+            ),
+
+            // Seed 016: Bengkel Motor Jaya (Selesai - 4 Bulan Lalu / Juli)
+            Order(
+                id = "order-seed-016",
+                kode = "GEC-20260712-003",
+                namaPelanggan = "Bengkel Motor Jaya",
+                noHpPelanggan = "081234567016",
+                dibuatOleh = OrderCreator.CUSTOMER,
+                userId = "user-cust-004",
+                status = OrderStatus.SELESAI,
+                total = 2_400_000L,
+                catatan = "Polo seragam montir sablon dada kanan dan punggung.",
+                uriDesain = "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80",
+                dibuatPada = System.currentTimeMillis() - (140L * 24 * 60 * 60 * 1000),
+                selesaiPada = System.currentTimeMillis() - (135L * 24 * 60 * 60 * 1000),
+                items = listOf(
+                    OrderItem(
+                        id = "item-016",
+                        productId = "prod-polo-pique",
+                        namaProduk = "Polo Shirt Custom CVC Pique",
+                        warnaNama = "Hitam Solid",
+                        ukuranLabel = "XL",
+                        jumlah = 30,
+                        hargaSatuan = 80_000L
+                    )
+                ),
+                produksi = ProductionState(
+                    tahapanSelesai = ProductionStage.orderedStages.toSet(),
+                    bajuTiba = true,
+                    dtfTiba = true,
+                    siapDisablon = true,
+                    updatedAt = System.currentTimeMillis() - (135L * 24 * 60 * 60 * 1000),
+                    updatedBy = "Owner GeCe"
+                ),
+                riwayat = listOf(
+                    ActivityLogEntry(
+                        waktu = System.currentTimeMillis() - (135L * 24 * 60 * 60 * 1000),
+                        aktor = "Owner GeCe",
+                        aksi = "Pesanan telah diambil oleh pemesan"
+                    )
+                )
+            ),
+
+            // Seed 017: Cafe Kopi Senja (Selesai - 5 Bulan Lalu / Juni)
+            Order(
+                id = "order-seed-017",
+                kode = "GEC-20260620-004",
+                namaPelanggan = "Cafe Kopi Senja",
+                noHpPelanggan = "081234567017",
+                dibuatOleh = OrderCreator.CUSTOMER,
+                userId = "user-cust-005",
+                status = OrderStatus.SELESAI,
+                total = 2_250_000L,
+                catatan = "Kaos barista warna cream sablon logo minimalis cokelat.",
+                uriDesain = "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80",
+                dibuatPada = System.currentTimeMillis() - (165L * 24 * 60 * 60 * 1000),
+                selesaiPada = System.currentTimeMillis() - (160L * 24 * 60 * 60 * 1000),
+                items = listOf(
+                    OrderItem(
+                        id = "item-017",
+                        productId = "prod-combed-24s",
+                        namaProduk = "Kaos Custom Cotton Combed 24s",
+                        warnaNama = "Cream",
+                        ukuranLabel = "M",
+                        jumlah = 30,
+                        hargaSatuan = 75_000L
+                    )
+                ),
+                produksi = ProductionState(
+                    tahapanSelesai = ProductionStage.orderedStages.toSet(),
+                    bajuTiba = true,
+                    dtfTiba = true,
+                    siapDisablon = true,
+                    updatedAt = System.currentTimeMillis() - (160L * 24 * 60 * 60 * 1000),
+                    updatedBy = "Admin Workshop"
+                ),
+                riwayat = listOf(
+                    ActivityLogEntry(
+                        waktu = System.currentTimeMillis() - (160L * 24 * 60 * 60 * 1000),
+                        aktor = "Admin Workshop",
+                        aksi = "Pesanan telah diambil oleh pemesan"
+                    )
+                )
+            ),
+
+            // Seed 018: Ekspedisi Kilat Nusantara (Selesai - Bulan Berjalan)
+            Order(
+                id = "order-seed-018",
+                kode = "GEC-20261110-008",
+                namaPelanggan = "Ekspedisi Kilat Nusantara",
+                noHpPelanggan = "081234567018",
+                dibuatOleh = OrderCreator.CUSTOMER,
+                userId = "user-cust-004",
+                status = OrderStatus.SELESAI,
+                total = 6_500_000L,
+                catatan = "Seragam kurir sablon logo dada dan punggung.",
+                uriDesain = "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80",
+                dibuatPada = System.currentTimeMillis() - (6L * 24 * 60 * 60 * 1000),
+                selesaiPada = System.currentTimeMillis() - (2L * 24 * 60 * 60 * 1000),
+                items = listOf(
+                    OrderItem(
+                        id = "item-018",
+                        productId = "prod-polo-pique",
+                        namaProduk = "Polo Shirt Custom CVC Pique",
+                        warnaNama = "Navy Blue",
+                        ukuranLabel = "L",
+                        jumlah = 80,
+                        hargaSatuan = 81_250L
+                    )
+                ),
+                produksi = ProductionState(
+                    tahapanSelesai = ProductionStage.orderedStages.toSet(),
+                    bajuTiba = true,
+                    dtfTiba = true,
+                    siapDisablon = true,
+                    updatedAt = System.currentTimeMillis() - (2L * 24 * 60 * 60 * 1000),
+                    updatedBy = "Owner GeCe"
+                ),
+                riwayat = listOf(
+                    ActivityLogEntry(
+                        waktu = System.currentTimeMillis() - (2L * 24 * 60 * 60 * 1000),
+                        aktor = "Owner GeCe",
+                        aksi = "Pesanan telah diambil oleh pemesan"
+                    )
+                )
+            ),
+
+            // Seed 019: Startup Edukasi Cerdas (Selesai - Bulan Berjalan)
+            Order(
+                id = "order-seed-019",
+                kode = "GEC-20261112-009",
+                namaPelanggan = "Startup Edukasi Cerdas",
+                noHpPelanggan = "081234567019",
+                dibuatOleh = OrderCreator.CUSTOMER,
+                userId = "user-cust-005",
+                status = OrderStatus.SELESAI,
+                total = 4_550_000L,
+                catatan = "Kaos workshop coding sablon warna gradient DTF.",
+                uriDesain = "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80",
+                dibuatPada = System.currentTimeMillis() - (5L * 24 * 60 * 60 * 1000),
+                selesaiPada = System.currentTimeMillis() - (1L * 24 * 60 * 60 * 1000),
+                items = listOf(
+                    OrderItem(
+                        id = "item-019",
+                        productId = "prod-combed-24s",
+                        namaProduk = "Kaos Custom Cotton Combed 24s",
+                        warnaNama = "Hitam Solid",
+                        ukuranLabel = "XL",
+                        jumlah = 70,
+                        hargaSatuan = 65_000L
+                    )
+                ),
+                produksi = ProductionState(
+                    tahapanSelesai = ProductionStage.orderedStages.toSet(),
+                    bajuTiba = true,
+                    dtfTiba = true,
+                    siapDisablon = true,
+                    updatedAt = System.currentTimeMillis() - (1L * 24 * 60 * 60 * 1000),
+                    updatedBy = "Admin Workshop"
+                ),
+                riwayat = listOf(
+                    ActivityLogEntry(
+                        waktu = System.currentTimeMillis() - (1L * 24 * 60 * 60 * 1000),
+                        aktor = "Admin Workshop",
                         aksi = "Pesanan telah diambil oleh pemesan"
                     )
                 )

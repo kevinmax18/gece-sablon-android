@@ -546,6 +546,60 @@
 
     <!-- Tahap 6A: Dashboard Owner -->
     <!-- <string name="title_owner_dashboard">Dashboard</string> -->
+    <string name="owner_header_title">GECE OWNER</string>
+    <string name="owner_header_badge">WORKSHOP</string>
+    <string name="owner_header_tab_home">Beranda</string>
+
+    <string name="owner_greeting_label">SELAMAT DATANG, OWNER</string>
+    <string name="owner_greeting_sub">Ringkasan Finansial &amp; Operasional</string>
+
+    <string name="owner_dashboard_finance_title">Ringkasan Finansial</string>
+    <string name="owner_dashboard_finance_formula">Formula: Pendapatan - Pengeluaran</string>
+    <string name="owner_dashboard_margin_healthy">Margin Sehat</string>
+    <string name="owner_dashboard_margin_defisit">Margin Defisit</string>
+    <string name="owner_dashboard_total_income">TOTAL PENDAPATAN</string>
+    <string name="owner_dashboard_orders_done_count">%1$d Pesanan selesai</string>
+    <string name="owner_dashboard_total_expense">TOTAL PENGELUARAN</string>
+    <string name="owner_dashboard_biggest_expense_prefix">Terbesar: %1$s</string>
+
+    <string name="owner_dashboard_trend_title">Tren Pendapatan &amp; Pengeluaran 6 Bulan</string>
+    <string name="owner_dashboard_trend_sub">Perbandingan Pendapatan vs Pengeluaran</string>
+    <string name="owner_dashboard_legend_income">Pendapatan</string>
+    <string name="owner_dashboard_legend_expense">Pengeluaran</string>
+    <string name="owner_dashboard_avg_margin">Rata-rata Margin</string>
+    <string name="owner_dashboard_trend_chart_desc">Grafik perbandingan pendapatan dan pengeluaran 6 bulan terakhir</string>
+
+    <string name="owner_dashboard_production_title">Status Produksi Workshop</string>
+    <string name="owner_dashboard_production_active_count">Total %1$d pesanan aktif</string>
+    <string name="owner_dashboard_queue_board">Papan Antrean</string>
+    <string name="owner_dashboard_stat_diterima">Pesanan Masuk</string>
+    <string name="owner_dashboard_stat_diproses">Sedang Diproses</string>
+    <string name="owner_dashboard_stat_cetak_press">Cetak &amp; Press</string>
+    <string name="owner_dashboard_stat_siap_ambil">Siap Diambil</string>
+    <string name="owner_dashboard_badge_priority">Prioritas</string>
+
+    <string name="owner_dashboard_stock_title">Status Stok Material</string>
+    <string name="owner_dashboard_stock_sub">Stok Kaos Polos &amp; Suplai DTF</string>
+    <string name="owner_dashboard_stock_group_baju">Bahan Produk (Tekstil)</string>
+    <string name="owner_dashboard_stock_group_dtf">Konsumabel Cetak DTF</string>
+    <string name="owner_dashboard_stock_available">Tersedia</string>
+    <string name="owner_dashboard_stock_low">Menipis</string>
+
+    <string-array name="month_short_names">
+        <item>Jan</item>
+        <item>Feb</item>
+        <item>Mar</item>
+        <item>Apr</item>
+        <item>Mei</item>
+        <item>Jun</item>
+        <item>Jul</item>
+        <item>Agu</item>
+        <item>Sep</item>
+        <item>Okt</item>
+        <item>Nov</item>
+        <item>Des</item>
+    </string-array>
+
     <string name="owner_dashboard_finance_this_month">Keuangan Bulan Ini</string>
     <string name="owner_dashboard_income">Pemasukan</string>
     <string name="owner_dashboard_expense">Pengeluaran</string>
@@ -557,7 +611,7 @@
     <string name="owner_dashboard_stat_ready">Siap Diambil</string>
     <string name="owner_dashboard_quick_actions">Aksi Cepat</string>
     <string name="owner_dashboard_action_create_order">Buat\nPesanan</string>
-    <string name="owner_dashboard_action_record_expense">Catat\nPengeluaran</string>
+    <string name="owner_dashboard_action_record_expense">Catat\nKeluar</string>
     <string name="owner_dashboard_action_catalog">Katalog\nProduk</string>
     <string name="owner_dashboard_action_team">Tim\nSablon</string>
     <string name="owner_dashboard_attention">Perlu Perhatian</string>

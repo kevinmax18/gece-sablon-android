@@ -191,6 +191,102 @@ fun AdminTopBar(
 }
 
 /**
+ * Header bersama untuk alur Owner (OwnerHeader / StaffHeader):
+ * - Kotak logo kuning dengan border tipis (res/drawable/logo_gece)
+ * - Teks "GECE OWNER" dengan badge "WORKSHOP"
+ * - Subjudul nama tab aktif (mis. "Beranda")
+ * - Kanan: Ikon profil lingkar abu-abu yang membuka tab Akun. Tanpa ikon lonceng.
+ */
+@Composable
+fun OwnerHeader(
+    tabName: String,
+    modifier: Modifier = Modifier,
+    title: String = stringResource(R.string.owner_header_title),
+    roleBadge: String = stringResource(R.string.owner_header_badge),
+    onProfileClick: () -> Unit = {}
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(GeceColors.Background)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Logo GeCe (tampil bersih seperti di Figma)
+            Image(
+                painter = painterResource(id = R.drawable.logo_gece),
+                contentDescription = "Logo GeCe",
+                modifier = Modifier
+                    .size(34.dp)
+                    .clip(CircleShape)
+            )
+
+            Spacer(modifier = Modifier.width(10.dp))
+
+            // Title & Tab Subtitle
+            Column {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = GeceColors.PrimaryInk,
+                        fontSize = 15.sp
+                    )
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    // Badge Kuning WORKSHOP
+                    Box(
+                        modifier = Modifier
+                            .clip(ShapeBadge)
+                            .background(GeceColors.Accent)
+                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                    ) {
+                        Text(
+                            text = roleBadge,
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = GeceColors.PrimaryInk,
+                            fontSize = 9.sp
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(1.dp))
+
+                Text(
+                    text = tabName,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = GeceColors.TextMuted,
+                    fontSize = 12.sp
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            // Action: Profil Pengguna (Ikon profil membuka tab Akun, tanpa notifikasi)
+            TopBarActionButton(
+                icon = Icons.Default.Person,
+                contentDescription = stringResource(R.string.content_desc_profile),
+                onClick = onProfileClick,
+                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                iconTint = MaterialTheme.colorScheme.onBackground
+            )
+        }
+
+        HorizontalDivider(
+            thickness = 1.dp,
+            color = GeceColors.Border
+        )
+    }
+}
+
+/**
  * Pasangan aksi top bar standar GeCe (Chat WhatsApp & Profil Pengguna).
  */
 @Composable

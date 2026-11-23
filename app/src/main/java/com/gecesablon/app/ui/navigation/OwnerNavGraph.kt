@@ -46,6 +46,7 @@ fun NavGraphBuilder.ownerNavGraph(
                 factory = OwnerDashboardViewModel.factory(
                     orderRepository = appContainer.orderRepository,
                     financeRepository = appContainer.financeRepository,
+                    stockRepository = appContainer.stockRepository,
                     sessionStore = appContainer.sessionStore
                 )
             )
@@ -63,7 +64,31 @@ fun NavGraphBuilder.ownerNavGraph(
                     navController.navigate(Routes.staffOrderDetailRoute(orderId))
                 },
                 onNavigateToOrders = {
-                    navController.navigate(Routes.OWNER_ORDERS)
+                    navController.navigate(Routes.OWNER_ORDERS) {
+                        popUpTo(Routes.OWNER_HOME) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                onNavigateToProcess = {
+                    navController.navigate(Routes.OWNER_PROCESS) {
+                        popUpTo(Routes.OWNER_HOME) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                onNavigateToAccount = {
+                    navController.navigate(Routes.OWNER_ACCOUNT) {
+                        popUpTo(Routes.OWNER_HOME) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 }
             )
         }

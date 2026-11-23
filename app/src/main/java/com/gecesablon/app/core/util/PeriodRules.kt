@@ -60,6 +60,45 @@ object PeriodRules {
     }
 
     /**
+     * Menghitung rentang tanggal [DateRange] untuk perbandingan Month-to-Date (MTD) bulan lalu:
+     * Mulai dari tanggal 1 bulan lalu (00:00:00.000) sampai tanggal hari ini pada bulan lalu (23:59:59.999).
+     * Jika tanggal hari ini melebihi jumlah hari maksimal di bulan lalu (misal tgl 31 pada bulan yg 30 hari),
+     * maka batas akhir disesuaikan ke hari terakhir bulan lalu (misal tgl 30).
+     */
+    fun getLastMonthSamePeriodRange(
+        now: Long = System.currentTimeMillis(),
+        timeZone: TimeZone = TimeZone.getDefault()
+    ): DateRange {
+        val currentCal = Calendar.getInstance(timeZone).apply {
+            timeInMillis = now
+        }
+        val currentDay = currentCal.get(Calendar.DAY_OF_MONTH)
+
+        val cal = Calendar.getInstance(timeZone).apply {
+            timeInMillis = now
+            add(Calendar.MONTH, -1)
+            set(Calendar.DAY_OF_MONTH, 1)
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        val start = cal.timeInMillis
+
+        val maxDayLastMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
+        val targetDay = currentDay.coerceAtMost(maxDayLastMonth)
+
+        cal.set(Calendar.DAY_OF_MONTH, targetDay)
+        cal.set(Calendar.HOUR_OF_DAY, 23)
+        cal.set(Calendar.MINUTE, 59)
+        cal.set(Calendar.SECOND, 59)
+        cal.set(Calendar.MILLISECOND, 999)
+        val end = cal.timeInMillis
+
+        return DateRange(start, end)
+    }
+
+    /**
      * Menghitung rentang [DateRange] untuk [FinancePeriod].
      *
      * @param period       Periode yang dipilih

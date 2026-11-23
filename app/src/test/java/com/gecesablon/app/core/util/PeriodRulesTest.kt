@@ -167,4 +167,41 @@ class PeriodRulesTest {
         assertFalse("1 ms sebelum start harus di luar", range.contains(start - 1))
         assertFalse("1 ms setelah end harus di luar", range.contains(end + 1))
     }
+
+    @Test
+    fun testGetLastMonthSamePeriodRange_akhirBulanPendekDanBiasa() {
+        // Kasus 1: Tanggal 15 Mei 2026 -> Bulan lalu: 1 s.d. 15 April 2026
+        val nowMay15 = createTimestamp(2026, 5, 15, 14, 0, 0)
+        val rangeMay15 = PeriodRules.getLastMonthSamePeriodRange(nowMay15, testZone)
+        val calStartMay = Calendar.getInstance(testZone).apply { timeInMillis = rangeMay15.startMillis }
+        val calEndMay = Calendar.getInstance(testZone).apply { timeInMillis = rangeMay15.endMillis }
+        assertEquals(1, calStartMay.get(Calendar.DAY_OF_MONTH))
+        assertEquals(Calendar.APRIL, calStartMay.get(Calendar.MONTH))
+        assertEquals(15, calEndMay.get(Calendar.DAY_OF_MONTH))
+        assertEquals(Calendar.APRIL, calEndMay.get(Calendar.MONTH))
+        assertEquals(23, calEndMay.get(Calendar.HOUR_OF_DAY))
+        assertEquals(59, calEndMay.get(Calendar.MINUTE))
+        assertEquals(59, calEndMay.get(Calendar.SECOND))
+
+        // Kasus 2: Tanggal 31 Mei 2026 -> Bulan lalu (April) hanya 30 hari -> 1 s.d. 30 April 2026
+        val nowMay31 = createTimestamp(2026, 5, 31, 10, 0, 0)
+        val rangeMay31 = PeriodRules.getLastMonthSamePeriodRange(nowMay31, testZone)
+        val calEndApril = Calendar.getInstance(testZone).apply { timeInMillis = rangeMay31.endMillis }
+        assertEquals(30, calEndApril.get(Calendar.DAY_OF_MONTH))
+        assertEquals(Calendar.APRIL, calEndApril.get(Calendar.MONTH))
+
+        // Kasus 3: Tanggal 31 Maret 2024 (Tahun Kabisat) -> Bulan lalu (Februari) 29 hari -> 1 s.d. 29 Feb 2024
+        val nowMar31Leap = createTimestamp(2024, 3, 31, 12, 0, 0)
+        val rangeMar31Leap = PeriodRules.getLastMonthSamePeriodRange(nowMar31Leap, testZone)
+        val calEndFebLeap = Calendar.getInstance(testZone).apply { timeInMillis = rangeMar31Leap.endMillis }
+        assertEquals(29, calEndFebLeap.get(Calendar.DAY_OF_MONTH))
+        assertEquals(Calendar.FEBRUARY, calEndFebLeap.get(Calendar.MONTH))
+
+        // Kasus 4: Tanggal 31 Maret 2025 (Bukan Kabisat) -> Bulan lalu (Februari) 28 hari -> 1 s.d. 28 Feb 2025
+        val nowMar31NonLeap = createTimestamp(2025, 3, 31, 12, 0, 0)
+        val rangeMar31NonLeap = PeriodRules.getLastMonthSamePeriodRange(nowMar31NonLeap, testZone)
+        val calEndFebNonLeap = Calendar.getInstance(testZone).apply { timeInMillis = rangeMar31NonLeap.endMillis }
+        assertEquals(28, calEndFebNonLeap.get(Calendar.DAY_OF_MONTH))
+        assertEquals(Calendar.FEBRUARY, calEndFebNonLeap.get(Calendar.MONTH))
+    }
 }

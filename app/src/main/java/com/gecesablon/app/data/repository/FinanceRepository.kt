@@ -4,6 +4,7 @@ import com.gecesablon.app.core.util.DateRange
 import com.gecesablon.app.core.util.Resource
 import com.gecesablon.app.data.model.FinanceSummary
 import com.gecesablon.app.data.model.Session
+import com.gecesablon.app.data.model.SixMonthTrend
 import com.gecesablon.app.data.model.Transaction
 import com.gecesablon.app.data.model.TransactionCategory
 import com.gecesablon.app.data.model.TransactionType
@@ -108,4 +109,14 @@ interface FinanceRepository {
         actor: Session,
         range: DateRange
     ): Flow<Resource<FinanceSummary>>
+
+    /**
+     * Mengalirkan ringkasan dan tren keuangan 6 bulan terakhir ([SixMonthTrend])
+     * secara reaktif menggunakan combine pada transaksi dan pesanan.
+     *
+     * @param actor Sesi pengguna (hanya OWNER)
+     */
+    fun getSixMonthTrend(
+        actor: Session
+    ): Flow<Resource<SixMonthTrend>>
 }

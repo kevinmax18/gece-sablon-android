@@ -6,6 +6,7 @@ import com.gecesablon.app.core.util.Resource
 import com.gecesablon.app.data.model.FinanceSummary
 import com.gecesablon.app.data.model.Role
 import com.gecesablon.app.data.model.Session
+import com.gecesablon.app.data.model.SixMonthTrend
 import com.gecesablon.app.data.model.Transaction
 import com.gecesablon.app.data.model.TransactionCategory
 import com.gecesablon.app.data.model.TransactionSource
@@ -179,6 +180,114 @@ class FakeFinanceRepository(
             nominal = 175_000L,
             tanggal = now - (33 * DAY),
             keterangan = "Pembelian masker, sarung tangan, dan cairan cuci head meja press",
+            sumber = TransactionSource.MANUAL,
+            dibuatOleh = "Owner GeCe (Owner)"
+        ),
+
+        // --- Transaksi 3 bulan lalu (September) ---
+        Transaction(
+            id = "fin-013",
+            tipe = TransactionType.PENGELUARAN,
+            kategori = TransactionCategory.BAHAN_BAKU,
+            nominal = 1_400_000L,
+            tanggal = now - (70 * DAY),
+            keterangan = "Pembelian bahan kaos combed 24s",
+            sumber = TransactionSource.MANUAL,
+            dibuatOleh = "Owner GeCe (Owner)"
+        ),
+        Transaction(
+            id = "fin-014",
+            tipe = TransactionType.PENGELUARAN,
+            kategori = TransactionCategory.OPERASIONAL,
+            nominal = 410_000L,
+            tanggal = now - (72 * DAY),
+            keterangan = "Listrik dan utilitas workshop September",
+            sumber = TransactionSource.MANUAL,
+            dibuatOleh = "Owner GeCe (Owner)"
+        ),
+        Transaction(
+            id = "fin-014-in",
+            tipe = TransactionType.PEMASUKAN,
+            kategori = TransactionCategory.PENJUALAN_LAIN,
+            nominal = 400_000L,
+            tanggal = now - (68 * DAY),
+            keterangan = "Jual sisa potongan bahan",
+            sumber = TransactionSource.MANUAL,
+            dibuatOleh = "Owner GeCe (Owner)"
+        ),
+
+        // --- Transaksi 4 bulan lalu (Agustus) ---
+        Transaction(
+            id = "fin-015",
+            tipe = TransactionType.PENGELUARAN,
+            kategori = TransactionCategory.MATERIAL_DTF,
+            nominal = 890_000L,
+            tanggal = now - (105 * DAY),
+            keterangan = "Beli lem bubuk DTF dan cleaner",
+            sumber = TransactionSource.MANUAL,
+            dibuatOleh = "Owner GeCe (Owner)"
+        ),
+        Transaction(
+            id = "fin-016",
+            tipe = TransactionType.PEMASUKAN,
+            kategori = TransactionCategory.PENJUALAN_LAIN,
+            nominal = 350_000L,
+            tanggal = now - (100 * DAY),
+            keterangan = "Jual sisa kain perca pabrik",
+            sumber = TransactionSource.MANUAL,
+            dibuatOleh = "Owner GeCe (Owner)"
+        ),
+
+        // --- Transaksi 5 bulan lalu (Juli) ---
+        Transaction(
+            id = "fin-017",
+            tipe = TransactionType.PENGELUARAN,
+            kategori = TransactionCategory.BAHAN_BAKU,
+            nominal = 1_200_000L,
+            tanggal = now - (135 * DAY),
+            keterangan = "Pengadaan kain polo pique Juli",
+            sumber = TransactionSource.MANUAL,
+            dibuatOleh = "Owner GeCe (Owner)"
+        ),
+        Transaction(
+            id = "fin-018",
+            tipe = TransactionType.PENGELUARAN,
+            kategori = TransactionCategory.OPERASIONAL,
+            nominal = 380_000L,
+            tanggal = now - (140 * DAY),
+            keterangan = "Biaya pemeliharaan printer DTF dan listrik",
+            sumber = TransactionSource.MANUAL,
+            dibuatOleh = "Owner GeCe (Owner)"
+        ),
+        Transaction(
+            id = "fin-018-in",
+            tipe = TransactionType.PEMASUKAN,
+            kategori = TransactionCategory.PENJUALAN_LAIN,
+            nominal = 500_000L,
+            tanggal = now - (132 * DAY),
+            keterangan = "Jual kaos reject bersih",
+            sumber = TransactionSource.MANUAL,
+            dibuatOleh = "Owner GeCe (Owner)"
+        ),
+
+        // --- Transaksi 6 bulan lalu (Juni) ---
+        Transaction(
+            id = "fin-019",
+            tipe = TransactionType.PENGELUARAN,
+            kategori = TransactionCategory.OPERASIONAL,
+            nominal = 350_000L,
+            tanggal = now - (165 * DAY),
+            keterangan = "Operasional workshop Juni",
+            sumber = TransactionSource.MANUAL,
+            dibuatOleh = "Owner GeCe (Owner)"
+        ),
+        Transaction(
+            id = "fin-020",
+            tipe = TransactionType.PEMASUKAN,
+            kategori = TransactionCategory.PENJUALAN_LAIN,
+            nominal = 300_000L,
+            tanggal = now - (162 * DAY),
+            keterangan = "Penjualan plastik packing cadangan",
             sumber = TransactionSource.MANUAL,
             dibuatOleh = "Owner GeCe (Owner)"
         )
@@ -432,6 +541,36 @@ class FakeFinanceRepository(
                     )
                 }
                 is Resource.Error -> Resource.Error(ordersResource.message ?: "Gagal memuat ringkasan keuangan.")
+                is Resource.Loading -> Resource.Loading
+            }
+        }
+    }
+
+    /**
+     * Mengalirkan ringkasan dan tren keuangan 6 bulan terakhir secara reaktif
+     * menggunakan [combine] antara transaksi manual dan pesanan selesai.
+     */
+    override fun getSixMonthTrend(actor: Session): Flow<Resource<SixMonthTrend>> {
+        val ownerError = validateOwner(actor)
+        if (ownerError != null) {
+            return flow { emit(Resource.Error(ownerError)) }
+        }
+
+        return combine(
+            manualTransactionsFlow,
+            orderRepository.getAllOrders(ownerSession)
+        ) { manualList, ordersResource ->
+            when (ordersResource) {
+                is Resource.Success -> {
+                    val orders = ordersResource.data
+                    val trend = FinanceCalculator.buildMonthlyTrend(
+                        now = System.currentTimeMillis(),
+                        manualTransactions = manualList,
+                        orders = orders
+                    )
+                    Resource.Success(trend)
+                }
+                is Resource.Error -> Resource.Error(ordersResource.message ?: "Gagal memuat tren keuangan 6 bulan.")
                 is Resource.Loading -> Resource.Loading
             }
         }
