@@ -194,12 +194,16 @@ fun AdminTopBar(
  * Header bersama untuk alur Owner (OwnerHeader / StaffHeader):
  * - Kotak logo kuning dengan border tipis (res/drawable/logo_gece)
  * - Teks "GECE OWNER" dengan badge "WORKSHOP"
- * - Subjudul nama tab aktif (mis. "Beranda")
+ * - Subjudul nama tab aktif (mis. "Beranda") atau subtitle spesifik (mis. "Keuangan", "Laporan")
+ * - Kiri opsional: tombol kembali (showBack = true, onBack)
  * - Kanan: Ikon profil lingkar abu-abu yang membuka tab Akun. Tanpa ikon lonceng.
  */
 @Composable
 fun OwnerHeader(
-    tabName: String,
+    tabName: String = "",
+    subtitle: String = tabName,
+    showBack: Boolean = false,
+    onBack: () -> Unit = {},
     modifier: Modifier = Modifier,
     title: String = stringResource(R.string.owner_header_title),
     roleBadge: String = stringResource(R.string.owner_header_badge),
@@ -216,6 +220,17 @@ fun OwnerHeader(
                 .padding(horizontal = 16.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            if (showBack) {
+                TopBarActionButton(
+                    icon = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = stringResource(R.string.content_desc_back),
+                    onClick = onBack,
+                    backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                    iconTint = MaterialTheme.colorScheme.onBackground
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+            }
+
             // Logo GeCe (tampil bersih seperti di Figma)
             Image(
                 painter = painterResource(id = R.drawable.logo_gece),
@@ -260,7 +275,7 @@ fun OwnerHeader(
                 Spacer(modifier = Modifier.height(1.dp))
 
                 Text(
-                    text = tabName,
+                    text = subtitle,
                     style = MaterialTheme.typography.bodySmall,
                     color = GeceColors.TextMuted,
                     fontSize = 12.sp

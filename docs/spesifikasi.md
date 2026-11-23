@@ -143,3 +143,9 @@ Keuangan (hanya OWNER; repository menolak role lain):
   Pesanan manual dibuat dari Dashboard Owner memakai layar yang sama dengan Admin (rute staff bersama).
   Tanggal: gunakan java.util.Calendar/SimpleDateFormat (Locale id-ID); jangan java.time.
 - Tanggal transaksi manual tidak boleh melewati hari ini.
+
+## Ubah kata sandi (semua peran yang login)
+- Wajib: kata sandi lama (harus benar), kata sandi baru, konfirmasi (harus sama).
+- Kata sandi baru minimal 8 karakter, mengandung huruf dan angka, tidak boleh sama dengan yang lama.
+- Kata sandi tidak pernah ditampilkan ulang, dicatat di log, atau disimpan di sesi.
+- Email dan no HP tidak disimpan di sesi; tampil di profil hanya setelah ada endpoint profil (integrasi API).

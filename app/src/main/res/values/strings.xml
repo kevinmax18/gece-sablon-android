@@ -696,4 +696,30 @@
     <string name="owner_report_expense_by_category">Rincian Pengeluaran per Kategori</string>
     <string name="owner_report_no_income">Tidak ada pemasukan pada periode ini.</string>
     <string name="owner_report_no_expense">Tidak ada pengeluaran pada periode ini.</string>
+
+    <!-- P2: Tab Keuangan & Layar Laporan Owner Sesuai Figma -->
+    <string name="owner_finance_header_subtitle">Keuangan</string>
+    <string name="owner_report_header_subtitle">Laporan</string>
+    <string name="owner_finance_title_detail">Detail Keuangan</string>
+    <string name="owner_finance_badge_rahasia">RAHASIA</string>
+    <string name="owner_finance_desc_detail">Ringkasan arus kas dan margin laba bersih workshop GeCe.</string>
+    <string name="owner_report_desc">Analisis pemasukan, pengeluaran, dan laba GeCe</string>
+    <string name="owner_report_info_banner">Khusus Owner. Laporan ini tidak dapat diakses Admin maupun tim produksi.</string>
+    <string name="owner_report_period_bar">Periode Laporan: %1$s - %2$s</string>
+    <string name="owner_finance_formula_row">Pemasukan %1$s - Pengeluaran %2$s</string>
+    <string name="owner_finance_vs_prev_diff">vs periode sebelumnya %1$s</string>
+    <string name="owner_finance_percent_omzet">%1$s omzet</string>
+    <string name="owner_finance_no_expense_yet">Belum ada pengeluaran</string>
+    <string name="owner_finance_structure_title">Struktur Beban</string>
+    <string name="owner_report_expense_breakdown_title">Rincian Pengeluaran</string>
+    <string name="owner_finance_income_source_title">Sumber Pemasukan</string>
+    <string name="owner_finance_source_orders">Pesanan Selesai</string>
+    <string name="owner_finance_source_manual">Pemasukan Lain</string>
+    <string name="owner_finance_source_orders_count">%1$d pesanan</string>
+    <string name="owner_finance_tx_title">Transaksi Keuangan</string>
+    <string name="owner_finance_tx_subtitle">Buku Kas &amp; Pengeluaran Produksi</string>
+    <string name="owner_finance_search_placeholder">Cari keterangan transaksi</string>
+    <string name="owner_finance_btn_load_more">Muat Lebih Banyak Transaksi</string>
+    <string name="owner_finance_btn_view_report">Lihat Laporan Keuangan</string>
+    <string name="owner_report_financial_perf_title">Kinerja Finansial</string>
 </resources>

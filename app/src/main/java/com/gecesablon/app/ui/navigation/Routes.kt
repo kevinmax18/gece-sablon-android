@@ -54,7 +54,6 @@ object Routes {
     const val OWNER_ACCOUNT = "owner_account"
 
     // Owner – Sub-rute Keuangan (Tahap 6A)
-    const val OWNER_FINANCE_DETAIL = "owner_finance_detail"
     const val OWNER_TRANSACTION_FORM = "owner_transaction_form?transactionId={transactionId}&type={type}"
     const val OWNER_TRANSACTION_DETAIL = "owner_transaction_detail/{transactionId}"
     const val OWNER_REPORT = "owner_report"

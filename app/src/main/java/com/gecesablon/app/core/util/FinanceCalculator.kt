@@ -8,6 +8,7 @@ import com.gecesablon.app.data.model.Transaction
 import com.gecesablon.app.data.model.TransactionCategory
 import com.gecesablon.app.data.model.TransactionType
 import com.gecesablon.app.data.model.toVirtualTransactionOrNull
+import com.gecesablon.app.data.model.TransactionSource
 import java.util.Calendar
 import java.util.TimeZone
 
@@ -225,6 +226,103 @@ object FinanceCalculator {
             currentMonthIncome = currentMonthBar.totalIncome,
             lastMonthIncome = lastMonthBar.totalIncome,
             incomeGrowthPercentage = growth
+        )
+    }
+
+    /**
+     * Data class representasi rincian pengeluaran per kategori.
+     */
+    data class ExpenseCategoryBreakdown(
+        val category: TransactionCategory,
+        val total: Long,
+        val percentage: Double
+    )
+
+    /**
+     * Data class representasi sumber pemasukan (pesanan selesai vs manual).
+     */
+    data class IncomeSourcesSummary(
+        val totalOrdersIncome: Long,
+        val completedOrdersCount: Int,
+        val ordersPercentage: Double?,
+        val totalManualIncome: Long,
+        val manualPercentage: Double?,
+        val totalIncome: Long
+    )
+
+    /**
+     * Menghitung rincian pengeluaran per kategori.
+     * Hanya kategori dengan nominal > 0, diurutkan dari nominal terbesar ke terkecil.
+     * Persentase dihitung terhadap total pengeluaran.
+     * Mengembalikan daftar kosong jika total pengeluaran 0.
+     */
+    fun expenseBreakdown(
+        transactions: List<Transaction>,
+        startMillis: Long,
+        endMillis: Long
+    ): List<ExpenseCategoryBreakdown> {
+        val range = DateRange(startMillis, endMillis)
+        val filtered = filterTransactionsByPeriod(transactions, range)
+            .filter { it.tipe == TransactionType.PENGELUARAN }
+
+        val totalExpense = filtered.sumOf { it.nominal }
+        if (totalExpense <= 0L) return emptyList()
+
+        val byCat = calculateTotalsByCategory(filtered)
+        return byCat.entries
+            .filter { it.value > 0L }
+            .map { (cat, nominal) ->
+                val pct = (nominal.toDouble() / totalExpense.toDouble()) * 100.0
+                ExpenseCategoryBreakdown(category = cat, total = nominal, percentage = pct)
+            }
+            .sortedByDescending { it.total }
+    }
+
+    /**
+     * Menghitung sumber pemasukan antara pesanan selesai dan pemasukan manual.
+     * @return [IncomeSourcesSummary]
+     */
+    fun incomeSources(
+        transactions: List<Transaction>,
+        orders: List<Order>,
+        startMillis: Long,
+        endMillis: Long
+    ): IncomeSourcesSummary {
+        val range = DateRange(startMillis, endMillis)
+
+        // Pesanan SELESAI
+        val completedOrders = orders.filter {
+            it.status == OrderStatus.SELESAI &&
+                    it.selesaiPada != null &&
+                    range.contains(it.selesaiPada)
+        }
+        val countOrders = completedOrders.size
+        val totalOrdersIncome = completedOrders.sumOf { it.total }
+
+        // Pemasukan manual (tipe PEMASUKAN dan bukan virtual order)
+        val manualIncomes = filterTransactionsByPeriod(transactions, range).filter {
+            it.tipe == TransactionType.PEMASUKAN &&
+                    it.sumber == TransactionSource.MANUAL &&
+                    it.kategori != TransactionCategory.PESANAN
+        }
+        val totalManualIncome = manualIncomes.sumOf { it.nominal }
+
+        val totalIncome = totalOrdersIncome + totalManualIncome
+        val (ordersPct, manualPct) = if (totalIncome > 0L) {
+            val op = (totalOrdersIncome.toDouble() / totalIncome.toDouble()) * 100.0
+            val mp = (totalManualIncome.toDouble() / totalIncome.toDouble()) * 100.0
+            Pair(op, mp)
+        } else {
+            Pair(null, null)
+        }
+
+        return IncomeSourcesSummary(
+            totalOrdersIncome = totalOrdersIncome,
+            completedOrdersCount = countOrders,
+            ordersPercentage = ordersPct,
+            totalManualIncome = totalManualIncome,
+            manualPercentage = manualPct,
+            totalIncome = totalIncome
         )
     }
 }

@@ -343,4 +343,86 @@ class FinanceCalculatorTest {
         assertNotNull(trend.incomeGrowthPercentage)
         assertEquals(200.0, trend.incomeGrowthPercentage!!, 0.001)
     }
+
+    @Test
+    fun testExpenseBreakdown_berbagaiKondisi() {
+        val range = DateRange(100_000L, 200_000L)
+
+        // 1. Total 0 -> kosong
+        val emptyList = FinanceCalculator.expenseBreakdown(emptyList(), range.startMillis, range.endMillis)
+        assertTrue(emptyList.isEmpty())
+
+        // 2. Satu kategori saja -> 100%
+        val singleTx = listOf(
+            Transaction(
+                id = "tx1",
+                tipe = TransactionType.PENGELUARAN,
+                kategori = TransactionCategory.BAHAN_BAKU,
+                nominal = 500_000L,
+                tanggal = 150_000L,
+                keterangan = "Kain",
+                dibuatOleh = "Owner"
+            )
+        )
+        val singleBreakdown = FinanceCalculator.expenseBreakdown(singleTx, range.startMillis, range.endMillis)
+        assertEquals(1, singleBreakdown.size)
+        assertEquals(TransactionCategory.BAHAN_BAKU, singleBreakdown[0].category)
+        assertEquals(500_000L, singleBreakdown[0].total)
+        assertEquals(100.0, singleBreakdown[0].percentage, 0.001)
+
+        // 3. Multi-kategori: urut terbesar, nominal > 0, jumlah persen ~100%
+        val multiTx = listOf(
+            Transaction(id = "1", tipe = TransactionType.PENGELUARAN, kategori = TransactionCategory.BAHAN_BAKU, nominal = 500_000L, tanggal = 150_000L, keterangan = "A", dibuatOleh = "Owner"),
+            Transaction(id = "2", tipe = TransactionType.PENGELUARAN, kategori = TransactionCategory.MATERIAL_DTF, nominal = 300_000L, tanggal = 150_000L, keterangan = "B", dibuatOleh = "Owner"),
+            Transaction(id = "3", tipe = TransactionType.PENGELUARAN, kategori = TransactionCategory.OPERASIONAL, nominal = 200_000L, tanggal = 150_000L, keterangan = "C", dibuatOleh = "Owner"),
+            // Transaksi di luar rentang
+            Transaction(id = "4", tipe = TransactionType.PENGELUARAN, kategori = TransactionCategory.GAJI, nominal = 1_000_000L, tanggal = 300_000L, keterangan = "D", dibuatOleh = "Owner")
+        )
+        val multiBreakdown = FinanceCalculator.expenseBreakdown(multiTx, range.startMillis, range.endMillis)
+        assertEquals(3, multiBreakdown.size)
+        assertEquals(TransactionCategory.BAHAN_BAKU, multiBreakdown[0].category)
+        assertEquals(50.0, multiBreakdown[0].percentage, 0.001)
+        assertEquals(TransactionCategory.MATERIAL_DTF, multiBreakdown[1].category)
+        assertEquals(30.0, multiBreakdown[1].percentage, 0.001)
+        assertEquals(TransactionCategory.OPERASIONAL, multiBreakdown[2].category)
+        assertEquals(20.0, multiBreakdown[2].percentage, 0.001)
+
+        val totalPercent = multiBreakdown.sumOf { it.percentage }
+        assertEquals(100.0, totalPercent, 0.01)
+    }
+
+    @Test
+    fun testIncomeSources_danFormatPercent() {
+        val range = DateRange(100_000L, 200_000L)
+
+        // 1. Total 0 -> null percentages
+        val sourcesZero = FinanceCalculator.incomeSources(emptyList(), emptyList(), range.startMillis, range.endMillis)
+        assertEquals(0L, sourcesZero.totalIncome)
+        assertEquals(0, sourcesZero.completedOrdersCount)
+        assertNull(sourcesZero.ordersPercentage)
+        assertNull(sourcesZero.manualPercentage)
+
+        // 2. Gabungan pesanan selesai dan manual
+        val orders = listOf(
+            Order(id = "o1", kode = "G-1", namaPelanggan = "A", status = OrderStatus.SELESAI, total = 800_000L, selesaiPada = 150_000L),
+            Order(id = "o2", kode = "G-2", namaPelanggan = "B", status = OrderStatus.SELESAI, total = 200_000L, selesaiPada = 160_000L),
+            Order(id = "o3", kode = "G-3", namaPelanggan = "C", status = OrderStatus.SEDANG_DIPROSES, total = 500_000L, selesaiPada = 170_000L)
+        )
+        val txs = listOf(
+            Transaction(id = "t1", tipe = TransactionType.PEMASUKAN, kategori = TransactionCategory.PENJUALAN_LAIN, nominal = 1_000_000L, tanggal = 150_000L, keterangan = "Lain", dibuatOleh = "Owner")
+        )
+        val sources = FinanceCalculator.incomeSources(txs, orders, range.startMillis, range.endMillis)
+        assertEquals(2, sources.completedOrdersCount)
+        assertEquals(1_000_000L, sources.totalOrdersIncome)
+        assertEquals(1_000_000L, sources.totalManualIncome)
+        assertEquals(2_000_000L, sources.totalIncome)
+        assertEquals(50.0, sources.ordersPercentage!!, 0.001)
+        assertEquals(50.0, sources.manualPercentage!!, 0.001)
+
+        // 3. Formatter.formatPercent (Locale id-ID dengan koma)
+        assertEquals("48,8%", Formatter.formatPercent(48.8, 1))
+        assertEquals("50,0%", Formatter.formatPercent(50.0, 1))
+        assertEquals("100,0%", Formatter.formatPercent(100.0, 1))
+        assertEquals("0,0%", Formatter.formatPercent(0.0, 1))
+    }
 }

@@ -35,6 +35,16 @@ object Formatter {
     }
 
     /**
+     * Memformat persentase dengan jumlah desimal yang ditentukan (Locale id-ID).
+     * Contoh: formatPercent(48.8, 1) -> "48,8%".
+     */
+    fun formatPercent(value: Double, decimals: Int = 1): String {
+        val pattern = if (decimals <= 0) "0'%' " else "0." + "0".repeat(decimals) + "'%'"
+        val df = DecimalFormat(pattern, rupiahSymbols)
+        return df.format(value).trim()
+    }
+
+    /**
      * Memformat waktu epoch timestamp (milidetik) ke dalam representasi format tanggal Indonesia.
      * Contoh: "3 November 2026, 14.30"
      */

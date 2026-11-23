@@ -204,4 +204,69 @@ class PeriodRulesTest {
         assertEquals(28, calEndFebNonLeap.get(Calendar.DAY_OF_MONTH))
         assertEquals(Calendar.FEBRUARY, calEndFebNonLeap.get(Calendar.MONTH))
     }
+
+    @Test
+    fun testGetComparisonPeriodRange_semuaKasus() {
+        // 1. BULAN_INI: Hari ke-31 Mei vs bulan lalu April (30 hari)
+        val nowMay31 = createTimestamp(2026, 5, 31, 10, 0, 0)
+        val compMay31 = PeriodRules.getComparisonPeriodRange(FinancePeriod.BULAN_INI, now = nowMay31, timeZone = testZone)
+        val calEndMayComp = Calendar.getInstance(testZone).apply { timeInMillis = compMay31.endMillis }
+        assertEquals(30, calEndMayComp.get(Calendar.DAY_OF_MONTH))
+        assertEquals(Calendar.APRIL, calEndMayComp.get(Calendar.MONTH))
+
+        // 2. BULAN_INI: Maret -> Februari kabisat (2024: 29 hari)
+        val nowMar31Leap = createTimestamp(2024, 3, 31, 12, 0, 0)
+        val compMarLeap = PeriodRules.getComparisonPeriodRange(FinancePeriod.BULAN_INI, now = nowMar31Leap, timeZone = testZone)
+        val calEndMarLeap = Calendar.getInstance(testZone).apply { timeInMillis = compMarLeap.endMillis }
+        assertEquals(29, calEndMarLeap.get(Calendar.DAY_OF_MONTH))
+        assertEquals(Calendar.FEBRUARY, calEndMarLeap.get(Calendar.MONTH))
+
+        // 3. BULAN_INI: Lintas tahun (Januari -> Desember tahun sebelumnya)
+        val nowJan15 = createTimestamp(2027, 1, 15, 10, 0, 0)
+        val compJan = PeriodRules.getComparisonPeriodRange(FinancePeriod.BULAN_INI, now = nowJan15, timeZone = testZone)
+        val calStartJan = Calendar.getInstance(testZone).apply { timeInMillis = compJan.startMillis }
+        val calEndJan = Calendar.getInstance(testZone).apply { timeInMillis = compJan.endMillis }
+        assertEquals(2026, calStartJan.get(Calendar.YEAR))
+        assertEquals(Calendar.DECEMBER, calStartJan.get(Calendar.MONTH))
+        assertEquals(1, calStartJan.get(Calendar.DAY_OF_MONTH))
+        assertEquals(2026, calEndJan.get(Calendar.YEAR))
+        assertEquals(Calendar.DECEMBER, calEndJan.get(Calendar.MONTH))
+        assertEquals(15, calEndJan.get(Calendar.DAY_OF_MONTH))
+
+        // 4. BULAN_LALU: Bulan sebelumnya penuh (dari Nov 2026 -> 2 bulan lalu = Sept 2026)
+        val nowNov = createTimestamp(2026, 11, 20, 10, 0, 0)
+        val compBulanLalu = PeriodRules.getComparisonPeriodRange(FinancePeriod.BULAN_LALU, now = nowNov, timeZone = testZone)
+        val calStartBL = Calendar.getInstance(testZone).apply { timeInMillis = compBulanLalu.startMillis }
+        val calEndBL = Calendar.getInstance(testZone).apply { timeInMillis = compBulanLalu.endMillis }
+        assertEquals(Calendar.SEPTEMBER, calStartBL.get(Calendar.MONTH))
+        assertEquals(1, calStartBL.get(Calendar.DAY_OF_MONTH))
+        assertEquals(Calendar.SEPTEMBER, calEndBL.get(Calendar.MONTH))
+        assertEquals(30, calEndBL.get(Calendar.DAY_OF_MONTH))
+
+        // 5. HARI_7: 7 hari sebelum rentang 7 hari aktif
+        // Rentang aktif 12-18 Nov -> Rentang pembanding: 5-11 Nov
+        val comp7 = PeriodRules.getComparisonPeriodRange(FinancePeriod.HARI_7, now = nowNov, timeZone = testZone)
+        val calStart7 = Calendar.getInstance(testZone).apply { timeInMillis = comp7.startMillis }
+        val calEnd7 = Calendar.getInstance(testZone).apply { timeInMillis = comp7.endMillis }
+        assertEquals(5, calStart7.get(Calendar.DAY_OF_MONTH))
+        assertEquals(11, calEnd7.get(Calendar.DAY_OF_MONTH))
+
+        // 6. HARI_30: 30 hari sebelum rentang 30 hari aktif
+        val comp30 = PeriodRules.getComparisonPeriodRange(FinancePeriod.HARI_30, now = nowNov, timeZone = testZone)
+        val current30 = PeriodRules.getPeriodRange(FinancePeriod.HARI_30, now = nowNov, timeZone = testZone)
+        assertEquals(PeriodRules.startOfDay(current30.startMillis, testZone) - 1, comp30.endMillis)
+
+        // 7. CUSTOM 1 hari: 15 Nov -> pembanding: 14 Nov
+        val customDay = createTimestamp(2026, 11, 15)
+        val compCustom1 = PeriodRules.getComparisonPeriodRange(
+            FinancePeriod.CUSTOM,
+            customStart = customDay,
+            customEnd = customDay,
+            timeZone = testZone
+        )
+        val calStartCustom1 = Calendar.getInstance(testZone).apply { timeInMillis = compCustom1.startMillis }
+        val calEndCustom1 = Calendar.getInstance(testZone).apply { timeInMillis = compCustom1.endMillis }
+        assertEquals(14, calStartCustom1.get(Calendar.DAY_OF_MONTH))
+        assertEquals(14, calEndCustom1.get(Calendar.DAY_OF_MONTH))
+    }
 }

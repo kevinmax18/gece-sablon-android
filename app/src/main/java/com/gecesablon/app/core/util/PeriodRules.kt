@@ -249,4 +249,92 @@ object PeriodRules {
         }
         return localCal.timeInMillis
     }
+
+    /**
+     * Menghitung rentang [DateRange] periode pembanding untuk [FinancePeriod].
+     * - BULAN_INI: tanggal 1 sampai tanggal hari ini di bulan lalu (dipotong bila bulan lalu lebih pendek)
+     * - BULAN_LALU: bulan sebelumnya penuh (2 bulan lalu dari now)
+     * - HARI_7: 7 hari tepat sebelum rentang HARI_7 (yaitu rentang sama panjang tepat sebelumnya)
+     * - HARI_30: 30 hari tepat sebelum rentang HARI_30
+     * - CUSTOM: rentang sama panjang (jumlah hari) tepat sebelumnya
+     */
+    fun getComparisonPeriodRange(
+        period: FinancePeriod,
+        customStart: Long? = null,
+        customEnd: Long? = null,
+        now: Long = System.currentTimeMillis(),
+        timeZone: TimeZone = TimeZone.getDefault()
+    ): DateRange {
+        return when (period) {
+            FinancePeriod.BULAN_INI -> {
+                getLastMonthSamePeriodRange(now, timeZone)
+            }
+
+            FinancePeriod.BULAN_LALU -> {
+                val cal = Calendar.getInstance(timeZone).apply {
+                    timeInMillis = now
+                    add(Calendar.MONTH, -2)
+                    set(Calendar.DAY_OF_MONTH, 1)
+                    set(Calendar.HOUR_OF_DAY, 0)
+                    set(Calendar.MINUTE, 0)
+                    set(Calendar.SECOND, 0)
+                    set(Calendar.MILLISECOND, 0)
+                }
+                val start = cal.timeInMillis
+
+                val maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
+                cal.set(Calendar.DAY_OF_MONTH, maxDay)
+                cal.set(Calendar.HOUR_OF_DAY, 23)
+                cal.set(Calendar.MINUTE, 59)
+                cal.set(Calendar.SECOND, 59)
+                cal.set(Calendar.MILLISECOND, 999)
+                val end = cal.timeInMillis
+
+                DateRange(start, end)
+            }
+
+            FinancePeriod.HARI_7 -> {
+                val currentRange = getPeriodRange(FinancePeriod.HARI_7, now = now, timeZone = timeZone)
+                val prevEnd = currentRange.startMillis - 1
+                val cal = Calendar.getInstance(timeZone).apply {
+                    timeInMillis = currentRange.startMillis
+                    add(Calendar.DAY_OF_YEAR, -7)
+                }
+                val prevStart = startOfDay(cal.timeInMillis, timeZone)
+                DateRange(prevStart, endOfDay(prevEnd, timeZone))
+            }
+
+            FinancePeriod.HARI_30 -> {
+                val currentRange = getPeriodRange(FinancePeriod.HARI_30, now = now, timeZone = timeZone)
+                val prevEnd = currentRange.startMillis - 1
+                val cal = Calendar.getInstance(timeZone).apply {
+                    timeInMillis = currentRange.startMillis
+                    add(Calendar.DAY_OF_YEAR, -30)
+                }
+                val prevStart = startOfDay(cal.timeInMillis, timeZone)
+                DateRange(prevStart, endOfDay(prevEnd, timeZone))
+            }
+
+            FinancePeriod.CUSTOM -> {
+                requireNotNull(customStart) { "Tanggal mulai wajib diisi untuk rentang kustom." }
+                requireNotNull(customEnd) { "Tanggal akhir wajib diisi untuk rentang kustom." }
+                val currentStartDay = startOfDay(customStart, timeZone)
+                val currentEndDay = endOfDay(customEnd, timeZone)
+                require(currentStartDay <= currentEndDay) { "Tanggal mulai tidak boleh melebihi tanggal akhir." }
+
+                // Hitung jumlah hari inklusif
+                val startCal = Calendar.getInstance(timeZone).apply { timeInMillis = currentStartDay }
+                val endCal = Calendar.getInstance(timeZone).apply { timeInMillis = currentEndDay }
+                val dayDiff = ((endCal.timeInMillis - startCal.timeInMillis) / (24L * 60 * 60 * 1000)).toInt() + 1
+
+                val prevEnd = currentStartDay - 1
+                val prevStartCal = Calendar.getInstance(timeZone).apply {
+                    timeInMillis = currentStartDay
+                    add(Calendar.DAY_OF_YEAR, -dayDiff)
+                }
+                val prevStart = startOfDay(prevStartCal.timeInMillis, timeZone)
+                DateRange(prevStart, endOfDay(prevEnd, timeZone))
+            }
+        }
+    }
 }

@@ -15,8 +15,6 @@ import com.gecesablon.app.ui.owner.OwnerDashboardScreen
 import com.gecesablon.app.ui.owner.OwnerDashboardViewModel
 import com.gecesablon.app.ui.owner.OwnerFinanceScreen
 import com.gecesablon.app.ui.owner.OwnerFinanceViewModel
-import com.gecesablon.app.ui.owner.finance.OwnerFinanceDetailScreen
-import com.gecesablon.app.ui.owner.finance.OwnerFinanceDetailViewModel
 import com.gecesablon.app.ui.owner.finance.OwnerReportScreen
 import com.gecesablon.app.ui.owner.finance.OwnerReportViewModel
 import com.gecesablon.app.ui.owner.finance.OwnerTransactionDetailScreen
@@ -116,10 +114,10 @@ fun NavGraphBuilder.ownerNavGraph(
             val financeViewModel: OwnerFinanceViewModel = viewModel(
                 factory = OwnerFinanceViewModel.factory(
                     financeRepository = appContainer.financeRepository,
+                    orderRepository = appContainer.orderRepository,
                     sessionStore = appContainer.sessionStore
                 )
             )
-            val uiState = financeViewModel.uiState
             OwnerFinanceScreen(
                 viewModel = financeViewModel,
                 onNavigateToRecordIncome = {
@@ -132,14 +130,20 @@ fun NavGraphBuilder.ownerNavGraph(
                         Routes.ownerTransactionFormRoute(type = TransactionType.PENGELUARAN.name)
                     )
                 },
-                onNavigateToFinanceDetail = { startMs, endMs ->
-                    navController.navigate("owner_finance_detail?startMillis=$startMs&endMillis=$endMs")
-                },
                 onNavigateToReport = {
                     navController.navigate(Routes.OWNER_REPORT)
                 },
                 onNavigateToTransactionDetail = { txId ->
                     navController.navigate(Routes.ownerTransactionDetailRoute(txId))
+                },
+                onNavigateToAccount = {
+                    navController.navigate(Routes.OWNER_ACCOUNT) {
+                        popUpTo(Routes.OWNER_HOME) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 }
             )
         }
@@ -150,40 +154,6 @@ fun NavGraphBuilder.ownerNavGraph(
                 viewModel = accountViewModel,
                 onNavigateToAbout = onNavigateToAbout,
                 onLogout = onLogout
-            )
-        }
-
-        // Sub-rute: Detail semua transaksi suatu periode
-        // Rute: owner_finance_detail?startMillis={startMillis}&endMillis={endMillis}
-        composable(
-            route = "owner_finance_detail?startMillis={startMillis}&endMillis={endMillis}",
-            arguments = listOf(
-                navArgument("startMillis") {
-                    type = NavType.LongType
-                    defaultValue = 0L
-                },
-                navArgument("endMillis") {
-                    type = NavType.LongType
-                    defaultValue = Long.MAX_VALUE
-                }
-            )
-        ) { backStackEntry ->
-            val startMillis = backStackEntry.arguments?.getLong("startMillis") ?: 0L
-            val endMillis = backStackEntry.arguments?.getLong("endMillis") ?: Long.MAX_VALUE
-            val detailViewModel: OwnerFinanceDetailViewModel = viewModel(
-                factory = OwnerFinanceDetailViewModel.factory(
-                    financeRepository = appContainer.financeRepository,
-                    sessionStore = appContainer.sessionStore,
-                    startMillis = startMillis,
-                    endMillis = endMillis
-                )
-            )
-            OwnerFinanceDetailScreen(
-                viewModel = detailViewModel,
-                onNavigateBack = { navController.popBackStack() },
-                onNavigateToTransactionDetail = { txId ->
-                    navController.navigate(Routes.ownerTransactionDetailRoute(txId))
-                }
             )
         }
 
@@ -260,12 +230,22 @@ fun NavGraphBuilder.ownerNavGraph(
             val reportViewModel: OwnerReportViewModel = viewModel(
                 factory = OwnerReportViewModel.factory(
                     financeRepository = appContainer.financeRepository,
+                    orderRepository = appContainer.orderRepository,
                     sessionStore = appContainer.sessionStore
                 )
             )
             OwnerReportScreen(
                 viewModel = reportViewModel,
-                onNavigateBack = { navController.popBackStack() }
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToAccount = {
+                    navController.navigate(Routes.OWNER_ACCOUNT) {
+                        popUpTo(Routes.OWNER_HOME) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
             )
         }
     }

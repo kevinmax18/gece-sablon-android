@@ -1,7 +1,6 @@
 package com.gecesablon.app.ui.owner
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,17 +11,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DateRangePicker
-import androidx.compose.material3.DateRangePickerState
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -31,6 +30,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -47,29 +48,46 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.gecesablon.app.R
-import com.gecesablon.app.core.util.Formatter
 import com.gecesablon.app.core.util.PeriodRules
 import com.gecesablon.app.data.model.FinancePeriod
-import com.gecesablon.app.data.model.Transaction
 import com.gecesablon.app.data.model.TransactionType
-import com.gecesablon.app.data.model.displayName
-import com.gecesablon.app.ui.components.AppTopBar
 import com.gecesablon.app.ui.components.EmptyState
 import com.gecesablon.app.ui.components.ErrorState
 import com.gecesablon.app.ui.components.LoadingState
+import com.gecesablon.app.ui.components.OwnerHeader
+import com.gecesablon.app.ui.owner.components.ExpenseBreakdownCard
+import com.gecesablon.app.ui.owner.components.FinanceHeroCard
+import com.gecesablon.app.ui.owner.components.FinanceSummaryCards
+import com.gecesablon.app.ui.owner.components.IncomeSourceCard
+import com.gecesablon.app.ui.owner.components.MonthlyTrendChart
 import com.gecesablon.app.ui.owner.finance.TransactionListItem
 import com.gecesablon.app.ui.theme.AccentYellow
+import com.gecesablon.app.ui.theme.BorderHairline
 import com.gecesablon.app.ui.theme.GeceColors
 import com.gecesablon.app.ui.theme.InkBlack
+import com.gecesablon.app.ui.theme.ShapeBadge
 import com.gecesablon.app.ui.theme.ShapeCard
 import com.gecesablon.app.ui.theme.ShapeControl
+import com.gecesablon.app.ui.theme.TextPrimary
+import com.gecesablon.app.ui.theme.TextSecondary
 import kotlinx.coroutines.launch
 
 /**
- * Layar utama tab Keuangan Owner.
- * Menampilkan filter periode, ringkasan, tombol catat, dan transaksi terbaru.
+ * Layar utama Tab Keuangan Owner sesuai desain Figma (docs/figma/owner/32-detail-keuangan.png).
+ *
+ * Urutan dari atas:
+ * 1. OwnerHeader (subtitle "Keuangan")
+ * 2. Judul "Detail Keuangan" dengan badge "RAHASIA" dan subjudul
+ * 3. Chip periode yang bisa digulir
+ * 4. FinanceHeroCard & FinanceSummaryCards
+ * 5. Kartu tren 6 bulan (MonthlyTrendChart)
+ * 6. ExpenseBreakdownCard("Struktur Beban") & IncomeSourceCard
+ * 7. Bagian "Transaksi Keuangan": tombol catat, pencarian keterangan, filter tipe, 5 item, tombol muat lebih banyak
+ * 8. Tombol "Lihat Laporan Keuangan"
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -77,14 +95,13 @@ fun OwnerFinanceScreen(
     viewModel: OwnerFinanceViewModel,
     onNavigateToRecordIncome: () -> Unit,
     onNavigateToRecordExpense: () -> Unit,
-    onNavigateToFinanceDetail: (Long, Long) -> Unit,
     onNavigateToReport: () -> Unit,
     onNavigateToTransactionDetail: (String) -> Unit,
+    onNavigateToAccount: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    // State untuk DateRangePicker bottom sheet
     var showDateRangePicker by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
@@ -92,7 +109,11 @@ fun OwnerFinanceScreen(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
-            AppTopBar(title = stringResource(R.string.title_owner_finance))
+            // 1. OwnerHeader dengan subtitle "Keuangan"
+            OwnerHeader(
+                subtitle = stringResource(R.string.owner_finance_header_subtitle),
+                onProfileClick = onNavigateToAccount
+            )
         },
         containerColor = GeceColors.Background
     ) { innerPadding ->
@@ -103,7 +124,53 @@ fun OwnerFinanceScreen(
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Filter periode chips
+            // 2. Judul "Detail Keuangan" dengan badge "RAHASIA" dan subjudul
+            item {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.owner_finance_title_detail),
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp
+                            ),
+                            color = TextPrimary
+                        )
+
+                        // Badge "RAHASIA"
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    color = GeceColors.StatusCancelledBg,
+                                    shape = ShapeBadge
+                                )
+                                .padding(horizontal = 6.dp, vertical = 2.dp)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.owner_finance_badge_rahasia),
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 10.sp
+                                ),
+                                color = GeceColors.StatusCancelledText
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Text(
+                        text = stringResource(R.string.owner_finance_desc_detail),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextSecondary
+                    )
+                }
+            }
+
+            // 3. Chip periode (Bulan Ini, Bulan Lalu, 7 Hari, 30 Hari, Pilih Tanggal), aktif hitam
             item {
                 val periods = listOf(
                     FinancePeriod.BULAN_INI to stringResource(R.string.owner_finance_period_this_month),
@@ -125,170 +192,280 @@ fun OwnerFinanceScreen(
                             },
                             label = { Text(label) },
                             colors = FilterChipDefaults.filterChipColors(
-                                selectedContainerColor = GeceColors.PrimaryInk,
-                                selectedLabelColor = GeceColors.Background
+                                selectedContainerColor = InkBlack,
+                                selectedLabelColor = AccentYellow,
+                                containerColor = GeceColors.Surface,
+                                labelColor = TextPrimary
                             )
                         )
                     }
                 }
             }
 
-            // Kartu ringkasan
-            item {
-                when {
-                    uiState.isLoading -> LoadingState()
-                    uiState.errorMessage != null -> ErrorState(
+            // Loading / Error
+            if (uiState.isLoading) {
+                item { LoadingState() }
+            } else if (uiState.errorMessage != null && uiState.allTransactions.isEmpty()) {
+                item {
+                    ErrorState(
                         description = uiState.errorMessage ?: "",
                         onRetry = { viewModel.loadFinance() }
                     )
-                    else -> {
-                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(
-                                text = stringResource(R.string.owner_finance_summary),
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                FinanceSummaryCard(
-                                    label = stringResource(R.string.owner_dashboard_income),
-                                    value = Formatter.formatRupiah(uiState.totalPemasukan),
-                                    valueColor = GeceColors.StatusSuccessText,
-                                    bgColor = GeceColors.StatusSuccessBg,
-                                    modifier = Modifier.weight(1f)
-                                )
-                                FinanceSummaryCard(
-                                    label = stringResource(R.string.owner_dashboard_expense),
-                                    value = Formatter.formatRupiah(uiState.totalPengeluaran),
-                                    valueColor = GeceColors.StatusCancelledText,
-                                    bgColor = GeceColors.StatusCancelledBg,
-                                    modifier = Modifier.weight(1f)
-                                )
-                            }
-                            val labaPositif = uiState.labaRugi >= 0
-                            FinanceSummaryCard(
-                                label = if (labaPositif)
-                                    stringResource(R.string.owner_dashboard_profit)
-                                else
-                                    stringResource(R.string.owner_dashboard_loss),
-                                value = Formatter.formatRupiah(kotlin.math.abs(uiState.labaRugi)),
-                                valueColor = if (labaPositif) GeceColors.StatusSuccessText else GeceColors.StatusCancelledText,
-                                bgColor = if (labaPositif) GeceColors.StatusSuccessBg else GeceColors.StatusCancelledBg,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-                    }
                 }
-            }
-
-            // Tombol Catat Pemasukan & Pengeluaran
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Button(
-                        onClick = onNavigateToRecordIncome,
-                        modifier = Modifier.weight(1f).height(44.dp),
-                        shape = ShapeControl,
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = GeceColors.StatusSuccessBg,
-                            contentColor = GeceColors.StatusSuccessText
-                        )
-                    ) {
-                        Icon(Icons.Default.Add, contentDescription = null)
-                        Text(
-                            text = stringResource(R.string.owner_finance_btn_income),
-                            style = MaterialTheme.typography.labelMedium
-                        )
-                    }
-                    Button(
-                        onClick = onNavigateToRecordExpense,
-                        modifier = Modifier.weight(1f).height(44.dp),
-                        shape = ShapeControl,
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = GeceColors.StatusCancelledBg,
-                            contentColor = GeceColors.StatusCancelledText
-                        )
-                    ) {
-                        Icon(Icons.Default.Add, contentDescription = null)
-                        Text(
-                            text = stringResource(R.string.owner_finance_btn_expense),
-                            style = MaterialTheme.typography.labelMedium
-                        )
-                    }
-                }
-            }
-
-            // Transaksi terbaru
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = stringResource(R.string.owner_finance_recent_tx),
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold
+            } else {
+                // 4. FinanceHeroCard lalu FinanceSummaryCards
+                item {
+                    FinanceHeroCard(
+                        totalPemasukan = uiState.totalPemasukan,
+                        totalPengeluaran = uiState.totalPengeluaran,
+                        labaRugi = uiState.labaRugi,
+                        marginPercentage = uiState.marginPercentage,
+                        diffProfitVsPrev = uiState.diffProfitVsPrev
                     )
-                    TextButton(
-                        onClick = {
-                            val range = uiState.currentRange
-                            if (range != null) {
-                                onNavigateToFinanceDetail(range.startMillis, range.endMillis)
-                            }
-                        }
-                    ) {
-                        Text(stringResource(R.string.owner_finance_see_all))
+                }
+
+                item {
+                    FinanceSummaryCards(
+                        totalPemasukan = uiState.totalPemasukan,
+                        totalPengeluaran = uiState.totalPengeluaran,
+                        completedOrdersCount = uiState.completedOrdersCount,
+                        biggestExpenseCategory = uiState.biggestExpenseCategory,
+                        incomeGrowthPercentage = uiState.incomeGrowthPercentage,
+                        expenseRatioToIncome = uiState.expenseRatioToIncome
+                    )
+                }
+
+                // 5. Kartu Tren 6 Bulan Terakhir
+                item {
+                    uiState.sixMonthTrend?.let { trend ->
+                        MonthlyTrendChart(trend = trend)
                     }
                 }
-            }
 
-            if (!uiState.isLoading) {
-                if (uiState.recentTransactions.isEmpty()) {
+                // 6. ExpenseBreakdownCard("Struktur Beban") lalu IncomeSourceCard
+                item {
+                    ExpenseBreakdownCard(
+                        title = stringResource(R.string.owner_finance_structure_title),
+                        breakdown = uiState.expenseBreakdown,
+                        totalExpense = uiState.totalPengeluaran
+                    )
+                }
+
+                item {
+                    IncomeSourceCard(sources = uiState.incomeSources)
+                }
+
+                // 7. Bagian "Transaksi Keuangan"
+                item {
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(modifier = Modifier.weight(1f, fill = false)) {
+                                Text(
+                                    text = stringResource(R.string.owner_finance_tx_title),
+                                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                                    color = TextPrimary
+                                )
+                                Text(
+                                    text = stringResource(R.string.owner_finance_tx_subtitle),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = TextSecondary
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        // Tombol Catat Pemasukan dan Catat Pengeluaran
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Button(
+                                onClick = onNavigateToRecordIncome,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(44.dp),
+                                shape = ShapeControl,
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = GeceColors.StatusSuccessBg,
+                                    contentColor = GeceColors.StatusSuccessText
+                                )
+                            ) {
+                                Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(18.dp))
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(
+                                    text = stringResource(R.string.owner_finance_btn_income),
+                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold)
+                                )
+                            }
+
+                            Button(
+                                onClick = onNavigateToRecordExpense,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(44.dp),
+                                shape = ShapeControl,
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = GeceColors.StatusCancelledBg,
+                                    contentColor = GeceColors.StatusCancelledText
+                                )
+                            ) {
+                                Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(18.dp))
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(
+                                    text = stringResource(R.string.owner_finance_btn_expense),
+                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold)
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        // Kolom Cari Keterangan Transaksi
+                        OutlinedTextField(
+                            value = uiState.searchQuery,
+                            onValueChange = { viewModel.onSearchQueryChange(it) },
+                            modifier = Modifier.fillMaxWidth(),
+                            placeholder = {
+                                Text(
+                                    text = stringResource(R.string.owner_finance_search_placeholder),
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.Search,
+                                    contentDescription = null,
+                                    tint = TextSecondary,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            },
+                            singleLine = true,
+                            shape = ShapeControl,
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = InkBlack,
+                                unfocusedBorderColor = BorderHairline,
+                                focusedContainerColor = GeceColors.Background,
+                                unfocusedContainerColor = GeceColors.Background
+                            )
+                        )
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        // Filter Chip: Semua / Pemasukan / Pengeluaran
+                        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            item {
+                                FilterChip(
+                                    selected = uiState.filterType == null,
+                                    onClick = { viewModel.onFilterTypeChange(null) },
+                                    label = { Text(stringResource(R.string.owner_finance_detail_filter_all)) },
+                                    colors = FilterChipDefaults.filterChipColors(
+                                        selectedContainerColor = InkBlack,
+                                        selectedLabelColor = AccentYellow,
+                                        containerColor = GeceColors.Surface,
+                                        labelColor = TextPrimary
+                                    )
+                                )
+                            }
+                            item {
+                                FilterChip(
+                                    selected = uiState.filterType == TransactionType.PEMASUKAN,
+                                    onClick = { viewModel.onFilterTypeChange(TransactionType.PEMASUKAN) },
+                                    label = { Text(stringResource(R.string.owner_finance_detail_filter_income)) },
+                                    colors = FilterChipDefaults.filterChipColors(
+                                        selectedContainerColor = GeceColors.StatusSuccessBg,
+                                        selectedLabelColor = GeceColors.StatusSuccessText,
+                                        containerColor = GeceColors.Surface,
+                                        labelColor = TextPrimary
+                                    )
+                                )
+                            }
+                            item {
+                                FilterChip(
+                                    selected = uiState.filterType == TransactionType.PENGELUARAN,
+                                    onClick = { viewModel.onFilterTypeChange(TransactionType.PENGELUARAN) },
+                                    label = { Text(stringResource(R.string.owner_finance_detail_filter_expense)) },
+                                    colors = FilterChipDefaults.filterChipColors(
+                                        selectedContainerColor = GeceColors.StatusCancelledBg,
+                                        selectedLabelColor = GeceColors.StatusCancelledText,
+                                        containerColor = GeceColors.Surface,
+                                        labelColor = TextPrimary
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+
+                // Daftar Transaksi (5 item, tombol muat lebih banyak)
+                if (uiState.filteredTransactions.isEmpty()) {
                     item {
-                        Text(
-                            text = stringResource(R.string.owner_finance_no_transactions),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = GeceColors.TextMuted
+                        EmptyState(
+                            title = stringResource(R.string.owner_finance_detail_empty),
+                            description = stringResource(R.string.owner_finance_no_transactions)
                         )
                     }
                 } else {
-                    items(uiState.recentTransactions, key = { it.id }) { tx ->
+                    val displayedList = uiState.filteredTransactions.take(uiState.displayedTransactionsLimit)
+                    items(displayedList, key = { it.id }) { tx ->
                         TransactionListItem(
                             transaction = tx,
                             onClick = { onNavigateToTransactionDetail(tx.id) }
                         )
                     }
+
+                    if (uiState.filteredTransactions.size > uiState.displayedTransactionsLimit) {
+                        item {
+                            OutlinedButton(
+                                onClick = { viewModel.onLoadMoreTransactions() },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(44.dp),
+                                shape = ShapeControl
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.owner_finance_btn_load_more),
+                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold)
+                                )
+                            }
+                        }
+                    }
+                }
+
+                // 8. Tombol "Lihat Laporan Keuangan"
+                item {
+                    Button(
+                        onClick = onNavigateToReport,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp),
+                        shape = ShapeControl,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = InkBlack,
+                            contentColor = AccentYellow
+                        )
+                    ) {
+                        Text(
+                            text = stringResource(R.string.owner_finance_btn_view_report),
+                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
+                        )
+                    }
                 }
             }
 
-            // Tombol Laporan
-            item {
-                OutlinedButton(
-                    onClick = onNavigateToReport,
-                    modifier = Modifier.fillMaxWidth().height(44.dp),
-                    shape = ShapeControl
-                ) {
-                    Text(stringResource(R.string.owner_finance_report))
-                }
-            }
+            item { Spacer(modifier = Modifier.height(16.dp)) }
         }
     }
 
-    // DateRangePicker dalam ModalBottomSheet
+    // Modal DateRangePicker
     if (showDateRangePicker) {
-        val pickerState = rememberDateRangePickerState(
-            initialDisplayMode = DisplayMode.Picker
-        )
+        val pickerState = rememberDateRangePickerState(initialDisplayMode = DisplayMode.Picker)
         ModalBottomSheet(
-            onDismissRequest = {
-                // Dismiss tanpa memilih → pertahankan periode sebelumnya
-                showDateRangePicker = false
-            },
+            onDismissRequest = { showDateRangePicker = false },
             sheetState = sheetState
         ) {
             Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
@@ -313,7 +490,6 @@ fun OwnerFinanceScreen(
                         onClick = {
                             val utcStart = pickerState.selectedStartDateMillis
                             val utcEnd = pickerState.selectedEndDateMillis
-                            // Kedua tanggal wajib ada
                             if (utcStart != null && utcEnd != null) {
                                 val localRange = PeriodRules.utcRangeToLocalDateRange(utcStart, utcEnd)
                                 viewModel.onPeriodChange(
@@ -330,33 +506,6 @@ fun OwnerFinanceScreen(
                     ) { Text("OK") }
                 }
             }
-        }
-    }
-}
-
-/** Kartu ringkasan nilai keuangan. */
-@Composable
-private fun FinanceSummaryCard(
-    label: String,
-    value: String,
-    valueColor: androidx.compose.ui.graphics.Color,
-    bgColor: androidx.compose.ui.graphics.Color,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier,
-        shape = ShapeCard,
-        colors = CardDefaults.cardColors(containerColor = bgColor)
-    ) {
-        Column(modifier = Modifier.padding(14.dp)) {
-            Text(text = label, style = MaterialTheme.typography.bodySmall, color = GeceColors.TextMuted)
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = value,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = valueColor
-            )
         }
     }
 }
