@@ -44,7 +44,7 @@ Akun admin dibuat oleh Owner lewat menu Kelola Akun Admin. Akun owner dibuat lan
 - Dashboard Owner.
 - Manajemen Pesanan dan Proses Workshop (pengawasan, sama seperti admin).
 - Keuangan: Catat Pemasukan/Pengeluaran, Ringkasan Laba/Rugi, Detail Transaksi, Filter Periode.
-- Laporan/Ekspor: unduh PDF atau XLSX.
+- Laporan/Ekspor: unduh PDF dan CSV (dibuka di Excel). XLSX asli ditunda sampai library disetujui
 - Kelola Produk, Harga & Variasi (warna, ukuran).
 - Kelola Akun Admin.
 - Akun: profil, pengaturan, logout.
@@ -65,14 +65,15 @@ Pemetaan tahapan internal ke status pelanggan:
   Abaikan; pakai daftar status di atas.
 
 ## Data utama (usulan, belum final)
-- users: id, nama, email, password, no_hp, role (owner/admin/customer)
-- products: id, nama, deskripsi, harga_dasar, gambar
+- users: id, nama, email, password, no_hp, role (owner/admin/customer), aktif
+- products: id, nama, deskripsi, harga_dasar, gambar, kategori, bahan, aktif
 - product_variants: warna, ukuran, tambahan harga
-- orders: id, pelanggan, status, total_harga, catatan, file_desain, dibuat_oleh (pelanggan atau admin untuk pesanan manual)
+- orders: id, pelanggan, status, total_harga, catatan, file_desain, dibuat_oleh (pelanggan atau admin untuk pesanan manual), selesai_pada
 - order_items: pesanan, produk, warna, ukuran, jumlah, harga
 - production_stages: pesanan, tahapan, selesai, waktu, diperbarui_oleh
 - stocks: item (baju polos, material DTF), jumlah
-- transactions: tipe (pemasukan/pengeluaran), nominal, keterangan, tanggal
+- transactions: tipe (pemasukan/pengeluaran), nominal, keterangan, tanggal, kategori. sumber, order_id, dibuat_oleh
+
 
 ## Urutan pengerjaan (sesuai target mingguan)
 - Minggu 11: setup project, tema dari Figma, komponen UI dasar.
@@ -143,6 +144,22 @@ Keuangan (hanya OWNER; repository menolak role lain):
   Pesanan manual dibuat dari Dashboard Owner memakai layar yang sama dengan Admin (rute staff bersama).
   Tanggal: gunakan java.util.Calendar/SimpleDateFormat (Locale id-ID); jangan java.time.
 - Tanggal transaksi manual tidak boleh melewati hari ini.
+
+## Aturan lanjutan owner (Tahap 6B-6C)
+Produk dan pesanan:
+- Produk nonaktif atau dihapus tidak bisa dipesan: repository pesanan menolak (pelanggan dan pesanan manual staff),
+  bukan hanya disembunyikan di UI. Pesanan lama tidak berubah (menyimpan salinan).
+- ID produk, warna, dan ukuran tetap saat diubah. Produk boleh dihapus walau punya pesanan (dengan konfirmasi).
+  Akun admin:
+- Email harus unik terhadap SEMUA akun (admin, owner, pelanggan), tanpa membedakan huruf besar-kecil.
+- Pesan tolak login akun nonaktif: "Akun dinonaktifkan. Hubungi Owner."
+- Atur ulang password oleh Owner = Owner mengisi password sementara baru (aturan password sama); tidak pernah
+  ditampilkan ulang.
+- FakeAuthRepository dan FakeAccountRepository memakai satu penyimpanan akun yang sama.
+  Ekspor laporan (OWNER saja):
+- PDF (PdfDocument bawaan Android) dan CSV berlabel "Unduh Excel (CSV)": pemisah titik koma, penanda UTF-8,
+  nominal angka tanpa pemisah ribuan. Isi sama dengan layar Laporan untuk periode terpilih.
+- Disimpan lewat CreateDocument (pengguna memilih lokasi). Nama file memuat periode.
 
 ## Ubah kata sandi (semua peran yang login)
 - Wajib: kata sandi lama (harus benar), kata sandi baru, konfirmasi (harus sama).
