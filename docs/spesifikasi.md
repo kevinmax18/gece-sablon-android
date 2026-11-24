@@ -160,6 +160,8 @@ Produk dan pesanan:
 - PDF (PdfDocument bawaan Android) dan CSV berlabel "Unduh Excel (CSV)": pemisah titik koma, penanda UTF-8,
   nominal angka tanpa pemisah ribuan. Isi sama dengan layar Laporan untuk periode terpilih.
 - Disimpan lewat CreateDocument (pengguna memilih lokasi). Nama file memuat periode.
+- Input warna produk: kode boleh diketik dengan atau tanpa "#" dan dinormalisasi ke #RRGGBB huruf besar sebelum
+  divalidasi. Tersedia pilihan warna umum yang mengisi nama dan kode sekaligus.
 
 ## Ubah kata sandi (semua peran yang login)
 - Wajib: kata sandi lama (harus benar), kata sandi baru, konfirmasi (harus sama).

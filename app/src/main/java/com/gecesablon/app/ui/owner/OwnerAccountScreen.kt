@@ -17,7 +17,8 @@ fun OwnerAccountScreen(
     onNavigateToChangePassword: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onLogout: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateToManageProducts: () -> Unit = {}
 ) {
     AccountScreenContent(
         viewModel = viewModel,
@@ -28,6 +29,7 @@ fun OwnerAccountScreen(
         onNavigateToChangePassword = onNavigateToChangePassword,
         onNavigateToAbout = onNavigateToAbout,
         onLogout = onLogout,
+        onNavigateToManageProducts = onNavigateToManageProducts,
         modifier = modifier
     )
 }

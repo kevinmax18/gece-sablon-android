@@ -748,4 +748,58 @@
     <string name="change_password_hint_rules">Kata sandi minimal 8 karakter, mengandung kombinasi huruf dan angka, serta tidak boleh sama dengan kata sandi lama.</string>
     <string name="change_password_btn_submit">Simpan Kata Sandi</string>
     <string name="change_password_success">Kata sandi diperbarui</string>
+
+    <!-- Tahap 6B: Kelola Produk Owner -->
+    <string name="owner_products_header_subtitle">Katalog Produk</string>
+    <string name="owner_products_title">Katalog Produk</string>
+    <string name="owner_products_btn_add">Tambah Produk</string>
+    <string name="owner_products_search_hint">Cari nama atau bahan produk...</string>
+    <string name="owner_products_category_all">Semua Kategori</string>
+    <string name="owner_products_empty_title">Belum Ada Produk</string>
+    <string name="owner_products_empty_desc">Katalog produk workshop masih kosong atau tidak ada produk yang cocok dengan pencarian.</string>
+    <string name="owner_product_status_active">Aktif</string>
+    <string name="owner_product_status_inactive">Nonaktif</string>
+    <string name="owner_product_base_price_label">Harga Dasar</string>
+    <string name="owner_product_btn_edit">Ubah Produk</string>
+    <string name="owner_product_btn_delete">Hapus Produk</string>
+    <string name="owner_product_delete_dialog_title">Hapus Produk</string>
+    <string name="owner_product_delete_dialog_msg">Apakah Anda yakin ingin menghapus produk \"%1$s\"? Tindakan ini tidak dapat dibatalkan.</string>
+    <string name="owner_product_delete_confirm">Hapus</string>
+    <string name="owner_product_delete_cancel">Batal</string>
+    <string name="owner_product_form_title_add">Tambah Produk</string>
+    <string name="owner_product_form_title_edit">Ubah Produk</string>
+    <string name="owner_product_section_general">Informasi Umum</string>
+    <string name="owner_product_status_label">Status Ketersediaan</string>
+    <string name="owner_product_status_hint">Aktifkan agar tampil di katalog dan dapat dipesan pelanggan</string>
+    <string name="owner_product_name_label">Nama Produk</string>
+    <string name="owner_product_name_placeholder">Contoh: Kaos Custom Combed 24s</string>
+    <string name="owner_product_category_label">Kategori</string>
+    <string name="owner_product_category_placeholder">Pilih kategori produk</string>
+    <string name="owner_product_fabric_label">Bahan Kain</string>
+    <string name="owner_product_fabric_placeholder">Contoh: Cotton Combed 24s/30s</string>
+    <string name="owner_product_desc_label">Deskripsi Produk</string>
+    <string name="owner_product_desc_placeholder">Tuliskan keunggulan produk dan spesifikasi bahan...</string>
+    <string name="owner_product_price_label">Harga Dasar (Ukuran Standar)</string>
+    <string name="owner_product_price_placeholder">65000</string>
+    <string name="owner_product_image_title">Pratinjau Gambar Produk</string>
+    <string name="owner_product_image_note">Gambar produk saat ini menggunakan placeholder default GeCe Studio.</string>
+    <string name="owner_product_color_title">Pilihan Varian Warna</string>
+    <string name="owner_product_color_subtitle">Minimal 1 warna (nama dan kode hex valid)</string>
+    <string name="owner_product_btn_add_color">Tambah Warna</string>
+    <string name="owner_product_btn_remove_color_row">Hapus baris warna</string>
+    <string name="owner_product_size_title">Pilihan Ukuran &amp; Tambahan Harga</string>
+    <string name="owner_product_size_subtitle">Centang ukuran yang tersedia dan atur selisih harga per ukuran</string>
+    <string name="owner_product_btn_save_add">Simpan Produk</string>
+    <string name="owner_product_btn_save_edit">Simpan Perubahan</string>
+    <string name="owner_product_btn_delete_product">Hapus Produk Ini</string>
+    <string name="account_section_management">PENGELOLAAN WORKSHOP</string>
+    <string name="account_menu_manage_products">Kelola Produk</string>
+    <string name="account_menu_manage_products_sub">Atur katalog, harga, dan variasi produk</string>
+
+    <!-- Perbaikan Form Produk Owner -->
+    <string name="owner_product_color_name_placeholder">Nama (contoh: Abu-abu)</string>
+    <string name="owner_product_color_hex_placeholder">#1F2937</string>
+    <string name="owner_product_color_hex_error">Kode warna 6 karakter 0-9 atau A-F, contoh #1F2937</string>
+    <string name="owner_product_color_preset_label">Pilihan Warna Cepat:</string>
+    <string name="owner_product_color_duplicate_msg">Warna \"%1$s\" sudah ada dalam daftar.</string>
 </resources>

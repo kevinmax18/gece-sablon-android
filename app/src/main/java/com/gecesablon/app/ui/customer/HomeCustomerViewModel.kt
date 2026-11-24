@@ -38,25 +38,27 @@ class HomeCustomerViewModel(
     fun loadFeaturedProducts() {
         _uiState.update { it.copy(isLoading = true, errorMessage = null) }
         viewModelScope.launch {
-            when (val result = productRepository.getProducts()) {
-                is Resource.Success -> {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            featuredProducts = result.data,
-                            errorMessage = null
-                        )
+            productRepository.getActiveProductsStream().collect { result ->
+                when (result) {
+                    is Resource.Success -> {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                featuredProducts = result.data,
+                                errorMessage = null
+                            )
+                        }
                     }
-                }
-                is Resource.Error -> {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            errorMessage = result.message
-                        )
+                    is Resource.Error -> {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                errorMessage = result.message
+                            )
+                        }
                     }
+                    is Resource.Loading -> { /* no-op */ }
                 }
-                is Resource.Loading -> { /* no-op */ }
             }
         }
     }

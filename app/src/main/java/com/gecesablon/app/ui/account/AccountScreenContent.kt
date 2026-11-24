@@ -60,6 +60,7 @@ import com.gecesablon.app.ui.theme.ShapeControl
 import com.gecesablon.app.ui.theme.SurfaceCard
 import com.gecesablon.app.ui.theme.TextPrimary
 import com.gecesablon.app.ui.theme.TextSecondary
+import androidx.compose.material.icons.filled.Layers
 
 /**
  * Komposabel bersama layar Akun (Owner & Admin) yang diselaraskan dengan Figma 33 dan 25.
@@ -75,7 +76,8 @@ fun AccountScreenContent(
     onNavigateToChangePassword: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onLogout: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateToManageProducts: (() -> Unit)? = null
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
@@ -286,6 +288,37 @@ fun AccountScreenContent(
                         subtitle = stringResource(R.string.account_menu_change_password_sub),
                         onClick = onNavigateToChangePassword
                     )
+                }
+            }
+
+            // -------------------------------------------------------------
+            // Bagian PENGELOLAAN WORKSHOP (Khusus Owner: Kelola Produk)
+            // -------------------------------------------------------------
+            if (onNavigateToManageProducts != null) {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = stringResource(R.string.account_section_management),
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 11.sp
+                        ),
+                        color = TextSecondary,
+                        modifier = Modifier.padding(horizontal = 4.dp, vertical = 6.dp)
+                    )
+
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = ShapeCard,
+                        colors = CardDefaults.cardColors(containerColor = SurfaceCard),
+                        border = androidx.compose.foundation.BorderStroke(1.dp, BorderHairline)
+                    ) {
+                        AccountMenuRow(
+                            icon = Icons.Default.Layers,
+                            title = stringResource(R.string.account_menu_manage_products),
+                            subtitle = stringResource(R.string.account_menu_manage_products_sub),
+                            onClick = onNavigateToManageProducts
+                        )
+                    }
                 }
             }
 

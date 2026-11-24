@@ -383,6 +383,7 @@ fun AppNavHost(
                 navController = navController,
                 appContainer = appContainer,
                 accountViewModel = accountViewModel,
+                currentSession = currentSession,
                 onNavigateToAbout = handleNavigateToAbout,
                 onLogout = handleLogout
             )

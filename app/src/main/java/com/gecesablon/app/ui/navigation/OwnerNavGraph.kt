@@ -1,5 +1,6 @@
 package com.gecesablon.app.ui.navigation
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -8,6 +9,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.gecesablon.app.core.di.AppContainer
+import com.gecesablon.app.data.model.Role
+import com.gecesablon.app.data.model.Session
 import com.gecesablon.app.data.model.TransactionType
 import com.gecesablon.app.ui.account.AccountViewModel
 import com.gecesablon.app.ui.owner.OwnerAccountScreen
@@ -21,20 +24,25 @@ import com.gecesablon.app.ui.owner.finance.OwnerTransactionDetailScreen
 import com.gecesablon.app.ui.owner.finance.OwnerTransactionDetailViewModel
 import com.gecesablon.app.ui.owner.finance.OwnerTransactionFormScreen
 import com.gecesablon.app.ui.owner.finance.OwnerTransactionFormViewModel
+import com.gecesablon.app.ui.owner.product.OwnerProductFormScreen
+import com.gecesablon.app.ui.owner.product.OwnerProductFormViewModel
+import com.gecesablon.app.ui.owner.product.OwnerProductsScreen
+import com.gecesablon.app.ui.owner.product.OwnerProductsViewModel
 import com.gecesablon.app.ui.staff.StaffOrdersScreen
 import com.gecesablon.app.ui.staff.StaffProcessScreen
 
 /**
  * NavGraph untuk alur peran Owner / Pemilik Workshop.
  * Tab: Beranda, Pesanan, Proses, Keuangan, Akun.
- * Sub-rute keuangan: detail, form transaksi, detail transaksi, laporan.
+ * Sub-rute: Keuangan (detail, form, laporan) dan Kelola Produk (daftar, form).
  */
 fun NavGraphBuilder.ownerNavGraph(
     navController: NavHostController,
     appContainer: AppContainer,
     accountViewModel: AccountViewModel,
     onNavigateToAbout: () -> Unit,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    currentSession: Session? = null
 ) {
     navigation(startDestination = Routes.OWNER_HOME, route = Routes.OWNER_ROOT) {
 
@@ -87,6 +95,9 @@ fun NavGraphBuilder.ownerNavGraph(
                         launchSingleTop = true
                         restoreState = true
                     }
+                },
+                onNavigateToProducts = {
+                    navController.navigate(Routes.OWNER_PRODUCTS)
                 }
             )
         }
@@ -154,6 +165,9 @@ fun NavGraphBuilder.ownerNavGraph(
                 viewModel = accountViewModel,
                 onNavigateToChangePassword = {
                     navController.navigate(Routes.CHANGE_PASSWORD)
+                },
+                onNavigateToManageProducts = {
+                    navController.navigate(Routes.OWNER_PRODUCTS)
                 },
                 onNavigateToAbout = onNavigateToAbout,
                 onLogout = onLogout
@@ -250,6 +264,70 @@ fun NavGraphBuilder.ownerNavGraph(
                     }
                 }
             )
+        }
+
+        // Sub-rute: Kelola Produk (Tahap 6B) - Daftar Produk Owner
+        composable(Routes.OWNER_PRODUCTS) {
+            val role = currentSession?.role
+            if (role != null && role != Role.OWNER) {
+                LaunchedEffect(Unit) {
+                    navController.popBackStack()
+                }
+            } else {
+                val productsViewModel: OwnerProductsViewModel = viewModel(
+                    factory = OwnerProductsViewModel.factory(
+                        productRepository = appContainer.productRepository,
+                        sessionStore = appContainer.sessionStore
+                    )
+                )
+                OwnerProductsScreen(
+                    viewModel = productsViewModel,
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateToAdd = { navController.navigate(Routes.ownerProductFormRoute()) },
+                    onNavigateToEdit = { id -> navController.navigate(Routes.ownerProductFormRoute(id)) },
+                    onNavigateToAccount = {
+                        navController.navigate(Routes.OWNER_ACCOUNT) {
+                            popUpTo(Routes.OWNER_HOME) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                )
+            }
+        }
+
+        // Sub-rute: Form Tambah/Ubah Produk Owner (Tahap 6B)
+        composable(
+            route = Routes.OWNER_PRODUCT_FORM,
+            arguments = listOf(
+                navArgument("productId") {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                }
+            )
+        ) { backStackEntry ->
+            val role = currentSession?.role
+            if (role != null && role != Role.OWNER) {
+                LaunchedEffect(Unit) {
+                    navController.popBackStack()
+                }
+            } else {
+                val prodId = backStackEntry.arguments?.getString("productId")
+                val formViewModel: OwnerProductFormViewModel = viewModel(
+                    factory = OwnerProductFormViewModel.factory(
+                        productRepository = appContainer.productRepository,
+                        sessionStore = appContainer.sessionStore,
+                        productId = prodId
+                    )
+                )
+                OwnerProductFormScreen(
+                    viewModel = formViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
         }
     }
 }

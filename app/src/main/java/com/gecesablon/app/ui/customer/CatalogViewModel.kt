@@ -38,7 +38,15 @@ class CatalogViewModel(
     private var searchJob: Job? = null
 
     init {
-        loadProducts()
+        observeCatalogProducts()
+    }
+
+    private fun observeCatalogProducts() {
+        viewModelScope.launch {
+            productRepository.getActiveProductsStream().collect {
+                loadProducts()
+            }
+        }
     }
 
     fun onSearchQueryChanged(query: String) {

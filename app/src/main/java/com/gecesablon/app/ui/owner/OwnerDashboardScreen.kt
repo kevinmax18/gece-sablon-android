@@ -112,7 +112,8 @@ fun OwnerDashboardScreen(
     onNavigateToOrders: () -> Unit,
     onNavigateToProcess: () -> Unit,
     onNavigateToAccount: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateToProducts: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -180,9 +181,7 @@ fun OwnerDashboardScreen(
                     OwnerQuickActionsSection(
                         onBuatPesanan = onNavigateToCreateManualOrder,
                         onCatatKeluar = onNavigateToRecordExpense,
-                        onKatalogProduk = {
-                            scope.launch { snackbarHostState.showSnackbar(comingSoonMessage) }
-                        },
+                        onKatalogProduk = onNavigateToProducts,
                         onTimSablon = {
                             scope.launch { snackbarHostState.showSnackbar(comingSoonMessage) }
                         },

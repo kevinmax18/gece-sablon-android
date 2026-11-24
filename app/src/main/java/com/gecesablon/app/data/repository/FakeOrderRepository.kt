@@ -914,6 +914,12 @@ class FakeOrderRepository(
     ): Resource<Order> {
         delay(800)
 
+        // Validasi ketersediaan produk (menolak produk nonaktif atau yang sudah dihapus)
+        val productCheck = productRepository.getProductById(product.id)
+        if (productCheck !is Resource.Success || !productCheck.data.aktif) {
+            return Resource.Error("Produk tidak tersedia atau sedang dinonaktifkan.")
+        }
+
         val unitPrice = PriceCalculator.calculateUnitPrice(product.hargaDasar, size.tambahanHarga)
         val totalPrice = PriceCalculator.calculateTotalPrice(unitPrice, quantity)
 
@@ -1197,8 +1203,8 @@ class FakeOrderRepository(
         }
 
         val productRes = productRepository.getProductById(productId)
-        if (productRes !is Resource.Success) {
-            return Resource.Error("Produk tidak ditemukan.")
+        if (productRes !is Resource.Success || !productRes.data.aktif) {
+            return Resource.Error("Produk tidak ditemukan atau sedang dinonaktifkan.")
         }
         val product = productRes.data
 
