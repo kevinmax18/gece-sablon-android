@@ -802,4 +802,46 @@
     <string name="owner_product_color_hex_error">Kode warna 6 karakter 0-9 atau A-F, contoh #1F2937</string>
     <string name="owner_product_color_preset_label">Pilihan Warna Cepat:</string>
     <string name="owner_product_color_duplicate_msg">Warna \"%1$s\" sudah ada dalam daftar.</string>
+
+    <!-- Kelola Akun Admin Owner (Tahap 6B-2) -->
+    <string name="owner_admin_accounts_title">Kelola Akun Admin</string>
+    <string name="owner_admin_accounts_subtitle">Kelola akses dan staf operasional workshop</string>
+    <string name="owner_admin_accounts_empty_title">Belum Ada Staf Admin</string>
+    <string name="owner_admin_accounts_empty_desc">Belum ada akun admin yang didaftarkan oleh Owner.</string>
+    <string name="owner_admin_accounts_btn_add">Tambah Admin</string>
+    <string name="owner_admin_role_badge">Admin Workshop</string>
+    <string name="owner_admin_status_active">Aktif</string>
+    <string name="owner_admin_status_inactive">Dinonaktifkan</string>
+
+    <string name="owner_admin_form_title_add">Tambah Akun Admin</string>
+    <string name="owner_admin_form_name_label">Nama Lengkap</string>
+    <string name="owner_admin_form_name_placeholder">Contoh: Budi Santoso</string>
+    <string name="owner_admin_form_email_label">Alamat Email</string>
+    <string name="owner_admin_form_email_placeholder">budi@gece.test</string>
+    <string name="owner_admin_form_phone_label">Nomor WhatsApp / HP</string>
+    <string name="owner_admin_form_phone_placeholder">081234567890</string>
+    <string name="owner_admin_form_password_label">Kata Sandi Awal</string>
+    <string name="owner_admin_form_password_placeholder">Minimal 8 karakter (huruf &amp; angka)</string>
+    <string name="owner_admin_form_password_hint">Kata sandi sementara yang akan diberikan kepada staf admin.</string>
+    <string name="owner_admin_form_btn_submit">Buat Akun Admin</string>
+
+    <string name="owner_admin_detail_title">Detail Akun Admin</string>
+    <string name="owner_admin_detail_section_info">INFORMASI AKUN</string>
+    <string name="owner_admin_detail_section_security">PENGATURAN KEAMANAN</string>
+    <string name="owner_admin_detail_btn_save_name">Simpan Nama</string>
+    <string name="owner_admin_detail_btn_deactivate">Nonaktifkan Akun</string>
+    <string name="owner_admin_detail_btn_activate">Aktifkan Kembali Akun</string>
+    <string name="owner_admin_detail_dialog_deactivate_title">Nonaktifkan Akun Admin?</string>
+    <string name="owner_admin_detail_dialog_deactivate_msg">Akun %1$s tidak akan dapat login atau memproses pesanan hingga diaktifkan kembali oleh Owner.</string>
+    <string name="owner_admin_detail_dialog_activate_title">Aktifkan Akun Admin?</string>
+    <string name="owner_admin_detail_dialog_activate_msg">Akun %1$s akan dapat kembali login dan memproses pesanan workshop.</string>
+    <string name="owner_admin_detail_dialog_confirm">Ya, Lanjutkan</string>
+    <string name="owner_admin_detail_dialog_cancel">Batal</string>
+    <string name="owner_admin_detail_reset_password_title">Atur Ulang Kata Sandi</string>
+    <string name="owner_admin_detail_reset_password_desc">Masukkan kata sandi sementara baru untuk akun ini.</string>
+    <string name="owner_admin_detail_reset_password_btn">Atur Ulang Kata Sandi</string>
+    <string name="owner_admin_detail_reset_password_success">Kata sandi berhasil diatur ulang.</string>
+
+    <string name="account_menu_manage_admins">Kelola Akun Admin</string>
+    <string name="account_menu_manage_admins_sub">Daftar staf, hak akses, dan atur ulang sandi</string>
 </resources>

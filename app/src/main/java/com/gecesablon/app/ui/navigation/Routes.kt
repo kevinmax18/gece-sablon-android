@@ -63,6 +63,11 @@ object Routes {
     const val OWNER_PRODUCTS = "owner_products"
     const val OWNER_PRODUCT_FORM = "owner_product_form?productId={productId}"
 
+    // Owner – Sub-rute Kelola Akun Admin (Tahap 6B-2)
+    const val OWNER_ADMIN_ACCOUNTS = "owner_admin_accounts"
+    const val OWNER_ADMIN_FORM = "owner_admin_form"
+    const val OWNER_ADMIN_DETAIL = "owner_admin_detail/{id}"
+
     // Staf Workshop (Netral Peran - Admin & Owner)
     const val STAFF_ORDER_DETAIL = "staff_order_detail/{orderId}"
 
@@ -105,6 +110,9 @@ object Routes {
     // Helper: rute form produk owner (Tahap 6B)
     fun ownerProductFormRoute(productId: String? = null): String =
         if (!productId.isNullOrBlank()) "owner_product_form?productId=$productId" else "owner_product_form"
+
+    // Helper: rute kelola akun admin owner (Tahap 6B-2)
+    fun ownerAdminDetailRoute(id: String): String = "owner_admin_detail/$id"
 
     // Helper: bangun rute Login/Register dengan redirect dan productId opsional
     fun loginRoute(redirect: String? = null, productId: String? = null): String =

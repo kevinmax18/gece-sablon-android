@@ -1,74 +1,39 @@
 package com.gecesablon.app.data.repository
 
+import com.gecesablon.app.core.util.AccountRules
 import com.gecesablon.app.core.util.PasswordRules
 import com.gecesablon.app.core.util.Resource
+import com.gecesablon.app.data.local.AccountStore
 import com.gecesablon.app.data.model.Role
 import com.gecesablon.app.data.model.Session
 import kotlinx.coroutines.delay
 import java.util.UUID
 
 /**
- * Implementasi palsu AuthRepository untuk Tahap 3 (tanpa API).
- * Meniru latensi jaringan ±800 ms, menyimpan akun baru di memori.
+ * Implementasi palsu AuthRepository untuk autentikasi in-memory.
+ * Menggunakan shared [AccountStore] bersama [FakeAccountRepository].
+ * Meniru latensi jaringan ±800 ms.
  *
  * TODO: Hapus di Tahap 8 — ganti dengan implementasi yang memanggil API Laravel.
+ * TODO: server yang menyimpan hash password
+ * TODO: di API asli aktor dari token
  */
-class FakeAuthRepository : AuthRepository {
-
-    // ---------------------------------------------------------------------------
-    // Akun contoh — HANYA ada di file ini, bukan di UI atau konfigurasi lain.
-    // TODO: Hapus di Tahap 8 saat integrasi API.
-    // ---------------------------------------------------------------------------
-    private data class FakeAccount(
-        val id: String,
-        val name: String,
-        val email: String,
-        val phone: String,
-        val passwordHash: String, // disimpan dalam hash agar tidak ada teks asli di memori
-        val role: Role
-    )
-
-    private val accounts: MutableList<FakeAccount> = mutableListOf(
-        FakeAccount(
-            id = "user-cust-001",
-            name = "Pelanggan Demo",
-            email = "pelanggan@gece.test",
-            phone = "081234567890",
-            passwordHash = hash("Pelanggan123"),
-            role = Role.CUSTOMER
-        ),
-        FakeAccount(
-            id = "user-admin-001",
-            name = "Admin Workshop",
-            email = "admin@gece.test",
-            phone = "082000000001",
-            passwordHash = hash("Admin1234"),
-            role = Role.ADMIN
-        ),
-        FakeAccount(
-            id = "user-owner-001",
-            name = "Owner GeCe",
-            email = "owner@gece.test",
-            phone = "082000000002",
-            passwordHash = hash("Owner1234"),
-            role = Role.OWNER
-        )
-    )
-
-    // ---------------------------------------------------------------------------
-    // Implementasi
-    // ---------------------------------------------------------------------------
+class FakeAuthRepository(
+    private val accountStore: AccountStore = AccountStore()
+) : AuthRepository {
 
     override suspend fun login(identifier: String, password: String): Resource<Session> {
         delay(800) // meniru latensi jaringan
 
-        val identifierTrim = identifier.trim()
-        val account = accounts.find { acc ->
-            acc.email.equals(identifierTrim, ignoreCase = true) ||
-                    acc.phone == identifierTrim
-        } ?: return Resource.Error("Email atau nomor HP tidak ditemukan.")
+        val account = accountStore.findByIdentifier(identifier)
+            ?: return Resource.Error("Email atau nomor HP tidak ditemukan.")
 
-        if (account.passwordHash != hash(password)) {
+        // Periksa status keaktifan akun
+        if (!account.isActive) {
+            return Resource.Error("Akun dinonaktifkan. Hubungi Owner.")
+        }
+
+        if (!accountStore.verifyPassword(account, password)) {
             return Resource.Error("Kata sandi salah. Silakan coba lagi.")
         }
 
@@ -90,26 +55,24 @@ class FakeAuthRepository : AuthRepository {
     ): Resource<Session> {
         delay(800) // meniru latensi jaringan
 
-        // Tolak duplikat email (case-insensitive)
-        if (accounts.any { it.email.equals(email.trim(), ignoreCase = true) }) {
+        val allEmails = accountStore.getAllAccounts().map { it.email }
+        AccountRules.validasiKeunikanEmail(email, allEmails)?.let {
             return Resource.Error("Email sudah digunakan oleh akun lain.")
         }
 
         // Tolak duplikat nomor HP
-        if (accounts.any { it.phone == phone.trim() }) {
+        if (accountStore.getAllAccounts().any { it.phone == phone.trim() }) {
             return Resource.Error("Nomor HP sudah digunakan oleh akun lain.")
         }
 
         // Tambahkan akun baru — role SELALU CUSTOMER, tidak menerima role dari UI
-        val newAccount = FakeAccount(
-            id = "user-cust-${UUID.randomUUID().toString().take(8)}",
-            name = name.trim(),
-            email = email.trim().lowercase(),
-            phone = phone.trim(),
-            passwordHash = hash(password),
-            role = Role.CUSTOMER
+        // TODO: server yang menyimpan hash password
+        val newAccount = accountStore.addCustomerAccount(
+            name = name,
+            email = email,
+            phone = phone,
+            password = password
         )
-        accounts.add(newAccount)
 
         return Resource.Success(
             Session(
@@ -133,14 +96,15 @@ class FakeAuthRepository : AuthRepository {
     ): Resource<Unit> {
         delay(600) // meniru latensi jaringan
 
-        // Cari akun berdasarkan userId sesi atau nama
-        val index = accounts.indexOfFirst { it.id == actor.userId || it.name.equals(actor.name, ignoreCase = true) }
-        if (index == -1) {
-            return Resource.Error("Akun tidak ditemukan atau sesi tidak valid.")
+        val account = accountStore.findById(actor.userId)
+            ?: accountStore.getAllAccounts().find { it.name.equals(actor.name, ignoreCase = true) }
+            ?: return Resource.Error("Akun tidak ditemukan atau sesi tidak valid.")
+
+        if (!account.isActive) {
+            return Resource.Error("Akun dinonaktifkan. Hubungi Owner.")
         }
 
-        val account = accounts[index]
-        if (account.passwordHash != hash(oldPassword)) {
+        if (!accountStore.verifyPassword(account, oldPassword)) {
             return Resource.Error("Kata sandi lama salah.")
         }
 
@@ -152,13 +116,9 @@ class FakeAuthRepository : AuthRepository {
             return Resource.Error(errorMsg)
         }
 
-        // TODO: di API asli server memverifikasi dan menyimpan hash
-        accounts[index] = account.copy(passwordHash = hash(newPassword))
+        // TODO: server yang menyimpan hash password
+        // TODO: di API asli aktor dari token
+        accountStore.updatePassword(account.id, newPassword)
         return Resource.Success(Unit)
     }
-
-    // ---------------------------------------------------------------------------
-    // Utilitas internal — hash sederhana agar password tidak tersimpan sebagai teks
-    // ---------------------------------------------------------------------------
-    private fun hash(input: String): String = input.hashCode().toString()
 }

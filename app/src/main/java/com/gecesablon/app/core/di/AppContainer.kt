@@ -2,7 +2,10 @@ package com.gecesablon.app.core.di
 
 import android.content.Context
 import com.gecesablon.app.core.datastore.SessionStore
+import com.gecesablon.app.data.local.AccountStore
+import com.gecesablon.app.data.repository.AccountRepository
 import com.gecesablon.app.data.repository.AuthRepository
+import com.gecesablon.app.data.repository.FakeAccountRepository
 import com.gecesablon.app.data.repository.FakeAuthRepository
 import com.gecesablon.app.data.repository.FakeFinanceRepository
 import com.gecesablon.app.data.repository.FakeOrderRepository
@@ -24,11 +27,30 @@ class AppContainer(private val context: Context) {
     }
 
     /**
+     * Penyimpanan akun bersama di memori (single source of truth) untuk
+     * autentikasi dan manajemen akun staf admin.
+     * TODO: ganti ke database server saat integrasi API di Tahap 8.
+     */
+    val accountStore: AccountStore by lazy {
+        AccountStore()
+    }
+
+    /**
      * Repository autentikasi.
+     * Menggunakan accountStore bersama agar sinkron dengan manajemen akun admin.
      * TODO: Hapus FakeAuthRepository di Tahap 8 — ganti dengan RemoteAuthRepository.
      */
     val authRepository: AuthRepository by lazy {
-        FakeAuthRepository()
+        FakeAuthRepository(accountStore = accountStore)
+    }
+
+    /**
+     * Repository akun dan staf admin (khusus Owner).
+     * Menggunakan accountStore bersama.
+     * TODO: ganti ke Retrofit di Tahap 8.
+     */
+    val accountRepository: AccountRepository by lazy {
+        FakeAccountRepository(accountStore = accountStore)
     }
 
     /**

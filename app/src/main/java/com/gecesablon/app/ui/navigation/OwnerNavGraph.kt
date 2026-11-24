@@ -14,10 +14,16 @@ import com.gecesablon.app.data.model.Session
 import com.gecesablon.app.data.model.TransactionType
 import com.gecesablon.app.ui.account.AccountViewModel
 import com.gecesablon.app.ui.owner.OwnerAccountScreen
+import com.gecesablon.app.ui.owner.OwnerAdminAccountsScreen
+import com.gecesablon.app.ui.owner.OwnerAdminDetailScreen
+import com.gecesablon.app.ui.owner.OwnerAdminFormScreen
 import com.gecesablon.app.ui.owner.OwnerDashboardScreen
 import com.gecesablon.app.ui.owner.OwnerDashboardViewModel
 import com.gecesablon.app.ui.owner.OwnerFinanceScreen
 import com.gecesablon.app.ui.owner.OwnerFinanceViewModel
+import com.gecesablon.app.ui.owner.admin.OwnerAdminAccountsViewModel
+import com.gecesablon.app.ui.owner.admin.OwnerAdminDetailViewModel
+import com.gecesablon.app.ui.owner.admin.OwnerAdminFormViewModel
 import com.gecesablon.app.ui.owner.finance.OwnerReportScreen
 import com.gecesablon.app.ui.owner.finance.OwnerReportViewModel
 import com.gecesablon.app.ui.owner.finance.OwnerTransactionDetailScreen
@@ -98,6 +104,9 @@ fun NavGraphBuilder.ownerNavGraph(
                 },
                 onNavigateToProducts = {
                     navController.navigate(Routes.OWNER_PRODUCTS)
+                },
+                onNavigateToAdminAccounts = {
+                    navController.navigate(Routes.OWNER_ADMIN_ACCOUNTS)
                 }
             )
         }
@@ -168,6 +177,9 @@ fun NavGraphBuilder.ownerNavGraph(
                 },
                 onNavigateToManageProducts = {
                     navController.navigate(Routes.OWNER_PRODUCTS)
+                },
+                onNavigateToManageAdmins = {
+                    navController.navigate(Routes.OWNER_ADMIN_ACCOUNTS)
                 },
                 onNavigateToAbout = onNavigateToAbout,
                 onLogout = onLogout
@@ -325,6 +337,80 @@ fun NavGraphBuilder.ownerNavGraph(
                 )
                 OwnerProductFormScreen(
                     viewModel = formViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+        }
+
+        // Sub-rute: Kelola Akun Admin Owner (Tahap 6B-2)
+        composable(Routes.OWNER_ADMIN_ACCOUNTS) {
+            val role = currentSession?.role
+            if (role != null && role != Role.OWNER) {
+                LaunchedEffect(Unit) {
+                    navController.popBackStack()
+                }
+            } else {
+                val adminAccountsViewModel: OwnerAdminAccountsViewModel = viewModel(
+                    factory = OwnerAdminAccountsViewModel.factory(
+                        accountRepository = appContainer.accountRepository,
+                        sessionStore = appContainer.sessionStore
+                    )
+                )
+                OwnerAdminAccountsScreen(
+                    viewModel = adminAccountsViewModel,
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateToAdd = { navController.navigate(Routes.OWNER_ADMIN_FORM) },
+                    onNavigateToDetail = { id -> navController.navigate(Routes.ownerAdminDetailRoute(id)) }
+                )
+            }
+        }
+
+        // Sub-rute: Form Tambah Akun Admin
+        composable(Routes.OWNER_ADMIN_FORM) {
+            val role = currentSession?.role
+            if (role != null && role != Role.OWNER) {
+                LaunchedEffect(Unit) {
+                    navController.popBackStack()
+                }
+            } else {
+                val adminFormViewModel: OwnerAdminFormViewModel = viewModel(
+                    factory = OwnerAdminFormViewModel.factory(
+                        accountRepository = appContainer.accountRepository,
+                        sessionStore = appContainer.sessionStore
+                    )
+                )
+                OwnerAdminFormScreen(
+                    viewModel = adminFormViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+        }
+
+        // Sub-rute: Detail Akun Admin & Ubah Status/Sandi
+        composable(
+            route = Routes.OWNER_ADMIN_DETAIL,
+            arguments = listOf(
+                navArgument("id") {
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            val role = currentSession?.role
+            if (role != null && role != Role.OWNER) {
+                LaunchedEffect(Unit) {
+                    navController.popBackStack()
+                }
+            } else {
+                val adminId = backStackEntry.arguments?.getString("id") ?: ""
+                val adminDetailViewModel: OwnerAdminDetailViewModel = viewModel(
+                    factory = OwnerAdminDetailViewModel.factory(
+                        accountRepository = appContainer.accountRepository,
+                        sessionStore = appContainer.sessionStore,
+                        accountId = adminId
+                    )
+                )
+                OwnerAdminDetailScreen(
+                    viewModel = adminDetailViewModel,
                     onNavigateBack = { navController.popBackStack() }
                 )
             }

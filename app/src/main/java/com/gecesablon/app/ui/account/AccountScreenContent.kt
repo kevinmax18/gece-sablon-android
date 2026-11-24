@@ -61,6 +61,7 @@ import com.gecesablon.app.ui.theme.SurfaceCard
 import com.gecesablon.app.ui.theme.TextPrimary
 import com.gecesablon.app.ui.theme.TextSecondary
 import androidx.compose.material.icons.filled.Layers
+import androidx.compose.material.icons.filled.SupervisorAccount
 
 /**
  * Komposabel bersama layar Akun (Owner & Admin) yang diselaraskan dengan Figma 33 dan 25.
@@ -77,7 +78,8 @@ fun AccountScreenContent(
     onNavigateToAbout: () -> Unit,
     onLogout: () -> Unit,
     modifier: Modifier = Modifier,
-    onNavigateToManageProducts: (() -> Unit)? = null
+    onNavigateToManageProducts: (() -> Unit)? = null,
+    onNavigateToManageAdmins: (() -> Unit)? = null
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
@@ -318,6 +320,18 @@ fun AccountScreenContent(
                             subtitle = stringResource(R.string.account_menu_manage_products_sub),
                             onClick = onNavigateToManageProducts
                         )
+                        if (onNavigateToManageAdmins != null) {
+                            HorizontalDivider(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                color = BorderHairline
+                            )
+                            AccountMenuRow(
+                                icon = Icons.Default.SupervisorAccount,
+                                title = stringResource(R.string.account_menu_manage_admins),
+                                subtitle = stringResource(R.string.account_menu_manage_admins_sub),
+                                onClick = onNavigateToManageAdmins
+                            )
+                        }
                     }
                 }
             }
