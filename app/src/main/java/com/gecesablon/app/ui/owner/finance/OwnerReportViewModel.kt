@@ -1,10 +1,14 @@
 package com.gecesablon.app.ui.owner.finance
 
+import android.content.ContentResolver
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.gecesablon.app.core.datastore.SessionStore
+import com.gecesablon.app.core.util.CsvExportBuilder
 import com.gecesablon.app.core.util.DateRange
+import com.gecesablon.app.core.util.ExportFileNameGenerator
 import com.gecesablon.app.core.util.FinanceCalculator
 import com.gecesablon.app.core.util.FinanceCalculator.ExpenseCategoryBreakdown
 import com.gecesablon.app.core.util.FinanceCalculator.IncomeSourcesSummary
@@ -19,6 +23,8 @@ import com.gecesablon.app.data.model.Transaction
 import com.gecesablon.app.data.model.TransactionCategory
 import com.gecesablon.app.data.repository.FinanceRepository
 import com.gecesablon.app.data.repository.OrderRepository
+import com.gecesablon.app.ui.owner.export.PdfReportGenerator
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,6 +32,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.OutputStreamWriter
+import java.nio.charset.StandardCharsets
 
 data class OwnerReportUiState(
     val isLoading: Boolean = true,
@@ -55,6 +64,12 @@ data class OwnerReportUiState(
     val expenseBreakdown: List<ExpenseCategoryBreakdown> = emptyList(),
     val incomeSources: IncomeSourcesSummary = IncomeSourcesSummary(0L, 0, null, 0L, null, 0L),
 
+    // Ekspor Laporan (Tahap 6C)
+    val isExportingPdf: Boolean = false,
+    val isExportingCsv: Boolean = false,
+    val exportSuccessMessage: String? = null,
+    val exportErrorMessage: String? = null,
+
     val errorMessage: String? = null
 )
 
@@ -68,6 +83,9 @@ class OwnerReportViewModel(
     val uiState: StateFlow<OwnerReportUiState> = _uiState.asStateFlow()
 
     private var currentSession: Session? = null
+
+    // Salinan transaksi aktif untuk ekspor (bersumber dari FinanceRepository)
+    private var activeTransactions: List<Transaction> = emptyList()
 
     init {
         viewModelScope.launch {
@@ -145,6 +163,8 @@ class OwnerReportViewModel(
                 val compTxs = (compTxRes as? Resource.Success<List<Transaction>>)?.data ?: emptyList()
                 val trend = (trendRes as? Resource.Success<SixMonthTrend>)?.data
 
+                activeTransactions = currentTxs
+
                 val totalIncome = FinanceCalculator.calculateTotalIncome(currentTxs)
                 val totalExpense = FinanceCalculator.calculateTotalExpense(currentTxs)
                 val netProfit = FinanceCalculator.calculateNetProfit(totalIncome, totalExpense)
@@ -201,6 +221,154 @@ class OwnerReportViewModel(
                     )
                 }
             }.collect {}
+        }
+    }
+
+    /**
+     * Menghasilkan nama file default untuk ekspor berdasarkan periode aktif.
+     */
+    fun getSuggestedFileName(extension: String): String {
+        val state = _uiState.value
+        val range = state.currentRange ?: return "laporan-keuangan-GeCe.$extension"
+        return ExportFileNameGenerator.generateFileName(
+            period = state.selectedPeriod,
+            startMillis = range.startMillis,
+            endMillis = range.endMillis,
+            extension = extension
+        )
+    }
+
+    /**
+     * Mengekspor laporan ke dokumen PDF melalui Uri dari CreateDocument launcher.
+     */
+    fun exportToPdf(uri: Uri?, contentResolver: ContentResolver) {
+        if (uri == null) {
+            // Pengguna membatalkan pemilihan berkas, bukan error
+            return
+        }
+
+        val session = currentSession
+        if (session == null || session.role != Role.OWNER) {
+            _uiState.update { it.copy(exportErrorMessage = "Akses ditolak. Hanya Owner yang dapat mengekspor.") }
+            return
+        }
+
+        if (_uiState.value.isExportingPdf || _uiState.value.isExportingCsv) return
+
+        _uiState.update {
+            it.copy(isExportingPdf = true, exportErrorMessage = null, exportSuccessMessage = null)
+        }
+
+        val state = _uiState.value
+        val range = state.currentRange
+        if (range == null) {
+            _uiState.update { it.copy(isExportingPdf = false, exportErrorMessage = "Periode belum dimuat.") }
+            return
+        }
+
+        val txs = activeTransactions
+        val categoryTotals = FinanceCalculator.calculateTotalsByCategory(txs)
+
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                try {
+                    contentResolver.openOutputStream(uri)?.use { os ->
+                        PdfReportGenerator.generatePdf(
+                            rangeStart = range.startMillis,
+                            rangeEnd = range.endMillis,
+                            totalIncome = state.totalPemasukan,
+                            totalExpense = state.totalPengeluaran,
+                            netProfit = state.labaRugi,
+                            categoryTotals = categoryTotals,
+                            transactions = txs,
+                            outputStream = os
+                        )
+                    }
+                    true
+                } catch (e: Exception) {
+                    false
+                }
+            }
+
+            _uiState.update {
+                it.copy(
+                    isExportingPdf = false,
+                    exportSuccessMessage = if (result) "Laporan PDF berhasil disimpan." else null,
+                    exportErrorMessage = if (!result) "Gagal membuat dokumen PDF." else null
+                )
+            }
+        }
+    }
+
+    /**
+     * Mengekspor laporan ke file CSV (Excel) melalui Uri dari CreateDocument launcher.
+     */
+    fun exportToCsv(uri: Uri?, contentResolver: ContentResolver) {
+        if (uri == null) {
+            // Pengguna membatalkan pemilihan berkas, bukan error
+            return
+        }
+
+        val session = currentSession
+        if (session == null || session.role != Role.OWNER) {
+            _uiState.update { it.copy(exportErrorMessage = "Akses ditolak. Hanya Owner yang dapat mengekspor.") }
+            return
+        }
+
+        if (_uiState.value.isExportingPdf || _uiState.value.isExportingCsv) return
+
+        _uiState.update {
+            it.copy(isExportingCsv = true, exportErrorMessage = null, exportSuccessMessage = null)
+        }
+
+        val state = _uiState.value
+        val range = state.currentRange
+        if (range == null) {
+            _uiState.update { it.copy(isExportingCsv = false, exportErrorMessage = "Periode belum dimuat.") }
+            return
+        }
+
+        val txs = activeTransactions
+        val categoryTotals = FinanceCalculator.calculateTotalsByCategory(txs)
+
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                try {
+                    val csvContent = CsvExportBuilder.buildCsv(
+                        rangeStart = range.startMillis,
+                        rangeEnd = range.endMillis,
+                        totalIncome = state.totalPemasukan,
+                        totalExpense = state.totalPengeluaran,
+                        netProfit = state.labaRugi,
+                        categoryTotals = categoryTotals,
+                        transactions = txs
+                    )
+
+                    contentResolver.openOutputStream(uri)?.use { os ->
+                        OutputStreamWriter(os, StandardCharsets.UTF_8).use { writer ->
+                            writer.write(csvContent)
+                            writer.flush()
+                        }
+                    }
+                    true
+                } catch (e: Exception) {
+                    false
+                }
+            }
+
+            _uiState.update {
+                it.copy(
+                    isExportingCsv = false,
+                    exportSuccessMessage = if (result) "Laporan CSV berhasil disimpan." else null,
+                    exportErrorMessage = if (!result) "Gagal membuat file CSV." else null
+                )
+            }
+        }
+    }
+
+    fun clearExportMessages() {
+        _uiState.update {
+            it.copy(exportSuccessMessage = null, exportErrorMessage = null)
         }
     }
 

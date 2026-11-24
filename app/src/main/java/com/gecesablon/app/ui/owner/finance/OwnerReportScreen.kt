@@ -1,5 +1,8 @@
 package com.gecesablon.app.ui.owner.finance
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +23,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -32,12 +36,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,6 +54,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -55,8 +63,10 @@ import com.gecesablon.app.R
 import com.gecesablon.app.core.util.Formatter
 import com.gecesablon.app.core.util.PeriodRules
 import com.gecesablon.app.data.model.FinancePeriod
+import com.gecesablon.app.ui.components.AppButtonVariant
 import com.gecesablon.app.ui.components.EmptyState
 import com.gecesablon.app.ui.components.ErrorState
+import com.gecesablon.app.ui.components.GeceButton
 import com.gecesablon.app.ui.components.LoadingState
 import com.gecesablon.app.ui.components.OwnerHeader
 import com.gecesablon.app.ui.owner.components.ExpenseBreakdownCard
@@ -85,7 +95,7 @@ import kotlinx.coroutines.launch
  * 4. Chip periode (state sendiri) dan bilah "Periode Laporan: <tanggal mulai> - <tanggal akhir>"
  * 5. FinanceHeroCard, FinanceSummaryCards, kartu "Kinerja Finansial" (MonthlyTrendChart),
  *    ExpenseBreakdownCard("Rincian Pengeluaran"), IncomeSourceCard
- * 6. TIDAK ada bagian ekspor di tahap ini.
+ * 6. Bagian Ekspor Laporan: Tombol "Unduh PDF" dan "Unduh Excel (CSV)" (Tahap 6C).
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -96,10 +106,42 @@ fun OwnerReportScreen(
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
+    val contentResolver = context.contentResolver
+
+    val snackbarHostState = remember { SnackbarHostState() }
 
     var showDateRangePicker by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
+
+    // ActivityResultContracts.CreateDocument untuk PDF dan CSV
+    val pdfExportLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/pdf")
+    ) { uri: Uri? ->
+        viewModel.exportToPdf(uri, contentResolver)
+    }
+
+    val csvExportLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("text/csv")
+    ) { uri: Uri? ->
+        viewModel.exportToCsv(uri, contentResolver)
+    }
+
+    // Feedback pesan berhasil / gagal via Snackbar
+    LaunchedEffect(uiState.exportSuccessMessage) {
+        uiState.exportSuccessMessage?.let {
+            snackbarHostState.showSnackbar(it)
+            viewModel.clearExportMessages()
+        }
+    }
+
+    LaunchedEffect(uiState.exportErrorMessage) {
+        uiState.exportErrorMessage?.let {
+            snackbarHostState.showSnackbar(it)
+            viewModel.clearExportMessages()
+        }
+    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -112,6 +154,7 @@ fun OwnerReportScreen(
                 onProfileClick = onNavigateToAccount
             )
         },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         containerColor = GeceColors.Background
     ) { innerPadding ->
         LazyColumn(
@@ -141,19 +184,20 @@ fun OwnerReportScreen(
                 }
             }
 
-            // 3. Kartu Info Khusus Owner
+            // 3. Kartu Info: Khusus Owner
             item {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = ShapeCard,
                     colors = CardDefaults.cardColors(containerColor = SurfaceCard),
-                    border = BorderStroke(1.dp, BorderHairline)
+                    border = BorderStroke(0.5.dp, BorderHairline)
                 ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(14.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Box(
                             modifier = Modifier
@@ -169,9 +213,6 @@ fun OwnerReportScreen(
                                 modifier = Modifier.size(18.dp)
                             )
                         }
-
-                        Spacer(modifier = Modifier.width(12.dp))
-
                         Text(
                             text = stringResource(R.string.owner_report_info_banner),
                             style = MaterialTheme.typography.bodySmall.copy(
@@ -311,6 +352,72 @@ fun OwnerReportScreen(
 
                 item {
                     IncomeSourceCard(sources = uiState.incomeSources)
+                }
+
+                // 6. Bagian Ekspor Laporan (Tahap 6C)
+                item {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.owner_report_export_section_title),
+                            style = MaterialTheme.typography.titleSmall.copy(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 14.sp
+                            ),
+                            color = TextPrimary
+                        )
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            val isAnyExporting = uiState.isExportingPdf || uiState.isExportingCsv
+
+                            // Tombol Unduh PDF
+                            GeceButton(
+                                text = stringResource(R.string.owner_report_btn_download_pdf),
+                                onClick = {
+                                    val suggestedName = viewModel.getSuggestedFileName("pdf")
+                                    pdfExportLauncher.launch(suggestedName)
+                                },
+                                modifier = Modifier.weight(1f),
+                                variant = AppButtonVariant.Primary,
+                                loading = uiState.isExportingPdf,
+                                enabled = !isAnyExporting,
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Default.Download,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                },
+                                fullWidth = false
+                            )
+
+                            // Tombol Unduh Excel (CSV)
+                            GeceButton(
+                                text = stringResource(R.string.owner_report_btn_download_csv),
+                                onClick = {
+                                    val suggestedName = viewModel.getSuggestedFileName("csv")
+                                    csvExportLauncher.launch(suggestedName)
+                                },
+                                modifier = Modifier.weight(1f),
+                                variant = AppButtonVariant.Accent,
+                                loading = uiState.isExportingCsv,
+                                enabled = !isAnyExporting,
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Default.Download,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                },
+                                fullWidth = false
+                            )
+                        }
+                    }
                 }
             }
 

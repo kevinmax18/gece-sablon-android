@@ -244,12 +244,12 @@ class PeriodRulesTest {
         assertEquals(30, calEndBL.get(Calendar.DAY_OF_MONTH))
 
         // 5. HARI_7: 7 hari sebelum rentang 7 hari aktif
-        // Rentang aktif 12-18 Nov -> Rentang pembanding: 5-11 Nov
+        // Rentang aktif 14-20 Nov -> Rentang pembanding: 7-13 Nov
         val comp7 = PeriodRules.getComparisonPeriodRange(FinancePeriod.HARI_7, now = nowNov, timeZone = testZone)
         val calStart7 = Calendar.getInstance(testZone).apply { timeInMillis = comp7.startMillis }
         val calEnd7 = Calendar.getInstance(testZone).apply { timeInMillis = comp7.endMillis }
-        assertEquals(5, calStart7.get(Calendar.DAY_OF_MONTH))
-        assertEquals(11, calEnd7.get(Calendar.DAY_OF_MONTH))
+        assertEquals(7, calStart7.get(Calendar.DAY_OF_MONTH))
+        assertEquals(13, calEnd7.get(Calendar.DAY_OF_MONTH))
 
         // 6. HARI_30: 30 hari sebelum rentang 30 hari aktif
         val comp30 = PeriodRules.getComparisonPeriodRange(FinancePeriod.HARI_30, now = nowNov, timeZone = testZone)

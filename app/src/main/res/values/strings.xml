@@ -844,4 +844,13 @@
 
     <string name="account_menu_manage_admins">Kelola Akun Admin</string>
     <string name="account_menu_manage_admins_sub">Daftar staf, hak akses, dan atur ulang sandi</string>
+
+    <!-- Tahap 6C: Ekspor Laporan Keuangan Owner -->
+    <string name="owner_report_export_section_title">Ekspor Dokumen Laporan</string>
+    <string name="owner_report_btn_download_pdf">Unduh PDF</string>
+    <string name="owner_report_btn_download_csv">Unduh Excel (CSV)</string>
+    <string name="owner_report_export_loading_pdf">Menyiapkan dokumen PDF...</string>
+    <string name="owner_report_export_loading_csv">Menyiapkan file CSV...</string>
+    <string name="owner_report_export_success">Laporan berhasil disimpan.</string>
+    <string name="owner_report_export_failed">Gagal menyimpan laporan. Silakan coba lagi.</string>
 </resources>
