@@ -25,8 +25,7 @@ Akun admin dibuat oleh Owner lewat menu Kelola Akun Admin. Akun owner dibuat lan
 - Mode tamu: boleh melihat Beranda, Katalog, dan Detail Produk. Saat menekan Pesan atau Kirim,
   tamu diarahkan ke Login/Register, lalu kembali ke layar sebelumnya.
 - Register (nama, no HP/WhatsApp, email, password) dan Login.
-- Pembuatan pesanan: Pilih Produk -> Pilih Warna -> Pilih Ukuran -> Atur Jumlah (harga otomatis)
-  -> Upload Desain / Catatan -> Ringkasan Pesanan -> Kirim/Konfirmasi -> Pesanan Berhasil.
+- Pembuatan pesanan: Pilih Produk -> Pilih Bahan -> Pilih Warna -> Pilih Ukuran -> Atur Jumlah (harga otomatis)
 - Status & Detail Pesanan, Riwayat Pesanan.
 - Hubungi workshop lewat WhatsApp.
 - Profil dan Logout.
@@ -48,6 +47,7 @@ Akun admin dibuat oleh Owner lewat menu Kelola Akun Admin. Akun owner dibuat lan
 - Kelola Produk, Harga & Variasi (warna, ukuran).
 - Kelola Akun Admin.
 - Akun: profil, pengaturan, logout.
+- Kelola Kategori dan pilihan bahan produk
 
 ## Status dan tahapan pesanan
 Status yang dilihat pelanggan: Diterima -> Sedang Diproses -> Cetak DTF -> Pressing -> Siap Diambil -> Selesai.
@@ -66,10 +66,12 @@ Pemetaan tahapan internal ke status pelanggan:
 
 ## Data utama (usulan, belum final)
 - users: id, nama, email, password, no_hp, role (owner/admin/customer), aktif
-- products: id, nama, deskripsi, harga_dasar, gambar, kategori, bahan, aktif
+- categories: id, nama
+- products: id, nama, deskripsi, harga_dasar, gambar, category_id, bahan (teks ringkasan, tidak memengaruhi harga), aktif
 - product_variants: warna, ukuran, tambahan harga
+- product_materials: product_id, nama, tambahan_harga, is_default
 - orders: id, pelanggan, status, total_harga, catatan, file_desain, dibuat_oleh (pelanggan atau admin untuk pesanan manual), selesai_pada
-- order_items: pesanan, produk, warna, ukuran, jumlah, harga
+- order_items: pesanan, produk, bahan (salinan nama), warna, ukuran, jumlah, harga
 - production_stages: pesanan, tahapan, selesai, waktu, diperbarui_oleh
 - stocks: item (baju polos, material DTF), jumlah
 - transactions: tipe (pemasukan/pengeluaran), nominal, keterangan, tanggal, kategori. sumber, order_id, dibuat_oleh
@@ -90,10 +92,9 @@ Pemetaan tahapan internal ke status pelanggan:
 
 ## Aturan pemesanan (Tahap 4)
 - Satu pesanan = satu produk. Model data mendukung banyak item, tetapi UI hanya membuat satu item.
-- Harga satuan = harga dasar produk + tambahan harga ukuran. Total = harga satuan x jumlah.
-  Jumlah 1-999, tanpa minimum order. Posisi dan ukuran sablon ditulis pelanggan di catatan (tidak ada pilihan area cetak).
-  Rumus hanya ada di core/util/PriceCalculator.kt (fungsi murni), tidak boleh di UI.
-- Wajib diisi: warna, ukuran, jumlah, dan minimal salah satu dari file desain atau catatan.
+- Harga satuan = harga dasar produk + tambahan harga bahan + tambahan harga ukuran. Total = harga satuan x jumlah.
+  Jumlah 1-999, tanpa minimum order.
+- Wajib diisi: bahan, warna, ukuran, jumlah, dan minimal salah satu dari file desain atau catatan.
   Desain: gambar jpg/png/webp, maksimal 10 MB. Catatan maksimal 500 karakter.
 - Kode pesanan format GEC-YYYYMMDD-NNN. Status awal DITERIMA.
 - Status: DITERIMA, SEDANG_DIPROSES, CETAK_DTF, PRESSING, SIAP_DIAMBIL, SELESAI, DIBATALKAN.
@@ -136,7 +137,7 @@ Keuangan (hanya OWNER; repository menolak role lain):
   memakai awal hari (00:00) sampai akhir hari (23:59:59) zona waktu perangkat.
 - Transaksi manual boleh diubah dan dihapus (dengan konfirmasi). Transaksi sumber PESANAN hanya dilihat.
   Produk (OWNER): nama (3-60), kategori, bahan, deskripsi (maks 500), harga dasar (1.000 - 10.000.000),
-  minimal 1 warna (nama + kode #RRGGBB) dan 1 ukuran (S-XXXL) dengan tambahan harga >= 0. Status aktif/nonaktif;
+  minimal 1 warna (nama + kode #RRGGBB), 1 ukuran (S-XXXL) dengan tambahan harga >= 0, dan 1 bahan (lihat Aturan lanjutan, Tahap 6D). Status aktif/nonaktif;
   produk nonaktif tidak tampil di katalog pelanggan. Pesanan lama tidak berubah karena menyimpan salinan.
   Akun admin (OWNER): nama, email unik, password awal (minimal 8, ada huruf dan angka). Role selalu ADMIN. Akun
   nonaktif tidak bisa login. Akun owner tidak bisa dinonaktifkan atau dihapus lewat aplikasi. Password tidak
@@ -162,6 +163,31 @@ Produk dan pesanan:
 - Disimpan lewat CreateDocument (pengguna memilih lokasi). Nama file memuat periode.
 - Input warna produk: kode boleh diketik dengan atau tanpa "#" dan dinormalisasi ke #RRGGBB huruf besar sebelum
   divalidasi. Tersedia pilihan warna umum yang mengisi nama dan kode sekaligus.
+
+## Aturan lanjutan (Tahap 6D: no HP admin, bahan, kategori)
+No HP:
+- No HP wajib untuk akun admin (form tambah admin) dan tetap wajib untuk register pelanggan. Aturan sama untuk
+  keduanya, hanya di core/util/PhoneRules.kt (fungsi murni): buang spasi, tanda hubung, dan kurung; awalan +62 atau
+  62 diganti 0; hasil hanya angka, diawali 0, panjang 10-14 digit.
+- No HP unik terhadap SEMUA akun (admin, owner, pelanggan) setelah dinormalisasi. Tampil di daftar dan detail akun
+  admin untuk Owner. Mengubah no HP setelah akun dibuat belum tersedia.
+  Pilihan bahan (per produk, dikelola OWNER di form produk):
+- ProductMaterial: id, nama (2-80, unik per produk tanpa membedakan huruf besar-kecil), tambahanHarga (0 -
+  10.000.000), isDefault. Setiap produk wajib punya minimal 1 bahan dan tepat 1 bahan bawaan. ID bahan stabil saat
+  diubah.
+- Harga satuan = harga dasar + tambahan harga bahan + tambahan harga ukuran; total = harga satuan x jumlah (1-999).
+  Pelanggan wajib memilih bahan (bahan bawaan terpilih lebih dulu). Item pesanan menyimpan SALINAN nama bahan; harga
+  satuan sudah termasuk bahan. Pesanan lama tidak berubah bila bahan diubah atau dihapus.
+- Repository pesanan (pelanggan dan pesanan manual staff) menolak bahan yang tidak ada pada produk aktif tersebut.
+- Kolom ringkasan bahan produk (products.material) tetap sebagai teks informasi dan TIDAK memengaruhi harga.
+  Kategori produk (dikelola OWNER):
+- Category: id, nama (2-40, unik tanpa membedakan huruf besar-kecil). Kategori adalah data, bukan enum. ID stabil
+  saat nama diubah. Seed: Kaos Custom, Kaos Oversize, Baju Polo.
+- Setiap produk wajib punya satu kategori. Menghapus kategori yang masih dipakai produk DITOLAK dengan pesan yang
+  menyebut jumlah produk yang memakainya.
+- Filter kategori di Katalog pelanggan membaca daftar dari repository dan hanya menampilkan kategori yang punya
+  minimal 1 produk aktif.
+- Layar Kelola Kategori dibuka dari Akun Owner (bagian Pengelolaan Workshop).
 
 ## Ubah kata sandi (semua peran yang login)
 - Wajib: kata sandi lama (harus benar), kata sandi baru, konfirmasi (harus sama).
