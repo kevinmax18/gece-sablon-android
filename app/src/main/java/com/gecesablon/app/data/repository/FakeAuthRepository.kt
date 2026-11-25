@@ -2,6 +2,7 @@ package com.gecesablon.app.data.repository
 
 import com.gecesablon.app.core.util.AccountRules
 import com.gecesablon.app.core.util.PasswordRules
+import com.gecesablon.app.core.util.PhoneRules
 import com.gecesablon.app.core.util.Resource
 import com.gecesablon.app.data.local.AccountStore
 import com.gecesablon.app.data.model.Role
@@ -60,9 +61,15 @@ class FakeAuthRepository(
             return Resource.Error("Email sudah digunakan oleh akun lain.")
         }
 
-        // Tolak duplikat nomor HP
-        if (accountStore.getAllAccounts().any { it.phone == phone.trim() }) {
-            return Resource.Error("Nomor HP sudah digunakan oleh akun lain.")
+        // Validasi format nomor HP
+        PhoneRules.validate(phone)?.let {
+            return Resource.Error(it)
+        }
+
+        // Tolak duplikat nomor HP terhadap SEMUA akun setelah dinormalisasi
+        val allPhones = accountStore.getAllAccounts().map { it.phone }
+        PhoneRules.validateUniqueness(phone, allPhones)?.let {
+            return Resource.Error(it)
         }
 
         // Tambahkan akun baru — role SELALU CUSTOMER, tidak menerima role dari UI

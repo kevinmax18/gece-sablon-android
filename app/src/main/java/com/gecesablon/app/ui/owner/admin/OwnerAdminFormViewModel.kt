@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.gecesablon.app.core.datastore.SessionStore
 import com.gecesablon.app.core.util.AccountRules
+import com.gecesablon.app.core.util.PhoneRules
 import com.gecesablon.app.core.util.Resource
 import com.gecesablon.app.data.repository.AccountRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -61,13 +62,15 @@ class OwnerAdminFormViewModel(
         val state = _uiState.value
         val nameErr = AccountRules.validasiNama(state.name)
         val emailErr = AccountRules.validasiFormatEmail(state.email)
+        val phoneErr = PhoneRules.validate(state.phone)
         val passErr = AccountRules.validasiPassword(state.password)
 
-        if (nameErr != null || emailErr != null || passErr != null) {
+        if (nameErr != null || emailErr != null || phoneErr != null || passErr != null) {
             _uiState.update {
                 it.copy(
                     nameError = nameErr,
                     emailError = emailErr,
+                    phoneError = phoneErr,
                     passwordError = passErr
                 )
             }
@@ -86,7 +89,7 @@ class OwnerAdminFormViewModel(
                 actor = session,
                 name = state.name.trim(),
                 email = state.email.trim(),
-                phone = state.phone.trim(),
+                phone = PhoneRules.normalize(state.phone),
                 initialPassword = state.password
             )
 

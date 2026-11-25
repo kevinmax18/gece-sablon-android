@@ -1,5 +1,6 @@
 package com.gecesablon.app.data.local
 
+import com.gecesablon.app.core.util.PhoneRules
 import com.gecesablon.app.data.model.AdminAccount
 import com.gecesablon.app.data.model.Role
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -54,7 +55,7 @@ class AccountStore {
                 id = "user-cust-001",
                 name = "Pelanggan Demo",
                 email = "pelanggan@gece.test",
-                phone = "081234567890",
+                phone = "081200000003",
                 passwordHash = hash("Pelanggan123"),
                 role = Role.CUSTOMER,
                 isActive = true
@@ -63,7 +64,7 @@ class AccountStore {
                 id = "user-admin-001",
                 name = "Admin Workshop",
                 email = "admin@gece.test",
-                phone = "082000000001",
+                phone = "081200000002",
                 passwordHash = hash("Admin1234"),
                 role = Role.ADMIN,
                 isActive = true
@@ -72,7 +73,7 @@ class AccountStore {
                 id = "user-owner-001",
                 name = "Owner GeCe",
                 email = "owner@gece.test",
-                phone = "082000000002",
+                phone = "081200000001",
                 passwordHash = hash("Owner1234"),
                 role = Role.OWNER,
                 isActive = true
@@ -85,8 +86,9 @@ class AccountStore {
 
     fun findByIdentifier(identifier: String): StoredAccount? {
         val trimmed = identifier.trim()
+        val normalized = PhoneRules.normalize(trimmed)
         return _accounts.value.find { acc ->
-            acc.email.equals(trimmed, ignoreCase = true) || acc.phone == trimmed
+            acc.email.equals(trimmed, ignoreCase = true) || acc.phone == trimmed || acc.phone == normalized
         }
     }
 
@@ -99,7 +101,7 @@ class AccountStore {
             id = "user-cust-${UUID.randomUUID().toString().take(8)}",
             name = name.trim(),
             email = email.trim().lowercase(),
-            phone = phone.trim(),
+            phone = PhoneRules.normalize(phone),
             passwordHash = hash(password),
             role = Role.CUSTOMER,
             isActive = true
@@ -113,7 +115,7 @@ class AccountStore {
             id = "user-admin-${UUID.randomUUID().toString().take(8)}",
             name = name.trim(),
             email = email.trim().lowercase(),
-            phone = phone.trim(),
+            phone = PhoneRules.normalize(phone),
             passwordHash = hash(password),
             role = Role.ADMIN,
             isActive = true

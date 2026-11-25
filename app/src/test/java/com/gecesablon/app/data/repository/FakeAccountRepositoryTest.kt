@@ -71,21 +71,26 @@ class FakeAccountRepositoryTest {
             actor = ownerSession,
             name = "Staf Baru",
             email = "stafbaru@gece.test",
-            phone = "081299998888",
+            phone = "+62 812-9999-8888",
             initialPassword = "Password123"
         )
         assertTrue(result is Resource.Success)
         val created = (result as Resource.Success).data
         assertEquals(Role.ADMIN, created.role)
         assertEquals("stafbaru@gece.test", created.email)
+        assertEquals("081299998888", created.phone) // Ternormalisasi
         assertTrue(created.isActive)
 
-        // Login menggunakan akun baru di auth repository
+        // Login menggunakan akun baru di auth repository (bisa via nomor HP ternormalisasi atau +62)
         val loginResult = authRepository.login("stafbaru@gece.test", "Password123")
         assertTrue(loginResult is Resource.Success)
         val session = (loginResult as Resource.Success).data
         assertEquals(Role.ADMIN, session.role)
         assertEquals("Staf Baru", session.name)
+
+        // Login dengan no HP
+        val loginPhoneResult = authRepository.login("081299998888", "Password123")
+        assertTrue(loginPhoneResult is Resource.Success)
     }
 
     @Test
@@ -111,6 +116,53 @@ class FakeAccountRepositoryTest {
         )
         assertTrue(dupeCust is Resource.Error)
         assertEquals("Email sudah digunakan oleh akun lain.", (dupeCust as Resource.Error).message)
+    }
+
+    @Test
+    fun `tambahAdmin menolak format nomor HP salah dan duplikat lintas peran`() = runBlocking {
+        // Format salah (terlalu pendek)
+        val formatSalah = accountRepository.tambahAdmin(
+            actor = ownerSession,
+            name = "Staf Pendek",
+            email = "pendek@gece.test",
+            phone = "081234",
+            initialPassword = "Password123"
+        )
+        assertTrue(formatSalah is Resource.Error)
+        assertEquals("Nomor HP terlalu pendek (minimal 10 digit).", (formatSalah as Resource.Error).message)
+
+        // Duplikat nomor HP Admin (seed: 081200000002) dengan format +62
+        val dupeAdminPhone = accountRepository.tambahAdmin(
+            actor = ownerSession,
+            name = "Staf Dupe Admin",
+            email = "dupeadmin@gece.test",
+            phone = "+62 812-0000-0002",
+            initialPassword = "Password123"
+        )
+        assertTrue(dupeAdminPhone is Resource.Error)
+        assertEquals("Nomor HP sudah digunakan oleh akun lain.", (dupeAdminPhone as Resource.Error).message)
+
+        // Duplikat nomor HP Pelanggan (seed: 081200000003)
+        val dupeCustPhone = accountRepository.tambahAdmin(
+            actor = ownerSession,
+            name = "Staf Dupe Cust",
+            email = "dupecust@gece.test",
+            phone = "081200000003",
+            initialPassword = "Password123"
+        )
+        assertTrue(dupeCustPhone is Resource.Error)
+        assertEquals("Nomor HP sudah digunakan oleh akun lain.", (dupeCustPhone as Resource.Error).message)
+
+        // Duplikat nomor HP Owner (seed: 081200000001)
+        val dupeOwnerPhone = accountRepository.tambahAdmin(
+            actor = ownerSession,
+            name = "Staf Dupe Owner",
+            email = "dupeowner@gece.test",
+            phone = "6281200000001",
+            initialPassword = "Password123"
+        )
+        assertTrue(dupeOwnerPhone is Resource.Error)
+        assertEquals("Nomor HP sudah digunakan oleh akun lain.", (dupeOwnerPhone as Resource.Error).message)
     }
 
     @Test

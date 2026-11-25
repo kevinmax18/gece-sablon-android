@@ -7,6 +7,7 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.gecesablon.app.core.datastore.SessionStore
+import com.gecesablon.app.core.util.PhoneRules
 import com.gecesablon.app.core.util.Resource
 import com.gecesablon.app.data.model.Session
 import com.gecesablon.app.data.repository.AuthRepository
@@ -78,7 +79,7 @@ class RegisterViewModel(
 
         // Validasi lokal
         val nameError = if (state.name.isBlank()) "Nama tidak boleh kosong." else null
-        val phoneError = validatePhone(state.phone)
+        val phoneError = PhoneRules.validate(state.phone)
         val emailError = validateEmail(state.email)
         val passwordError = if (state.password.length < 8) "Kata sandi minimal 8 karakter." else null
         val confirmError = if (state.confirmPassword != state.password) "Konfirmasi kata sandi tidak cocok." else null
@@ -103,7 +104,7 @@ class RegisterViewModel(
         viewModelScope.launch {
             when (val result = authRepository.register(
                 name = state.name.trim(),
-                phone = state.phone.trim(),
+                phone = PhoneRules.normalize(state.phone),
                 email = state.email.trim(),
                 password = state.password
             )) {
@@ -131,21 +132,6 @@ class RegisterViewModel(
     // ---------------------------------------------------------------------------
     // Validasi
     // ---------------------------------------------------------------------------
-
-    /**
-     * Validasi nomor HP format Indonesia:
-     * Diawali 08 atau 628, total 10–14 digit, hanya angka.
-     */
-    private fun validatePhone(phone: String): String? {
-        val trimmed = phone.trim()
-        if (trimmed.isBlank()) return "Nomor HP tidak boleh kosong."
-        val digits = trimmed.filter { it.isDigit() }
-        val validPrefix = digits.startsWith("08") || digits.startsWith("628")
-        val validLength = digits.length in 10..14
-        return if (!validPrefix || !validLength) {
-            "Format nomor HP tidak valid. Contoh: 081234567890"
-        } else null
-    }
 
     private fun validateEmail(email: String): String? {
         val trimmed = email.trim()

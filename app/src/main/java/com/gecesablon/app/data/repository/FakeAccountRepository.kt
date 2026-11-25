@@ -1,6 +1,7 @@
 package com.gecesablon.app.data.repository
 
 import com.gecesablon.app.core.util.AccountRules
+import com.gecesablon.app.core.util.PhoneRules
 import com.gecesablon.app.core.util.Resource
 import com.gecesablon.app.data.local.AccountStore
 import com.gecesablon.app.data.model.AdminAccount
@@ -80,6 +81,17 @@ class FakeAccountRepository(
         // Validasi Keunikan Email terhadap SEMUA akun (Customer, Admin, Owner)
         val allEmails = accountStore.getAllAccounts().map { it.email }
         AccountRules.validasiKeunikanEmail(email, allEmails)?.let {
+            return Resource.Error(it)
+        }
+
+        // Validasi Format Nomor HP (Tahap 6D)
+        PhoneRules.validate(phone)?.let {
+            return Resource.Error(it)
+        }
+
+        // Validasi Keunikan Nomor HP terhadap SEMUA akun (Tahap 6D)
+        val allPhones = accountStore.getAllAccounts().map { it.phone }
+        PhoneRules.validateUniqueness(phone, allPhones)?.let {
             return Resource.Error(it)
         }
 

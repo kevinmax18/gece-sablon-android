@@ -50,6 +50,31 @@ object AccountRules {
     }
 
     /**
+     * Memvalidasi format nomor HP untuk akun admin / pengguna.
+     * Menggunakan aturan tunggal [PhoneRules.validate].
+     *
+     * @param phone String nomor HP/WhatsApp
+     * @return Pesan error jika tidak valid, atau null jika valid
+     */
+    fun validasiPhone(phone: String): String? {
+        return PhoneRules.validate(phone)
+    }
+
+    /**
+     * Memeriksa apakah nomor HP sudah digunakan oleh akun lain setelah dinormalisasi.
+     *
+     * @param phone Nomor HP yang diinputkan
+     * @param existingPhones Daftar nomor HP semua akun yang sudah terdaftar
+     * @return Pesan error jika sudah digunakan, atau null jika unik
+     */
+    fun validasiKeunikanPhone(
+        phone: String,
+        existingPhones: List<String>
+    ): String? {
+        return PhoneRules.validateUniqueness(phone, existingPhones)
+    }
+
+    /**
      * Memvalidasi nama admin.
      * @param name Nama lengkap staf admin
      * @return Pesan error jika tidak valid, atau null jika valid

@@ -80,6 +80,31 @@ class AccountRulesTest {
     }
 
     @Test
+    fun `validasi nomor HP mematuhi aturan PhoneRules`() {
+        assertEquals("Nomor HP wajib diisi.", AccountRules.validasiPhone(""))
+        assertEquals("Nomor HP harus diawali dengan angka 0.", AccountRules.validasiPhone("18123456789"))
+        assertEquals("Nomor HP terlalu pendek (minimal 10 digit).", AccountRules.validasiPhone("081234567"))
+        assertEquals("Nomor HP terlalu panjang (maksimal 14 digit).", AccountRules.validasiPhone("081234567890123"))
+        assertNull(AccountRules.validasiPhone("081200000001"))
+        assertNull(AccountRules.validasiPhone("+62 812-0000-0001"))
+    }
+
+    @Test
+    fun `validasi keunikan nomor HP mendeteksi duplikat terhadap semua akun`() {
+        val existing = listOf("081200000001", "081200000002", "081200000003")
+
+        assertEquals(
+            "Nomor HP sudah digunakan oleh akun lain.",
+            AccountRules.validasiKeunikanPhone("081200000001", existing)
+        )
+        assertEquals(
+            "Nomor HP sudah digunakan oleh akun lain.",
+            AccountRules.validasiKeunikanPhone("+62 812-0000-0002", existing)
+        )
+        assertNull(AccountRules.validasiKeunikanPhone("081299998888", existing))
+    }
+
+    @Test
     fun `role admin baru selalu bernilai ADMIN`() {
         assertEquals(Role.ADMIN, AccountRules.resolveRoleUntukAdminBaru())
     }
