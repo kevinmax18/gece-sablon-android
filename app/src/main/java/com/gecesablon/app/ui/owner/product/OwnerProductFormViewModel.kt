@@ -6,12 +6,13 @@ import androidx.lifecycle.viewModelScope
 import com.gecesablon.app.core.datastore.SessionStore
 import com.gecesablon.app.core.util.ProductRules
 import com.gecesablon.app.core.util.Resource
+import com.gecesablon.app.data.model.Category
 import com.gecesablon.app.data.model.Product
-import com.gecesablon.app.data.model.ProductCategory
 import com.gecesablon.app.data.model.ProductColor
 import com.gecesablon.app.data.model.ProductSize
 import com.gecesablon.app.data.model.Role
 import com.gecesablon.app.data.model.Session
+import com.gecesablon.app.data.repository.CategoryRepository
 import com.gecesablon.app.data.repository.ProductRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,10 +23,10 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 
 /**
- * Item baris warna yang dapat diubah pada formulir.
+ * Item baris variasi warna pada formulir.
  */
 data class ColorRowItem(
-    val rowId: String = UUID.randomUUID().toString(),
+    val tempId: String = UUID.randomUUID().toString(),
     val nama: String = "",
     val hex: String = "#111111"
 )
@@ -46,7 +47,8 @@ data class OwnerProductFormUiState(
     val isEditMode: Boolean = false,
     val productId: String = "",
     val nama: String = "",
-    val kategori: ProductCategory? = ProductCategory.KAOS_CUSTOM,
+    val categoryId: String? = null,
+    val categories: List<Category> = emptyList(),
     val bahan: String = "",
     val deskripsi: String = "",
     val hargaDasarInput: String = "",
@@ -72,6 +74,7 @@ data class OwnerProductFormUiState(
  */
 class OwnerProductFormViewModel(
     private val productRepository: ProductRepository,
+    private val categoryRepository: CategoryRepository,
     private val sessionStore: SessionStore,
     private val productId: String?
 ) : ViewModel() {
@@ -80,18 +83,14 @@ class OwnerProductFormViewModel(
         OwnerProductFormUiState(
             isEditMode = !productId.isNullOrBlank(),
             productId = productId ?: "",
-            isLoading = !productId.isNullOrBlank(),
+            isLoading = true,
             sizeSelections = defaultSizeSelections()
         )
     )
     val uiState: StateFlow<OwnerProductFormUiState> = _uiState.asStateFlow()
 
     init {
-        if (!productId.isNullOrBlank()) {
-            loadProductForEdit(productId)
-        } else {
-            initDefaultNewProduct()
-        }
+        loadCategoriesAndInitialData()
     }
 
     private suspend fun getOwnerSession(): Session? {
@@ -99,30 +98,40 @@ class OwnerProductFormViewModel(
         return if (session != null && session.role == Role.OWNER) session else null
     }
 
-    private fun defaultSizeSelections(): List<SizeSelectionItem> {
-        return ProductRules.ALLOWED_SIZE_LABELS.map { label ->
-            SizeSelectionItem(
-                label = label,
-                isSelected = label in listOf("S", "M", "L", "XL"),
-                tambahanHargaInput = when (label) {
-                    "XXL" -> "5000"
-                    "XXXL" -> "10000"
-                    else -> "0"
-                }
-            )
+    private fun loadCategoriesAndInitialData() {
+        viewModelScope.launch {
+            val catRes = categoryRepository.getCategories()
+            val categoriesList = if (catRes is Resource.Success) catRes.data else emptyList()
+            _uiState.update { it.copy(categories = categoriesList) }
+
+            if (!productId.isNullOrBlank()) {
+                loadProductForEdit(productId)
+            } else {
+                initDefaultNewProduct(categoriesList)
+            }
         }
     }
 
-    private fun initDefaultNewProduct() {
-        val initialColors = listOf(
-            ColorRowItem(nama = "Hitam Pekat", hex = "#111111"),
+    private fun initDefaultNewProduct(categoriesList: List<Category>) {
+        val defaultColors = listOf(
+            ColorRowItem(nama = "Hitam Solid", hex = "#111111"),
             ColorRowItem(nama = "Putih Bersih", hex = "#FFFFFF")
         )
+        val defaultSizes = listOf("S", "M", "L", "XL").map { label ->
+            SizeSelectionItem(label = label, isSelected = true, tambahanHargaInput = "0")
+        } + listOf(
+            SizeSelectionItem(label = "XXL", isSelected = false, tambahanHargaInput = "5000"),
+            SizeSelectionItem(label = "XXXL", isSelected = false, tambahanHargaInput = "10000")
+        )
+
+        val defaultCatId = categoriesList.firstOrNull()?.id
+
         _uiState.update {
             it.copy(
-                colorRows = initialColors,
-                sizeSelections = defaultSizeSelections(),
-                hargaDasarInput = "65000"
+                isLoading = false,
+                categoryId = defaultCatId,
+                colorRows = defaultColors,
+                sizeSelections = defaultSizes
             )
         }
     }
@@ -133,40 +142,38 @@ class OwnerProductFormViewModel(
             val session = getOwnerSession()
             if (session == null) {
                 _uiState.update {
-                    it.copy(isLoading = false, errorMessage = "Akses ditolak. Fitur ini hanya untuk Owner.")
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = "Akses ditolak. Fitur ini hanya untuk Owner."
+                    )
                 }
                 return@launch
             }
 
             when (val res = productRepository.getProductByIdForOwner(id, session)) {
                 is Resource.Success -> {
-                    val product = res.data
-                    val colors = product.daftarWarna.map {
-                        ColorRowItem(nama = it.nama, hex = it.hex)
-                    }.ifEmpty {
-                        listOf(ColorRowItem(nama = "Hitam", hex = "#111111"))
-                    }
-
-                    val sizes = ProductRules.ALLOWED_SIZE_LABELS.map { label ->
-                        val existing = product.daftarUkuran.find { it.label.equals(label, ignoreCase = true) }
+                    val p = res.data
+                    val loadedColors = p.daftarWarna.map { ColorRowItem(nama = it.nama, hex = it.hex) }
+                    val loadedSizes = ProductRules.ALLOWED_SIZE_LABELS.map { label ->
+                        val existing = p.daftarUkuran.find { it.label.equals(label, ignoreCase = true) }
                         SizeSelectionItem(
                             label = label,
                             isSelected = existing != null,
-                            tambahanHargaInput = existing?.tambahanHarga?.toString() ?: "0"
+                            tambahanHargaInput = (existing?.tambahanHarga ?: 0L).toString()
                         )
                     }
 
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            nama = product.nama,
-                            kategori = product.kategori,
-                            bahan = product.bahan,
-                            deskripsi = product.deskripsi,
-                            hargaDasarInput = product.hargaDasar.toString(),
-                            aktif = product.aktif,
-                            colorRows = colors,
-                            sizeSelections = sizes
+                            nama = p.nama,
+                            categoryId = p.categoryId,
+                            bahan = p.bahan,
+                            deskripsi = p.deskripsi,
+                            hargaDasarInput = p.hargaDasar.toString(),
+                            aktif = p.aktif,
+                            colorRows = if (loadedColors.isNotEmpty()) loadedColors else listOf(ColorRowItem()),
+                            sizeSelections = loadedSizes
                         )
                     }
                 }
@@ -185,8 +192,8 @@ class OwnerProductFormViewModel(
         _uiState.update { it.copy(nama = value, namaError = null) }
     }
 
-    fun onKategoriSelected(value: ProductCategory) {
-        _uiState.update { it.copy(kategori = value, kategoriError = null) }
+    fun onCategoryIdSelected(value: String) {
+        _uiState.update { it.copy(categoryId = value, kategoriError = null) }
     }
 
     fun onBahanChanged(value: String) {
@@ -216,123 +223,106 @@ class OwnerProductFormViewModel(
         }
     }
 
-    fun addPresetColor(preset: ProductColor, duplicateMessage: String) {
-        val current = _uiState.value.colorRows
-        val isDuplicate = current.any {
+    fun addPresetColor(preset: ProductColor, duplicateMsg: String) {
+        val currentRows = _uiState.value.colorRows
+        val isDuplicate = currentRows.any {
             it.nama.trim().equals(preset.nama.trim(), ignoreCase = true) ||
-            it.hex.trim().equals(preset.hex.trim(), ignoreCase = true)
+                it.hex.trim().equals(preset.hex.trim(), ignoreCase = true)
         }
         if (isDuplicate) {
+            _uiState.update { it.copy(warnaError = duplicateMsg) }
+        } else {
             _uiState.update {
-                it.copy(warnaError = duplicateMessage)
+                it.copy(
+                    colorRows = it.colorRows + ColorRowItem(nama = preset.nama, hex = preset.hex),
+                    warnaError = null
+                )
             }
-            return
-        }
-        _uiState.update {
-            it.copy(
-                colorRows = it.colorRows + ColorRowItem(nama = preset.nama, hex = preset.hex),
-                warnaError = null
-            )
         }
     }
 
     fun updateColorRow(index: Int, nama: String, hex: String) {
-        val currentList = _uiState.value.colorRows.toMutableList()
-        if (index in currentList.indices) {
-            val normalizedHex = ProductRules.normalizeHexInput(hex)
-            currentList[index] = currentList[index].copy(nama = nama, hex = normalizedHex)
-            _uiState.update { it.copy(colorRows = currentList, warnaError = null) }
+        _uiState.update { state ->
+            val updated = state.colorRows.toMutableList()
+            if (index in updated.indices) {
+                updated[index] = updated[index].copy(nama = nama, hex = hex)
+            }
+            state.copy(colorRows = updated, warnaError = null)
         }
     }
 
     fun removeColorRow(index: Int) {
-        val currentList = _uiState.value.colorRows.toMutableList()
-        if (index in currentList.indices) {
-            currentList.removeAt(index)
-            _uiState.update { it.copy(colorRows = currentList, warnaError = null) }
+        _uiState.update { state ->
+            if (state.colorRows.size <= 1) {
+                state.copy(warnaError = "Minimal 1 varian warna harus dipertahankan.")
+            } else {
+                val updated = state.colorRows.toMutableList()
+                if (index in updated.indices) {
+                    updated.removeAt(index)
+                }
+                state.copy(
+                    colorRows = updated,
+                    warnaError = null
+                )
+            }
         }
     }
 
     // Variasi Ukuran
-    fun toggleSizeSelection(label: String, selected: Boolean) {
-        val updated = _uiState.value.sizeSelections.map { item ->
-            if (item.label.equals(label, ignoreCase = true)) {
-                item.copy(isSelected = selected)
-            } else {
-                item
+    fun toggleSizeSelected(label: String) {
+        _uiState.update { state ->
+            val updated = state.sizeSelections.map { sizeItem ->
+                if (sizeItem.label == label) sizeItem.copy(isSelected = !sizeItem.isSelected) else sizeItem
             }
-        }
-        _uiState.update { it.copy(sizeSelections = updated, ukuranError = null) }
-    }
-
-    fun updateSizeExtraPrice(label: String, extraPrice: String) {
-        val clean = extraPrice.filter { it.isDigit() }
-        val updated = _uiState.value.sizeSelections.map { item ->
-            if (item.label.equals(label, ignoreCase = true)) {
-                item.copy(tambahanHargaInput = clean)
-            } else {
-                item
-            }
-        }
-        _uiState.update { it.copy(sizeSelections = updated, ukuranError = null) }
-    }
-
-    // Dialog hapus pada mode edit
-    fun requestDelete() {
-        _uiState.update { it.copy(showDeleteDialog = true) }
-    }
-
-    fun dismissDelete() {
-        _uiState.update { it.copy(showDeleteDialog = false) }
-    }
-
-    fun deleteProduct(onDeleted: () -> Unit) {
-        viewModelScope.launch {
-            val session = getOwnerSession() ?: return@launch
-            val id = _uiState.value.productId
-            if (id.isBlank()) return@launch
-
-            _uiState.update { it.copy(isSubmitting = true, showDeleteDialog = false) }
-            when (val res = productRepository.hapus(session, id)) {
-                is Resource.Success -> {
-                    _uiState.update { it.copy(isSubmitting = false, isSuccess = true) }
-                    onDeleted()
-                }
-                is Resource.Error -> {
-                    _uiState.update { it.copy(isSubmitting = false, errorMessage = res.message) }
-                }
-                is Resource.Loading -> Unit
-            }
+            state.copy(sizeSelections = updated, ukuranError = null)
         }
     }
 
-    /**
-     * Menyimpan data produk (Tambah atau Ubah).
-     */
-    fun saveProduct(onSuccess: () -> Unit) {
-        val current = _uiState.value
-        val hargaDasar = current.hargaDasarInput.toLongOrNull() ?: 0L
+    fun toggleSizeSelection(label: String, isChecked: Boolean) {
+        _uiState.update { state ->
+            val updated = state.sizeSelections.map { sizeItem ->
+                if (sizeItem.label == label) sizeItem.copy(isSelected = isChecked) else sizeItem
+            }
+            state.copy(sizeSelections = updated, ukuranError = null)
+        }
+    }
 
-        val productColors = current.colorRows.map {
+    fun updateSizeExtraPrice(label: String, priceInput: String) {
+        val clean = priceInput.filter { it.isDigit() }
+        _uiState.update { state ->
+            val updated = state.sizeSelections.map { sizeItem ->
+                if (sizeItem.label == label) sizeItem.copy(tambahanHargaInput = clean) else sizeItem
+            }
+            state.copy(sizeSelections = updated, ukuranError = null)
+        }
+    }
+
+    // Simpan Form (Tambah / Ubah)
+    fun saveProduct(onSuccess: (() -> Unit)? = null) {
+        val state = _uiState.value
+        val parsedHargaDasar = state.hargaDasarInput.toLongOrNull() ?: 0L
+
+        val productColors = state.colorRows.map {
             ProductColor(nama = it.nama.trim(), hex = it.hex.trim())
         }
 
-        val selectedSizes = current.sizeSelections.filter { it.isSelected }.map {
-            ProductSize(
-                label = it.label,
-                tambahanHarga = it.tambahanHargaInput.toLongOrNull() ?: 0L
-            )
-        }
+        val productSizes = state.sizeSelections
+            .filter { it.isSelected }
+            .map {
+                ProductSize(
+                    label = it.label.trim(),
+                    tambahanHarga = it.tambahanHargaInput.toLongOrNull() ?: 0L
+                )
+            }
 
-        // Jalankan validasi fungsi murni ProductRules
         val validation = ProductRules.validateProductFields(
-            nama = current.nama,
-            kategori = current.kategori,
-            bahan = current.bahan,
-            deskripsi = current.deskripsi,
-            hargaDasar = hargaDasar,
+            nama = state.nama,
+            categoryId = state.categoryId,
+            bahan = state.bahan,
+            deskripsi = state.deskripsi,
+            hargaDasar = parsedHargaDasar,
             daftarWarna = productColors,
-            daftarUkuran = selectedSizes
+            daftarUkuran = productSizes
         )
 
         if (!validation.isValid) {
@@ -352,42 +342,85 @@ class OwnerProductFormViewModel(
         }
 
         viewModelScope.launch {
+            _uiState.update { it.copy(isSubmitting = true, errorMessage = null) }
             val session = getOwnerSession()
             if (session == null) {
-                _uiState.update { it.copy(errorMessage = "Akses ditolak. Fitur ini hanya untuk Owner.") }
+                _uiState.update {
+                    it.copy(isSubmitting = false, errorMessage = "Akses ditolak. Fitur ini hanya untuk Owner.")
+                }
                 return@launch
             }
 
-            _uiState.update { it.copy(isSubmitting = true, errorMessage = null) }
-
-            val product = Product(
-                id = current.productId,
-                nama = current.nama.trim(),
-                kategori = current.kategori!!,
-                bahan = current.bahan.trim(),
-                deskripsi = current.deskripsi.trim(),
-                hargaDasar = hargaDasar,
-                gambarUrl = null, // Placeholder gambar
+            val productToSave = Product(
+                id = if (state.isEditMode) state.productId else "",
+                nama = state.nama.trim(),
+                categoryId = state.categoryId!!,
+                bahan = state.bahan.trim(),
+                deskripsi = state.deskripsi.trim(),
+                hargaDasar = parsedHargaDasar,
+                gambarUrl = null,
                 daftarWarna = productColors,
-                daftarUkuran = selectedSizes,
-                aktif = current.aktif
+                daftarUkuran = productSizes,
+                aktif = state.aktif
             )
 
-            val result = if (current.isEditMode) {
-                productRepository.ubah(session, product)
+            val result = if (state.isEditMode) {
+                productRepository.ubah(session, productToSave)
             } else {
-                productRepository.tambah(session, product)
+                productRepository.tambah(session, productToSave)
             }
 
             when (result) {
                 is Resource.Success -> {
                     _uiState.update { it.copy(isSubmitting = false, isSuccess = true) }
-                    onSuccess()
+                    onSuccess?.invoke()
                 }
                 is Resource.Error -> {
-                    _uiState.update {
-                        it.copy(isSubmitting = false, errorMessage = result.message)
-                    }
+                    _uiState.update { it.copy(isSubmitting = false, errorMessage = result.message) }
+                }
+                is Resource.Loading -> Unit
+            }
+        }
+    }
+
+    // Hapus Produk
+    fun requestDelete() {
+        showDeleteDialog()
+    }
+
+    fun dismissDelete() {
+        dismissDeleteDialog()
+    }
+
+    fun showDeleteDialog() {
+        _uiState.update { it.copy(showDeleteDialog = true) }
+    }
+
+    fun dismissDeleteDialog() {
+        _uiState.update { it.copy(showDeleteDialog = false) }
+    }
+
+    fun deleteProduct(onDeleted: (() -> Unit)? = null) {
+        val prodId = _uiState.value.productId
+        if (prodId.isBlank()) return
+
+        viewModelScope.launch {
+            _uiState.update { it.copy(isSubmitting = true, showDeleteDialog = false) }
+            val session = getOwnerSession()
+            if (session == null) {
+                _uiState.update {
+                    it.copy(isSubmitting = false, errorMessage = "Akses ditolak. Fitur ini hanya untuk Owner.")
+                }
+                return@launch
+            }
+
+            when (val res = productRepository.hapus(session, prodId)) {
+                is Resource.Success -> {
+                    _uiState.update { it.copy(isSubmitting = false, isSuccess = true) }
+                    onDeleted?.invoke()
+                }
+                is Resource.Error -> {
+                    _uiState.update { it.copy(isSubmitting = false, errorMessage = res.message) }
                 }
                 is Resource.Loading -> Unit
             }
@@ -395,14 +428,25 @@ class OwnerProductFormViewModel(
     }
 
     companion object {
+        private fun defaultSizeSelections(): List<SizeSelectionItem> {
+            return ProductRules.ALLOWED_SIZE_LABELS.map { label ->
+                SizeSelectionItem(
+                    label = label,
+                    isSelected = label in listOf("S", "M", "L", "XL"),
+                    tambahanHargaInput = if (label == "XXL") "5000" else if (label == "XXXL") "10000" else "0"
+                )
+            }
+        }
+
         fun factory(
             productRepository: ProductRepository,
+            categoryRepository: CategoryRepository,
             sessionStore: SessionStore,
             productId: String?
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T =
-                OwnerProductFormViewModel(productRepository, sessionStore, productId) as T
+                OwnerProductFormViewModel(productRepository, categoryRepository, sessionStore, productId) as T
         }
     }
 }

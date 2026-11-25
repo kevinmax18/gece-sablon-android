@@ -68,6 +68,9 @@ object Routes {
     const val OWNER_ADMIN_FORM = "owner_admin_form"
     const val OWNER_ADMIN_DETAIL = "owner_admin_detail/{id}"
 
+    // Owner – Sub-rute Kelola Kategori Produk (Tahap 6D-2)
+    const val OWNER_CATEGORIES = "owner_categories"
+
     // Staf Workshop (Netral Peran - Admin & Owner)
     const val STAFF_ORDER_DETAIL = "staff_order_detail/{orderId}"
 

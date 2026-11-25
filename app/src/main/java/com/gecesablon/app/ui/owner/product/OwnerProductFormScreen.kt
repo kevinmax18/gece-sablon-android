@@ -77,7 +77,6 @@ import com.gecesablon.app.R
 import com.gecesablon.app.core.util.Formatter
 import com.gecesablon.app.core.util.PresetColors
 import com.gecesablon.app.core.util.ProductRules
-import com.gecesablon.app.data.model.ProductCategory
 import com.gecesablon.app.ui.components.LoadingState
 import com.gecesablon.app.ui.components.OwnerHeader
 import com.gecesablon.app.ui.theme.AccentYellow
@@ -302,8 +301,9 @@ fun OwnerProductFormScreen(
                                 onExpandedChange = { categoryDropdownExpanded = !categoryDropdownExpanded },
                                 modifier = Modifier.fillMaxWidth()
                             ) {
+                                val selectedCatName = uiState.categories.find { it.id == uiState.categoryId }?.nama ?: ""
                                 OutlinedTextField(
-                                    value = uiState.kategori?.let { stringResource(it.titleRes) } ?: "",
+                                    value = selectedCatName,
                                     onValueChange = {},
                                     readOnly = true,
                                     placeholder = {
@@ -327,11 +327,11 @@ fun OwnerProductFormScreen(
                                     onDismissRequest = { categoryDropdownExpanded = false },
                                     modifier = Modifier.background(SurfaceCard)
                                 ) {
-                                    ProductCategory.entries.forEach { cat ->
+                                    uiState.categories.forEach { cat ->
                                         DropdownMenuItem(
-                                            text = { Text(text = stringResource(cat.titleRes), color = TextPrimary) },
+                                            text = { Text(text = cat.nama, color = TextPrimary) },
                                             onClick = {
-                                                viewModel.onKategoriSelected(cat)
+                                                viewModel.onCategoryIdSelected(cat.id)
                                                 categoryDropdownExpanded = false
                                             }
                                         )

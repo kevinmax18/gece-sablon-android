@@ -24,6 +24,8 @@ import com.gecesablon.app.ui.owner.OwnerFinanceViewModel
 import com.gecesablon.app.ui.owner.admin.OwnerAdminAccountsViewModel
 import com.gecesablon.app.ui.owner.admin.OwnerAdminDetailViewModel
 import com.gecesablon.app.ui.owner.admin.OwnerAdminFormViewModel
+import com.gecesablon.app.ui.owner.category.OwnerCategoriesScreen
+import com.gecesablon.app.ui.owner.category.OwnerCategoriesViewModel
 import com.gecesablon.app.ui.owner.finance.OwnerReportScreen
 import com.gecesablon.app.ui.owner.finance.OwnerReportViewModel
 import com.gecesablon.app.ui.owner.finance.OwnerTransactionDetailScreen
@@ -178,6 +180,9 @@ fun NavGraphBuilder.ownerNavGraph(
                 onNavigateToManageProducts = {
                     navController.navigate(Routes.OWNER_PRODUCTS)
                 },
+                onNavigateToManageCategories = {
+                    navController.navigate(Routes.OWNER_CATEGORIES)
+                },
                 onNavigateToManageAdmins = {
                     navController.navigate(Routes.OWNER_ADMIN_ACCOUNTS)
                 },
@@ -289,6 +294,7 @@ fun NavGraphBuilder.ownerNavGraph(
                 val productsViewModel: OwnerProductsViewModel = viewModel(
                     factory = OwnerProductsViewModel.factory(
                         productRepository = appContainer.productRepository,
+                        categoryRepository = appContainer.categoryRepository,
                         sessionStore = appContainer.sessionStore
                     )
                 )
@@ -331,6 +337,7 @@ fun NavGraphBuilder.ownerNavGraph(
                 val formViewModel: OwnerProductFormViewModel = viewModel(
                     factory = OwnerProductFormViewModel.factory(
                         productRepository = appContainer.productRepository,
+                        categoryRepository = appContainer.categoryRepository,
                         sessionStore = appContainer.sessionStore,
                         productId = prodId
                     )
@@ -411,6 +418,27 @@ fun NavGraphBuilder.ownerNavGraph(
                 )
                 OwnerAdminDetailScreen(
                     viewModel = adminDetailViewModel,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+        }
+
+        // Sub-rute: Kelola Kategori Produk Owner (Tahap 6D-2)
+        composable(Routes.OWNER_CATEGORIES) {
+            val role = currentSession?.role
+            if (role != null && role != Role.OWNER) {
+                LaunchedEffect(Unit) {
+                    navController.popBackStack()
+                }
+            } else {
+                val categoriesViewModel: OwnerCategoriesViewModel = viewModel(
+                    factory = OwnerCategoriesViewModel.factory(
+                        categoryRepository = appContainer.categoryRepository,
+                        sessionStore = appContainer.sessionStore
+                    )
+                )
+                OwnerCategoriesScreen(
+                    viewModel = categoriesViewModel,
                     onNavigateBack = { navController.popBackStack() }
                 )
             }

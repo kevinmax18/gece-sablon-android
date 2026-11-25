@@ -54,7 +54,6 @@ import com.gecesablon.app.R
 import com.gecesablon.app.core.util.Formatter
 import com.gecesablon.app.core.util.WhatsAppIntent
 import com.gecesablon.app.data.model.Product
-import com.gecesablon.app.data.model.ProductCategory
 import com.gecesablon.app.ui.components.ErrorView
 import com.gecesablon.app.ui.components.LoadingView
 import com.gecesablon.app.ui.components.ProductCard
@@ -78,7 +77,7 @@ fun CustomerHomeScreen(
     viewModel: HomeCustomerViewModel,
     onProfileClick: () -> Unit,
     onProductClick: (productId: String) -> Unit,
-    onNavigateToCatalog: (category: ProductCategory?) -> Unit,
+    onNavigateToCatalog: (categoryId: String?) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -302,24 +301,14 @@ fun CustomerHomeScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        CategoryCard(
-                            title = stringResource(R.string.category_kaos_custom),
-                            subtitle = stringResource(R.string.home_category_kaos_custom_desc),
-                            modifier = Modifier.weight(1f),
-                            onClick = { onNavigateToCatalog(ProductCategory.KAOS_CUSTOM) }
-                        )
-                        CategoryCard(
-                            title = stringResource(R.string.category_kaos_oversize),
-                            subtitle = stringResource(R.string.home_category_kaos_oversize_desc),
-                            modifier = Modifier.weight(1f),
-                            onClick = { onNavigateToCatalog(ProductCategory.KAOS_OVERSIZE) }
-                        )
-                        CategoryCard(
-                            title = stringResource(R.string.category_baju_polo),
-                            subtitle = stringResource(R.string.home_category_baju_polo_desc),
-                            modifier = Modifier.weight(1f),
-                            onClick = { onNavigateToCatalog(ProductCategory.BAJU_POLO) }
-                        )
+                        uiState.categories.forEach { cat ->
+                            CategoryCard(
+                                title = cat.nama,
+                                subtitle = stringResource(R.string.home_category_title),
+                                modifier = Modifier.weight(1f),
+                                onClick = { onNavigateToCatalog(cat.id) }
+                            )
+                        }
                     }
                 }
             }

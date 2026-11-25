@@ -853,4 +853,23 @@
     <string name="owner_report_export_loading_csv">Menyiapkan file CSV...</string>
     <string name="owner_report_export_success">Laporan berhasil disimpan.</string>
     <string name="owner_report_export_failed">Gagal menyimpan laporan. Silakan coba lagi.</string>
+
+    <!-- Tahap 6D-2: Kelola Kategori Produk Owner -->
+    <string name="account_menu_manage_categories">Kelola Kategori</string>
+    <string name="account_menu_manage_categories_sub">Daftar kategori produk sablon dan pakaian</string>
+    <string name="owner_categories_title">Kelola Kategori</string>
+    <string name="owner_categories_subtitle">Pengaturan kategori produk katalog</string>
+    <string name="owner_categories_btn_add">Tambah Kategori</string>
+    <string name="owner_categories_empty_title">Belum Ada Kategori</string>
+    <string name="owner_categories_empty_desc">Belum ada kategori produk yang terdaftar di sistem.</string>
+    <string name="owner_categories_dialog_add_title">Tambah Kategori Baru</string>
+    <string name="owner_categories_dialog_edit_title">Ubah Nama Kategori</string>
+    <string name="owner_categories_name_label">Nama Kategori</string>
+    <string name="owner_categories_name_placeholder">Contoh: Kaos Oversize</string>
+    <string name="owner_categories_dialog_save">Simpan</string>
+    <string name="owner_categories_dialog_cancel">Batal</string>
+    <string name="owner_categories_dialog_delete_title">Hapus Kategori?</string>
+    <string name="owner_categories_dialog_delete_msg">Apakah Anda yakin ingin menghapus kategori \"%1$s\"?</string>
+    <string name="owner_categories_dialog_delete_confirm">Ya, Hapus</string>
+    <string name="owner_categories_badge_role">OWNER</string>
 </resources>

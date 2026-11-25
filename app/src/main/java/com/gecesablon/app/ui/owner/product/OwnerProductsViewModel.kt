@@ -5,10 +5,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.gecesablon.app.core.datastore.SessionStore
 import com.gecesablon.app.core.util.Resource
+import com.gecesablon.app.data.model.Category
 import com.gecesablon.app.data.model.Product
-import com.gecesablon.app.data.model.ProductCategory
 import com.gecesablon.app.data.model.Role
 import com.gecesablon.app.data.model.Session
+import com.gecesablon.app.data.repository.CategoryRepository
 import com.gecesablon.app.data.repository.ProductRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,8 +24,9 @@ import kotlinx.coroutines.launch
 data class OwnerProductsUiState(
     val isLoading: Boolean = true,
     val allProducts: List<Product> = emptyList(),
+    val categories: List<Category> = emptyList(),
     val searchQuery: String = "",
-    val selectedCategory: ProductCategory? = null,
+    val selectedCategoryId: String? = null,
     val errorMessage: String? = null,
     val successMessage: String? = null,
     val productToDelete: Product? = null,
@@ -37,7 +39,7 @@ data class OwnerProductsUiState(
         get() {
             val trimmed = searchQuery.trim()
             return allProducts.filter { prod ->
-                val matchCategory = selectedCategory == null || prod.kategori == selectedCategory
+                val matchCategory = selectedCategoryId == null || prod.categoryId == selectedCategoryId
                 val matchQuery = trimmed.isEmpty() ||
                     prod.nama.contains(trimmed, ignoreCase = true) ||
                     prod.bahan.contains(trimmed, ignoreCase = true)
@@ -52,6 +54,7 @@ data class OwnerProductsUiState(
  */
 class OwnerProductsViewModel(
     private val productRepository: ProductRepository,
+    private val categoryRepository: CategoryRepository,
     private val sessionStore: SessionStore
 ) : ViewModel() {
 
@@ -59,12 +62,23 @@ class OwnerProductsViewModel(
     val uiState: StateFlow<OwnerProductsUiState> = _uiState.asStateFlow()
 
     init {
+        loadAndObserveCategories()
         loadAndObserveProducts()
     }
 
     private suspend fun getOwnerSession(): Session? {
         val session = sessionStore.session.firstOrNull()
         return if (session != null && session.role == Role.OWNER) session else null
+    }
+
+    private fun loadAndObserveCategories() {
+        viewModelScope.launch {
+            categoryRepository.semuaKategoriFlow().collect { res ->
+                if (res is Resource.Success) {
+                    _uiState.update { it.copy(categories = res.data) }
+                }
+            }
+        }
     }
 
     /**
@@ -103,9 +117,7 @@ class OwnerProductsViewModel(
                             )
                         }
                     }
-                    is Resource.Loading -> {
-                        _uiState.update { it.copy(isLoading = true) }
-                    }
+                    is Resource.Loading -> Unit
                 }
             }
         }
@@ -115,26 +127,24 @@ class OwnerProductsViewModel(
         _uiState.update { it.copy(searchQuery = query) }
     }
 
-    fun onCategorySelected(category: ProductCategory?) {
-        _uiState.update {
-            it.copy(selectedCategory = if (it.selectedCategory == category) null else category)
-        }
+    fun onCategorySelected(categoryId: String?) {
+        _uiState.update { it.copy(selectedCategoryId = categoryId) }
     }
 
-    /**
-     * Mengubah status aktif/nonaktif produk melalui sakelar.
-     */
-    fun toggleProductActive(product: Product, newActiveState: Boolean) {
+    fun toggleProductStatus(product: Product) {
+        toggleProductActive(product, !product.aktif)
+    }
+
+    fun toggleProductActive(product: Product, newActive: Boolean) {
         viewModelScope.launch {
             val session = getOwnerSession() ?: return@launch
             _uiState.update { it.copy(isActionInProgress = true) }
-            when (val res = productRepository.setAktif(session, product.id, newActiveState)) {
+            when (val res = productRepository.setAktif(session, product.id, newActive)) {
                 is Resource.Success -> {
-                    val statusText = if (newActiveState) "diaktifkan" else "dinonaktifkan"
                     _uiState.update {
                         it.copy(
                             isActionInProgress = false,
-                            successMessage = "Produk '${product.nama}' berhasil $statusText."
+                            successMessage = if (newActive) "Produk berhasil diaktifkan" else "Produk berhasil dinonaktifkan"
                         )
                     }
                 }
@@ -151,10 +161,11 @@ class OwnerProductsViewModel(
         }
     }
 
-    /**
-     * Membuka dialog konfirmasi hapus dengan menyebut nama produk.
-     */
     fun requestDeleteProduct(product: Product) {
+        showDeleteConfirmation(product)
+    }
+
+    fun showDeleteConfirmation(product: Product) {
         _uiState.update { it.copy(productToDelete = product) }
     }
 
@@ -162,10 +173,11 @@ class OwnerProductsViewModel(
         _uiState.update { it.copy(productToDelete = null) }
     }
 
-    /**
-     * Menjalankan penghapusan produk setelah dikonfirmasi owner.
-     */
     fun executeDeleteProduct() {
+        deleteConfirmedProduct()
+    }
+
+    fun deleteConfirmedProduct() {
         val target = _uiState.value.productToDelete ?: return
         viewModelScope.launch {
             val session = getOwnerSession() ?: return@launch
@@ -193,17 +205,22 @@ class OwnerProductsViewModel(
     }
 
     fun clearFeedback() {
+        clearMessages()
+    }
+
+    fun clearMessages() {
         _uiState.update { it.copy(errorMessage = null, successMessage = null) }
     }
 
     companion object {
         fun factory(
             productRepository: ProductRepository,
+            categoryRepository: CategoryRepository,
             sessionStore: SessionStore
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T =
-                OwnerProductsViewModel(productRepository, sessionStore) as T
+                OwnerProductsViewModel(productRepository, categoryRepository, sessionStore) as T
         }
     }
 }

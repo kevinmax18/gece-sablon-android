@@ -49,7 +49,10 @@ fun NavGraphBuilder.customerNavGraph(
     navigation(startDestination = Routes.CUSTOMER_HOME, route = Routes.CUSTOMER_ROOT) {
         composable(Routes.CUSTOMER_HOME) {
             val homeViewModel: HomeCustomerViewModel = viewModel(
-                factory = HomeCustomerViewModel.factory(appContainer.productRepository)
+                factory = HomeCustomerViewModel.factory(
+                    productRepository = appContainer.productRepository,
+                    categoryRepository = appContainer.categoryRepository
+                )
             )
             CustomerHomeScreen(
                 viewModel = homeViewModel,
@@ -71,7 +74,10 @@ fun NavGraphBuilder.customerNavGraph(
 
         composable(Routes.CUSTOMER_CATALOG) {
             val catalogViewModel: CatalogViewModel = viewModel(
-                factory = CatalogViewModel.factory(appContainer.productRepository)
+                factory = CatalogViewModel.factory(
+                    productRepository = appContainer.productRepository,
+                    categoryRepository = appContainer.categoryRepository
+                )
             )
             CatalogScreen(
                 viewModel = catalogViewModel,
@@ -97,7 +103,10 @@ fun NavGraphBuilder.customerNavGraph(
             )
         ) { backStackEntry ->
             val productDetailViewModel: ProductDetailViewModel = viewModel(
-                factory = ProductDetailViewModel.factory(appContainer.productRepository)
+                factory = ProductDetailViewModel.factory(
+                    productRepository = appContainer.productRepository,
+                    categoryRepository = appContainer.categoryRepository
+                )
             )
             val currentProdId = backStackEntry.arguments?.getString("productId") ?: ""
             ProductDetailScreen(

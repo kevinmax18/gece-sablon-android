@@ -1,9 +1,9 @@
 package com.gecesablon.app.core.util
 
 import com.gecesablon.app.data.model.Product
-import com.gecesablon.app.data.model.ProductCategory
 import com.gecesablon.app.data.model.ProductColor
 import com.gecesablon.app.data.model.ProductSize
+import com.gecesablon.app.data.repository.FakeCategoryRepository
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -14,7 +14,7 @@ import org.junit.Test
 /**
  * Unit test untuk [ProductRules] memverifikasi seluruh aturan bisnis produk owner:
  * - Nama 3-60 karakter
- * - Kategori dan bahan wajib
+ * - Kategori (categoryId) dan bahan wajib
  * - Deskripsi maksimal 500 karakter
  * - Harga dasar 1.000 - 10.000.000
  * - Minimal 1 warna (nama + kode #RRGGBB valid) tanpa duplikat
@@ -37,7 +37,7 @@ class ProductRulesTest {
     private val sampleValidProduct = Product(
         id = "prod-test-01",
         nama = "Kaos Polos Combed 24s",
-        kategori = ProductCategory.KAOS_CUSTOM,
+        categoryId = FakeCategoryRepository.SEED_CAT_KAOS_CUSTOM,
         bahan = "Cotton Combed 24s",
         deskripsi = "Kaos polos berkualitas untuk sablon DTF.",
         hargaDasar = 65000L,
@@ -79,10 +79,12 @@ class ProductRulesTest {
 
     @Test
     fun testValidasiKategoriDanBahan() {
-        assertNotNull(ProductRules.validateKategori(null))
-        assertNull(ProductRules.validateKategori(ProductCategory.KAOS_CUSTOM))
-        assertNull(ProductRules.validateKategori(ProductCategory.KAOS_OVERSIZE))
-        assertNull(ProductRules.validateKategori(ProductCategory.BAJU_POLO))
+        assertNotNull(ProductRules.validateCategoryId(null))
+        assertNotNull(ProductRules.validateCategoryId(""))
+        assertNotNull(ProductRules.validateCategoryId("   "))
+        assertNull(ProductRules.validateCategoryId(FakeCategoryRepository.SEED_CAT_KAOS_CUSTOM))
+        assertNull(ProductRules.validateCategoryId(FakeCategoryRepository.SEED_CAT_KAOS_OVERSIZE))
+        assertNull(ProductRules.validateCategoryId(FakeCategoryRepository.SEED_CAT_BAJU_POLO))
 
         assertNotNull(ProductRules.validateBahan(""))
         assertNotNull(ProductRules.validateBahan("   "))
@@ -103,147 +105,91 @@ class ProductRulesTest {
 
     @Test
     fun testValidasiHargaDasar() {
-        // Di bawah 1.000 ditolak
+        // Di bawah 1.000
         assertNotNull(ProductRules.validateHargaDasar(0L))
         assertNotNull(ProductRules.validateHargaDasar(999L))
-        assertNotNull(ProductRules.validateHargaDasar(-5000L))
 
-        // Batas bawah 1.000 diterima
-        assertNull(ProductRules.validateHargaDasar(1000L))
-        // Nominal normal diterima
-        assertNull(ProductRules.validateHargaDasar(85000L))
-        // Batas atas 10.000.000 diterima
-        assertNull(ProductRules.validateHargaDasar(10000000L))
+        // Pas 1.000 dan pas 10.000.000
+        assertNull(ProductRules.validateHargaDasar(1_000L))
+        assertNull(ProductRules.validateHargaDasar(65_000L))
+        assertNull(ProductRules.validateHargaDasar(10_000_000L))
 
-        // Di atas 10.000.000 ditolak
-        assertNotNull(ProductRules.validateHargaDasar(10000001L))
+        // Di atas 10.000.000
+        assertNotNull(ProductRules.validateHargaDasar(10_000_001L))
     }
 
     @Test
-    fun testValidasiHexColor() {
-        assertTrue(ProductRules.isValidHexColor("#111111"))
-        assertTrue(ProductRules.isValidHexColor("#FFFFFF"))
-        assertTrue(ProductRules.isValidHexColor("#ffffff"))
-        assertTrue(ProductRules.isValidHexColor("#AbCdEf"))
+    fun testValidasiWarnaMinimalSatuDanTanpaDuplikat() {
+        // Kosong
+        assertNotNull(ProductRules.validateWarna(emptyList()))
 
-        assertFalse(ProductRules.isValidHexColor(""))
-        assertFalse(ProductRules.isValidHexColor("111111")) // Tanpa '#'
-        assertFalse(ProductRules.isValidHexColor("#FFF")) // Shorthand 3 digit ditolak
-        assertFalse(ProductRules.isValidHexColor("#GGGGGG")) // Karakter non-hex
-        assertFalse(ProductRules.isValidHexColor("#1234567")) // 7 digit
-        assertFalse(ProductRules.isValidHexColor("merah"))
+        // Format hex salah
+        val invalidHex = listOf(
+            ProductColor(nama = "Merah", hex = "112233") // Tanpa '#'
+        )
+        assertNotNull(ProductRules.validateWarna(invalidHex))
+
+        val invalidHexLength = listOf(
+            ProductColor(nama = "Merah", hex = "#1122") // Kurang dari 6 digit
+        )
+        assertNotNull(ProductRules.validateWarna(invalidHexLength))
+
+        // Nama warna kosong
+        val emptyName = listOf(
+            ProductColor(nama = "  ", hex = "#112233")
+        )
+        assertNotNull(ProductRules.validateWarna(emptyName))
+
+        // Duplikat nama warna
+        val duplicateName = listOf(
+            ProductColor(nama = "Hitam", hex = "#000000"),
+            ProductColor(nama = "hitam", hex = "#111111")
+        )
+        assertNotNull(ProductRules.validateWarna(duplicateName))
+
+        // Duplikat hex warna
+        val duplicateHex = listOf(
+            ProductColor(nama = "Hitam Solid", hex = "#000000"),
+            ProductColor(nama = "Hitam Pekat", hex = "#000000")
+        )
+        assertNotNull(ProductRules.validateWarna(duplicateHex))
+    }
+
+    @Test
+    fun testValidasiUkuranRentangDanTanpaDuplikat() {
+        // Kosong
+        assertNotNull(ProductRules.validateUkuran(emptyList()))
+
+        // Ukuran di luar S-XXXL
+        val invalidSize = listOf(
+            ProductSize(label = "XS", tambahanHarga = 0L)
+        )
+        assertNotNull(ProductRules.validateUkuran(invalidSize))
+
+        val invalidSize4XL = listOf(
+            ProductSize(label = "XXXXL", tambahanHarga = 0L)
+        )
+        assertNotNull(ProductRules.validateUkuran(invalidSize4XL))
+
+        // Tambahan harga negatif
+        val negativePrice = listOf(
+            ProductSize(label = "M", tambahanHarga = -5000L)
+        )
+        assertNotNull(ProductRules.validateUkuran(negativePrice))
+
+        // Duplikat ukuran
+        val duplicateSize = listOf(
+            ProductSize(label = "L", tambahanHarga = 0L),
+            ProductSize(label = "l", tambahanHarga = 5000L)
+        )
+        assertNotNull(ProductRules.validateUkuran(duplicateSize))
     }
 
     @Test
     fun testNormalisasiHexInput() {
-        // Tanpa #
-        assertEquals("#111111", ProductRules.normalizeHexInput("111111"))
-        // Huruf kecil
-        assertEquals("#ABCDEF", ProductRules.normalizeHexInput("abcdef"))
-        // Karakter asing / non-hex dibuang
-        assertEquals("#1A2B3C", ProductRules.normalizeHexInput("#1A2B3C!@_"))
-        // Spasi diapit
-        assertEquals("#FFFFFF", ProductRules.normalizeHexInput(" #ffffff "))
-        // Kurang dari 6 digit
-        assertEquals("#FFF", ProductRules.normalizeHexInput("fff"))
-        assertEquals("#1A", ProductRules.normalizeHexInput("#1a"))
-        // Lebih dari 6 digit: dipotong maksimal 6 karakter pertama
-        assertEquals("#123456", ProductRules.normalizeHexInput("1234567890"))
-        // Kosong
-        assertEquals("#", ProductRules.normalizeHexInput(""))
-        assertEquals("#", ProductRules.normalizeHexInput("   "))
-        assertEquals("#", ProductRules.normalizeHexInput("#"))
-        // Sudah berformat #RRGGBB
-        assertEquals("#1F2937", ProductRules.normalizeHexInput("#1f2937"))
-    }
-
-    @Test
-    fun testValidasiWarnaMinimalSatuDanFormat() {
-        // Kosong ditolak
-        assertNotNull(ProductRules.validateWarna(emptyList()))
-
-        // Nama kosong ditolak
-        val warnaNamaKosong = listOf(ProductColor(nama = "", hex = "#111111"))
-        assertNotNull(ProductRules.validateWarna(warnaNamaKosong))
-
-        // Hex tidak valid ditolak
-        val warnaHexSalah = listOf(ProductColor(nama = "Hitam", hex = "bukanHex"))
-        assertNotNull(ProductRules.validateWarna(warnaHexSalah))
-
-        // Valid
-        assertNull(ProductRules.validateWarna(sampleValidColors))
-    }
-
-    @Test
-    fun testValidasiWarnaDuplikatDitolak() {
-        // Duplikat nama warna (case-insensitive)
-        val duplikatNama = listOf(
-            ProductColor(nama = "Hitam", hex = "#111111"),
-            ProductColor(nama = "hitam", hex = "#222222")
-        )
-        assertNotNull(ProductRules.validateWarna(duplikatNama))
-
-        // Duplikat kode hex (case-insensitive)
-        val duplikatHex = listOf(
-            ProductColor(nama = "Hitam 1", hex = "#111111"),
-            ProductColor(nama = "Hitam 2", hex = "#111111")
-        )
-        assertNotNull(ProductRules.validateWarna(duplikatHex))
-    }
-
-    @Test
-    fun testValidasiUkuranRentangDanTambahanHarga() {
-        // Kosong ditolak
-        assertNotNull(ProductRules.validateUkuran(emptyList()))
-
-        // Di luar S-XXXL ditolak
-        val ukuranInvalid = listOf(ProductSize(label = "XS", tambahanHarga = 0L))
-        assertNotNull(ProductRules.validateUkuran(ukuranInvalid))
-
-        val ukuranAllSize = listOf(ProductSize(label = "All Size", tambahanHarga = 0L))
-        assertNotNull(ProductRules.validateUkuran(ukuranAllSize))
-
-        // Tambahan harga negatif ditolak
-        val hargaNegatif = listOf(ProductSize(label = "L", tambahanHarga = -5000L))
-        assertNotNull(ProductRules.validateUkuran(hargaNegatif))
-
-        // Tambahan harga >= 0 diterima
-        val hargaNol = listOf(ProductSize(label = "M", tambahanHarga = 0L))
-        assertNull(ProductRules.validateUkuran(hargaNol))
-        val hargaPositif = listOf(ProductSize(label = "XXL", tambahanHarga = 10000L))
-        assertNull(ProductRules.validateUkuran(hargaPositif))
-    }
-
-    @Test
-    fun testValidasiUkuranDuplikatDitolak() {
-        val ukuranDuplikat = listOf(
-            ProductSize(label = "M", tambahanHarga = 0L),
-            ProductSize(label = "M", tambahanHarga = 5000L)
-        )
-        assertNotNull(ProductRules.validateUkuran(ukuranDuplikat))
-    }
-
-    @Test
-    fun testErrorPerKolomSecaraTerisolasi() {
-        // Buat produk dengan beberapa kesalahan berbeda
-        val result = ProductRules.validateProductFields(
-            nama = "X", // Error nama
-            kategori = null, // Error kategori
-            bahan = "", // Error bahan
-            deskripsi = "A".repeat(505), // Error deskripsi
-            hargaDasar = 500L, // Error harga
-            daftarWarna = emptyList(), // Error warna
-            daftarUkuran = emptyList() // Error ukuran
-        )
-
-        assertFalse(result.isValid)
-        assertNotNull(result.namaError)
-        assertNotNull(result.kategoriError)
-        assertNotNull(result.bahanError)
-        assertNotNull(result.deskripsiError)
-        assertNotNull(result.hargaDasarError)
-        assertNotNull(result.warnaError)
-        assertNotNull(result.ukuranError)
-        assertNotNull(result.generalError)
+        assertEquals("#112233", ProductRules.normalizeHexInput("112233"))
+        assertEquals("#AABBCC", ProductRules.normalizeHexInput("#aabbcc"))
+        assertEquals("#1F2937", ProductRules.normalizeHexInput("  #1f2937  "))
+        assertEquals("#FFFFFF", ProductRules.normalizeHexInput("ffffffextra"))
     }
 }

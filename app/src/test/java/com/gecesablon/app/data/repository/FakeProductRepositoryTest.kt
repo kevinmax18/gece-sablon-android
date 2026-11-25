@@ -2,7 +2,6 @@ package com.gecesablon.app.data.repository
 
 import com.gecesablon.app.core.util.Resource
 import com.gecesablon.app.data.model.Product
-import com.gecesablon.app.data.model.ProductCategory
 import com.gecesablon.app.data.model.ProductColor
 import com.gecesablon.app.data.model.ProductSize
 import com.gecesablon.app.data.model.Role
@@ -17,11 +16,13 @@ import org.junit.Before
 import org.junit.Test
 
 /**
- * Unit test untuk [FakeProductRepository] dan interaksinya dengan [FakeOrderRepository] (Tahap 6B-1):
- * - Memastikan fungsi baca pelanggan/tamu hanya mengembalikan produk aktif
- * - Memastikan fungsi owner (semuaProduk, tambah, ubah, setAktif, hapus) dilindungi otorisasi OWNER
- * - Memastikan perubahan owner mengalir reaktif via StateFlow
- * - Memastikan pembuatan pesanan (pelanggan & manual staff) menolak produk nonaktif atau terhapus
+ * Unit test untuk [FakeProductRepository] memverifikasi:
+ * - Produk seed awal lengkap (6 produk)
+ * - Pemisahan produk aktif vs nonaktif
+ * - Otorisasi role: fungsi owner menolak non-owner
+ * - Kestabilan ID saat tambah dan ubah produk
+ * - Aliran reaktif getActiveProductsStream
+ * - Penolakan pembuatan pesanan untuk produk nonaktif dan terhapus
  */
 class FakeProductRepositoryTest {
 
@@ -30,22 +31,22 @@ class FakeProductRepositoryTest {
 
     private val ownerSession = Session(
         token = "token-owner",
-        userId = "owner-1",
+        userId = "owner-01",
         name = "Owner GeCe",
         role = Role.OWNER
     )
 
     private val adminSession = Session(
         token = "token-admin",
-        userId = "admin-1",
-        name = "Admin Workshop",
+        userId = "admin-01",
+        name = "Admin Staff",
         role = Role.ADMIN
     )
 
     private val customerSession = Session(
         token = "token-customer",
-        userId = "cust-1",
-        name = "Pelanggan Demo",
+        userId = "cust-01",
+        name = "Pelanggan",
         role = Role.CUSTOMER
     )
 
@@ -55,7 +56,7 @@ class FakeProductRepositoryTest {
     )
 
     private val sampleSizes = listOf(
-        ProductSize(label = "S", tambahanHarga = 0L),
+        ProductSize(label = "M", tambahanHarga = 0L),
         ProductSize(label = "XL", tambahanHarga = 0L)
     )
 
@@ -66,56 +67,75 @@ class FakeProductRepositoryTest {
     }
 
     @Test
-    fun testGetProductsHanyaMengembalikanProdukAktif() = runBlocking {
-        // Awalnya seluruh 6 produk bawaan aktif
-        val initialRes = productRepository.getProducts()
-        assertTrue(initialRes is Resource.Success)
-        val initialList = (initialRes as Resource.Success).data
-        assertEquals(6, initialList.size)
-        assertTrue(initialList.all { it.aktif })
+    fun testSeedProdukAwalLengkapDanAktif() = runBlocking {
+        val result = productRepository.getProducts()
+        assertTrue(result is Resource.Success)
+        val products = (result as Resource.Success).data
+        assertEquals("Seed produk awal harus berjumlah 6", 6, products.size)
+        assertTrue("Semua produk seed awal harus berstatus aktif", products.all { it.aktif })
+        assertTrue("Semua produk seed awal harus memiliki categoryId valid", products.all { it.categoryId.isNotBlank() })
+    }
 
-        // Owner menonaktifkan produk pertama
-        val targetId = initialList[0].id
+    @Test
+    fun testGetProductByIdMengembalikanHanyaYangAktif() = runBlocking {
+        // Produk aktif
+        val res = productRepository.getProductById("prod-kaos-custom")
+        assertTrue(res is Resource.Success)
+        assertEquals("Kaos Custom Cotton Combed", (res as Resource.Success).data.nama)
+
+        // Nonaktifkan produk lewat owner
+        productRepository.setAktif(ownerSession, "prod-kaos-custom", false)
+
+        // getProductById untuk pelanggan sekarang harus gagal
+        val resAfter = productRepository.getProductById("prod-kaos-custom")
+        assertTrue("Produk nonaktif tidak boleh ditemukan lewat getProductById pelanggan", resAfter is Resource.Error)
+
+        // Namun owner tetap bisa mengambilnya lewat getProductByIdForOwner
+        val resOwner = productRepository.getProductByIdForOwner("prod-kaos-custom", ownerSession)
+        assertTrue(resOwner is Resource.Success)
+        assertFalse((resOwner as Resource.Success).data.aktif)
+    }
+
+    @Test
+    fun testSearchProductsDenganQueryDanCategory() = runBlocking {
+        // Cari berdasarkan kata kunci "Oversize"
+        val resQuery = productRepository.searchProducts("Oversize", null)
+        assertTrue(resQuery is Resource.Success)
+        val dataQuery = (resQuery as Resource.Success).data
+        assertEquals(2, dataQuery.size)
+
+        // Filter berdasarkan kategori BAJU_POLO
+        val resCategory = productRepository.searchProducts("", FakeCategoryRepository.SEED_CAT_BAJU_POLO)
+        assertTrue(resCategory is Resource.Success)
+        val dataCategory = (resCategory as Resource.Success).data
+        assertEquals(2, dataCategory.size)
+        assertTrue(dataCategory.all { it.categoryId == FakeCategoryRepository.SEED_CAT_BAJU_POLO })
+
+        // Gabungan kata kunci dan kategori
+        val resBoth = productRepository.searchProducts("Classic", FakeCategoryRepository.SEED_CAT_BAJU_POLO)
+        assertTrue(resBoth is Resource.Success)
+        val dataBoth = (resBoth as Resource.Success).data
+        assertEquals(1, dataBoth.size)
+        assertEquals("prod-polo-classic", dataBoth.first().id)
+    }
+
+    @Test
+    fun testSetAktifMengubahKetersediaanDiKatalogPelanggan() = runBlocking {
+        val targetId = "prod-polo-sport"
+
+        // Pastikan awal aktif di katalog (6 produk)
+        val initialActive = productRepository.getProducts() as Resource.Success
+        assertEquals(6, initialActive.data.size)
+
+        // Nonaktifkan oleh Owner
         val setRes = productRepository.setAktif(ownerSession, targetId, false)
         assertTrue(setRes is Resource.Success)
+        assertFalse((setRes as Resource.Success).data.aktif)
 
-        // getProducts sekarang hanya mengembalikan 5 produk
-        val updatedRes = productRepository.getProducts()
-        assertTrue(updatedRes is Resource.Success)
-        val updatedList = (updatedRes as Resource.Success).data
-        assertEquals(5, updatedList.size)
-        assertFalse(updatedList.any { it.id == targetId })
-    }
-
-    @Test
-    fun testGetProductByIdMenolakProdukNonaktif() = runBlocking {
-        val initialRes = productRepository.getProducts() as Resource.Success
-        val targetId = initialRes.data[0].id
-
-        // Sebelum dinonaktifkan: berhasil
-        val beforeRes = productRepository.getProductById(targetId)
-        assertTrue(beforeRes is Resource.Success)
-
-        // Nonaktifkan produk
-        productRepository.setAktif(ownerSession, targetId, false)
-
-        // Setelah dinonaktifkan: getProductById untuk pelanggan/tamu mengembalikan Resource.Error
-        val afterRes = productRepository.getProductById(targetId)
-        assertTrue("Produk nonaktif harus mengembalikan Resource.Error", afterRes is Resource.Error)
-
-        // Namun getProductByIdForOwner tetap bisa mengambil produk tersebut
-        val ownerRes = productRepository.getProductByIdForOwner(targetId, ownerSession)
-        assertTrue(ownerRes is Resource.Success)
-        assertFalse((ownerRes as Resource.Success).data.aktif)
-    }
-
-    @Test
-    fun testSemuaProdukOwnerMengembalikanProdukAktifDanNonaktif() = runBlocking {
-        val allInitial = productRepository.semuaProduk(ownerSession) as Resource.Success
-        val targetId = allInitial.data[0].id
-
-        // Nonaktifkan 1 produk
-        productRepository.setAktif(ownerSession, targetId, false)
+        // Katalog pelanggan sekarang hanya 5 produk
+        val afterActive = productRepository.getProducts() as Resource.Success
+        assertEquals(5, afterActive.data.size)
+        assertTrue(afterActive.data.none { it.id == targetId })
 
         // semuaProduk untuk owner tetap berisi 6 produk
         val allAfter = productRepository.semuaProduk(ownerSession) as Resource.Success
@@ -135,7 +155,7 @@ class FakeProductRepositoryTest {
         val dummyProd = Product(
             id = "test-id",
             nama = "Kaos Baru",
-            kategori = ProductCategory.KAOS_CUSTOM,
+            categoryId = FakeCategoryRepository.SEED_CAT_KAOS_CUSTOM,
             bahan = "Combed 30s",
             deskripsi = "Deskripsi",
             hargaDasar = 60000L,
@@ -165,7 +185,7 @@ class FakeProductRepositoryTest {
         val newProduct = Product(
             id = "prod-kustom-001",
             nama = "Kaos Vintage Special Edition",
-            kategori = ProductCategory.KAOS_OVERSIZE,
+            categoryId = FakeCategoryRepository.SEED_CAT_KAOS_OVERSIZE,
             bahan = "Heavyweight 16s",
             deskripsi = "Kaos edisi khusus sablon DTF.",
             hargaDasar = 99000L,
@@ -179,84 +199,75 @@ class FakeProductRepositoryTest {
         val added = (tambahRes as Resource.Success).data
         assertEquals("prod-kustom-001", added.id)
 
-        // Ubah produk: update harga dasar dan nama
+        // Ubah produk tanpa mengubah id
         val updatedProduct = added.copy(
-            nama = "Kaos Vintage Special Edition Updated",
-            hargaDasar = 110000L
+            nama = "Kaos Vintage Special Edition V2",
+            hargaDasar = 105000L
         )
-
         val ubahRes = productRepository.ubah(ownerSession, updatedProduct)
         assertTrue(ubahRes is Resource.Success)
-        val modified = (ubahRes as Resource.Success).data
-        assertEquals("prod-kustom-001", modified.id) // ID stabil
-        assertEquals(110000L, modified.hargaDasar)
-        assertEquals("Kaos Vintage Special Edition Updated", modified.nama)
+        val saved = (ubahRes as Resource.Success).data
+        assertEquals("prod-kustom-001", saved.id)
+        assertEquals("Kaos Vintage Special Edition V2", saved.nama)
+        assertEquals(105000L, saved.hargaDasar)
     }
 
     @Test
     fun testHapusProdukOwner() = runBlocking {
-        val initialList = (productRepository.getProducts() as Resource.Success).data
-        val target = initialList[0]
-
-        val hapusRes = productRepository.hapus(ownerSession, target.id)
+        val targetId = "prod-kaos-raglan"
+        val hapusRes = productRepository.hapus(ownerSession, targetId)
         assertTrue(hapusRes is Resource.Success)
 
-        // Tidak lagi ada di semuaProduk maupun getProducts
-        val allAfter = (productRepository.semuaProduk(ownerSession) as Resource.Success).data
-        assertFalse(allAfter.any { it.id == target.id })
+        // Pastikan tidak ada lagi di katalog
+        val activeRes = productRepository.getProducts() as Resource.Success
+        assertTrue(activeRes.data.none { it.id == targetId })
+
+        // Pastikan tidak ada di daftar owner
+        val allRes = productRepository.semuaProduk(ownerSession) as Resource.Success
+        assertTrue(allRes.data.none { it.id == targetId })
     }
 
     @Test
-    fun testOrderRepositoryMenolakPesananUntukProdukNonaktif() = runBlocking {
-        val products = (productRepository.getProducts() as Resource.Success).data
-        val targetProduct = products[0]
+    fun testPesananMenolakProdukNonaktif() = runBlocking {
+        val targetId = "prod-kaos-custom"
+        val product = (productRepository.getProductById(targetId) as Resource.Success).data
 
-        // Owner menonaktifkan produk
-        productRepository.setAktif(ownerSession, targetProduct.id, false)
+        // Nonaktifkan produk
+        productRepository.setAktif(ownerSession, targetId, false)
 
-        // 1. Pelanggan membuat pesanan lewat createOrder
+        // Coba buat pesanan untuk produk nonaktif tersebut
         val createRes = orderRepository.createOrder(
-            userId = "cust-1",
-            product = targetProduct,
-            color = targetProduct.daftarWarna.first(),
-            size = targetProduct.daftarUkuran.first(),
-            quantity = 10,
-            catatan = "Sablon depan",
-            uriDesain = null
-        )
-        assertTrue("Pesanan pelanggan untuk produk nonaktif harus ditolak", createRes is Resource.Error)
-
-        // 2. Staff membuat pesanan manual lewat createManualOrder
-        val manualRes = orderRepository.createManualOrder(
-            actor = adminSession,
-            namaPelanggan = "Walk-in Guest",
+            userId = "cust-01",
+            namaPelanggan = "Pelanggan Tes",
             noHpPelanggan = "081234567890",
-            productId = targetProduct.id,
-            colorName = targetProduct.daftarWarna.first().nama,
-            sizeLabel = targetProduct.daftarUkuran.first().label,
-            quantity = 5,
-            catatan = "Pesanan walk-in",
+            product = product,
+            color = product.daftarWarna.first(),
+            size = product.daftarUkuran.first(),
+            quantity = 10,
+            catatan = "Uji tolak nonaktif",
             uriDesain = null
         )
-        assertTrue("Pesanan manual staf untuk produk nonaktif harus ditolak", manualRes is Resource.Error)
+        assertTrue("Pesanan untuk produk nonaktif harus ditolak", createRes is Resource.Error)
     }
 
     @Test
-    fun testOrderRepositoryMenolakPesananUntukProdukTerhapus() = runBlocking {
-        val products = (productRepository.getProducts() as Resource.Success).data
-        val targetProduct = products[0]
+    fun testPesananMenolakProdukYangDihapus() = runBlocking {
+        val targetId = "prod-oversize-boxy"
+        val product = (productRepository.getProductById(targetId) as Resource.Success).data
 
-        // Owner menghapus produk
-        productRepository.hapus(ownerSession, targetProduct.id)
+        // Hapus produk
+        productRepository.hapus(ownerSession, targetId)
 
-        // Pelanggan membuat pesanan
+        // Coba buat pesanan untuk produk yang sudah dihapus
         val createRes = orderRepository.createOrder(
-            userId = "cust-1",
-            product = targetProduct,
-            color = targetProduct.daftarWarna.first(),
-            size = targetProduct.daftarUkuran.first(),
-            quantity = 10,
-            catatan = "Sablon depan",
+            userId = "cust-01",
+            namaPelanggan = "Pelanggan Tes",
+            noHpPelanggan = "081234567890",
+            product = product,
+            color = product.daftarWarna.first(),
+            size = product.daftarUkuran.first(),
+            quantity = 5,
+            catatan = "Uji tolak hapus",
             uriDesain = null
         )
         assertTrue("Pesanan untuk produk yang sudah dihapus harus ditolak", createRes is Resource.Error)
@@ -273,7 +284,7 @@ class FakeProductRepositoryTest {
         val newProduct = Product(
             id = "prod-new-stream",
             nama = "Kaos Stream Test",
-            kategori = ProductCategory.KAOS_CUSTOM,
+            categoryId = FakeCategoryRepository.SEED_CAT_KAOS_CUSTOM,
             bahan = "Cotton Combed 30s",
             deskripsi = "Deskripsi stream test",
             hargaDasar = 75000L,

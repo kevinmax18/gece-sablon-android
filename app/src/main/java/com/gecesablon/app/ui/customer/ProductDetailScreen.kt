@@ -333,7 +333,7 @@ fun ProductDetailScreen(
                                         .padding(horizontal = 8.dp, vertical = 4.dp)
                                 ) {
                                     Text(
-                                        text = stringResource(product.kategori.titleRes),
+                                        text = uiState.categoryName.ifBlank { stringResource(R.string.home_category_title) },
                                         style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )

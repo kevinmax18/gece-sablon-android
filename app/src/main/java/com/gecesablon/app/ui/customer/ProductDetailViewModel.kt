@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.gecesablon.app.core.util.Resource
 import com.gecesablon.app.data.model.Product
+import com.gecesablon.app.data.repository.CategoryRepository
 import com.gecesablon.app.data.repository.ProductRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,16 +22,18 @@ import kotlinx.coroutines.launch
 data class ProductDetailUiState(
     val productId: String = "",
     val product: Product? = null,
+    val categoryName: String = "",
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 )
 
 /**
  * ViewModel untuk ProductDetailScreen.
- * Membaca productId dari SavedStateHandle.
+ * Membaca productId dari SavedStateHandle dan memuat data produk beserta nama kategori.
  */
 class ProductDetailViewModel(
     private val productRepository: ProductRepository,
+    private val categoryRepository: CategoryRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -48,10 +51,16 @@ class ProductDetailViewModel(
         viewModelScope.launch {
             when (val result = productRepository.getProductById(productId)) {
                 is Resource.Success -> {
+                    val prod = result.data
+                    val catName = when (val catRes = categoryRepository.getCategoryById(prod.categoryId)) {
+                        is Resource.Success -> catRes.data.nama
+                        else -> ""
+                    }
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            product = result.data,
+                            product = prod,
+                            categoryName = catName,
                             errorMessage = null
                         )
                     }
@@ -71,12 +80,14 @@ class ProductDetailViewModel(
 
     companion object {
         fun factory(
-            productRepository: ProductRepository
+            productRepository: ProductRepository,
+            categoryRepository: CategoryRepository
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T =
                 ProductDetailViewModel(
                     productRepository = productRepository,
+                    categoryRepository = categoryRepository,
                     savedStateHandle = extras.createSavedStateHandle()
                 ) as T
         }

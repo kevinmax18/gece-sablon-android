@@ -2,7 +2,6 @@ package com.gecesablon.app.data.repository
 
 import com.gecesablon.app.core.util.Resource
 import com.gecesablon.app.data.model.Product
-import com.gecesablon.app.data.model.ProductCategory
 import com.gecesablon.app.data.model.Session
 import kotlinx.coroutines.flow.Flow
 
@@ -33,9 +32,9 @@ interface ProductRepository {
     suspend fun getProductById(id: String): Resource<Product>
 
     /**
-     * Mencari produk aktif berdasarkan kata kunci nama produk dan filter kategori opsional.
+     * Mencari produk aktif berdasarkan kata kunci nama/bahan dan filter categoryId opsional.
      */
-    suspend fun searchProducts(query: String, category: ProductCategory?): Resource<List<Product>>
+    suspend fun searchProducts(query: String, categoryId: String?): Resource<List<Product>>
 
     // =========================================================================
     // Fungsi Khusus Owner (Semua Produk termasuk Nonaktif)
@@ -62,30 +61,27 @@ interface ProductRepository {
     suspend fun getProductByIdForOwner(id: String, actor: Session): Resource<Product>
 
     /**
-     * Menambahkan produk baru beserta variasinya.
-     * Hanya dapat diakses oleh peran OWNER.
+     * Menambahkan produk baru. Hanya untuk peran OWNER.
+     * Menjaga kestabilan ID produk.
      * // TODO: di API asli aktor dari token
      */
     suspend fun tambah(actor: Session, product: Product): Resource<Product>
 
     /**
-     * Memperbarui informasi produk dan variasinya. ID produk tetap stabil saat diubah.
-     * Hanya dapat diakses oleh peran OWNER.
+     * Memperbarui informasi produk dan variasinya. Hanya untuk peran OWNER.
+     * Menjaga kestabilan ID produk, warna, dan ukuran.
      * // TODO: di API asli aktor dari token
      */
     suspend fun ubah(actor: Session, product: Product): Resource<Product>
 
     /**
-     * Mengubah status aktif/nonaktif produk.
-     * Hanya dapat diakses oleh peran OWNER.
+     * Mengubah status aktif/nonaktif produk. Hanya untuk peran OWNER.
      * // TODO: di API asli aktor dari token
      */
     suspend fun setAktif(actor: Session, productId: String, aktif: Boolean): Resource<Product>
 
     /**
-     * Menghapus produk dari sistem secara permanen.
-     * Produk yang sudah memiliki riwayat pesanan tetap dapat dihapus karena pesanan lama menyimpan salinan.
-     * Hanya dapat diakses oleh peran OWNER.
+     * Menghapus produk dari sistem. Hanya untuk peran OWNER.
      * // TODO: di API asli aktor dari token
      */
     suspend fun hapus(actor: Session, productId: String): Resource<Unit>

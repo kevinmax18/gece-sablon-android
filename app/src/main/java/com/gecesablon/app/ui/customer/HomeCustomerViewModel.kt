@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.gecesablon.app.core.util.Resource
+import com.gecesablon.app.data.model.Category
 import com.gecesablon.app.data.model.Product
+import com.gecesablon.app.data.repository.CategoryRepository
 import com.gecesablon.app.data.repository.ProductRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,6 +19,7 @@ import kotlinx.coroutines.launch
  */
 data class HomeCustomerUiState(
     val isLoading: Boolean = false,
+    val categories: List<Category> = emptyList(),
     val featuredProducts: List<Product> = emptyList(),
     val errorMessage: String? = null
 )
@@ -25,14 +28,26 @@ data class HomeCustomerUiState(
  * ViewModel untuk layar Beranda Pelanggan (HomeCustomerScreen).
  */
 class HomeCustomerViewModel(
-    private val productRepository: ProductRepository
+    private val productRepository: ProductRepository,
+    private val categoryRepository: CategoryRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeCustomerUiState(isLoading = true))
     val uiState: StateFlow<HomeCustomerUiState> = _uiState.asStateFlow()
 
     init {
+        observeCategories()
         loadFeaturedProducts()
+    }
+
+    private fun observeCategories() {
+        viewModelScope.launch {
+            categoryRepository.getCategoriesWithActiveProductsFlow().collect { result ->
+                if (result is Resource.Success) {
+                    _uiState.update { it.copy(categories = result.data) }
+                }
+            }
+        }
     }
 
     fun loadFeaturedProducts() {
@@ -64,11 +79,15 @@ class HomeCustomerViewModel(
     }
 
     companion object {
-        fun factory(productRepository: ProductRepository): ViewModelProvider.Factory =
+        fun factory(
+            productRepository: ProductRepository,
+            categoryRepository: CategoryRepository
+        ): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(modelClass: Class<T>): T =
-                    HomeCustomerViewModel(productRepository) as T
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    return HomeCustomerViewModel(productRepository, categoryRepository) as T
+                }
             }
     }
 }

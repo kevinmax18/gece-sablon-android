@@ -61,7 +61,6 @@ import androidx.compose.ui.unit.sp
 import com.gecesablon.app.R
 import com.gecesablon.app.core.util.Formatter
 import com.gecesablon.app.data.model.Product
-import com.gecesablon.app.data.model.ProductCategory
 import com.gecesablon.app.ui.components.EmptyState
 import com.gecesablon.app.ui.components.ErrorState
 import com.gecesablon.app.ui.components.LoadingState
@@ -245,7 +244,7 @@ fun OwnerProductsScreen(
             ) {
                 // Opsi "Semua Kategori"
                 item {
-                    val isSelected = uiState.selectedCategory == null
+                    val isSelected = uiState.selectedCategoryId == null
                     FilterChip(
                         selected = isSelected,
                         onClick = { viewModel.onCategorySelected(null) },
@@ -271,14 +270,14 @@ fun OwnerProductsScreen(
                     )
                 }
 
-                items(ProductCategory.entries.toTypedArray()) { category ->
-                    val isSelected = uiState.selectedCategory == category
+                items(uiState.categories) { category ->
+                    val isSelected = uiState.selectedCategoryId == category.id
                     FilterChip(
                         selected = isSelected,
-                        onClick = { viewModel.onCategorySelected(category) },
+                        onClick = { viewModel.onCategorySelected(category.id) },
                         label = {
                             Text(
-                                text = stringResource(category.titleRes),
+                                text = category.nama,
                                 style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
                                 maxLines = 1
                             )
@@ -341,8 +340,11 @@ fun OwnerProductsScreen(
                             items = uiState.filteredProducts,
                             key = { it.id }
                         ) { product ->
+                            val categoryName = uiState.categories.find { it.id == product.categoryId }?.nama
+                                ?: stringResource(R.string.owner_product_category_label)
                             OwnerProductItemCard(
                                 product = product,
+                                categoryName = categoryName,
                                 onEditClick = { onNavigateToEdit(product.id) },
                                 onDeleteClick = { viewModel.requestDeleteProduct(product) },
                                 onToggleActive = { newActive ->
@@ -364,6 +366,7 @@ fun OwnerProductsScreen(
 @Composable
 private fun OwnerProductItemCard(
     product: Product,
+    categoryName: String,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
     onToggleActive: (Boolean) -> Unit,
@@ -397,7 +400,7 @@ private fun OwnerProductItemCard(
                         .padding(horizontal = 8.dp, vertical = 3.dp)
                 ) {
                     Text(
-                        text = stringResource(product.kategori.titleRes),
+                        text = categoryName,
                         style = MaterialTheme.typography.labelSmall.copy(
                             fontWeight = FontWeight.Bold,
                             fontSize = 10.sp

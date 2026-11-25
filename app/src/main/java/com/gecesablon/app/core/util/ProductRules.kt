@@ -1,7 +1,6 @@
 package com.gecesablon.app.core.util
 
 import com.gecesablon.app.data.model.Product
-import com.gecesablon.app.data.model.ProductCategory
 import com.gecesablon.app.data.model.ProductColor
 import com.gecesablon.app.data.model.ProductSize
 
@@ -55,10 +54,10 @@ object ProductRules {
     }
 
     /**
-     * Memvalidasi kategori produk (wajib dipilih).
+     * Memvalidasi categoryId produk (wajib diisi / dipilih).
      */
-    fun validateKategori(kategori: ProductCategory?): String? {
-        return if (kategori == null) {
+    fun validateCategoryId(categoryId: String?): String? {
+        return if (categoryId.isNullOrBlank()) {
             "Kategori produk wajib dipilih."
         } else {
             null
@@ -202,7 +201,7 @@ object ProductRules {
      */
     fun validateProductFields(
         nama: String,
-        kategori: ProductCategory?,
+        categoryId: String?,
         bahan: String,
         deskripsi: String,
         hargaDasar: Long,
@@ -210,7 +209,7 @@ object ProductRules {
         daftarUkuran: List<ProductSize>
     ): ProductValidationResult {
         val namaErr = validateNama(nama)
-        val kategoriErr = validateKategori(kategori)
+        val kategoriErr = validateCategoryId(categoryId)
         val bahanErr = validateBahan(bahan)
         val deskripsiErr = validateDeskripsi(deskripsi)
         val hargaErr = validateHargaDasar(hargaDasar)
@@ -239,7 +238,7 @@ object ProductRules {
     fun validateProduct(product: Product): ProductValidationResult {
         return validateProductFields(
             nama = product.nama,
-            kategori = product.kategori,
+            categoryId = product.categoryId,
             bahan = product.bahan,
             deskripsi = product.deskripsi,
             hargaDasar = product.hargaDasar,

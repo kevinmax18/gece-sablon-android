@@ -5,8 +5,10 @@ import com.gecesablon.app.core.datastore.SessionStore
 import com.gecesablon.app.data.local.AccountStore
 import com.gecesablon.app.data.repository.AccountRepository
 import com.gecesablon.app.data.repository.AuthRepository
+import com.gecesablon.app.data.repository.CategoryRepository
 import com.gecesablon.app.data.repository.FakeAccountRepository
 import com.gecesablon.app.data.repository.FakeAuthRepository
+import com.gecesablon.app.data.repository.FakeCategoryRepository
 import com.gecesablon.app.data.repository.FakeFinanceRepository
 import com.gecesablon.app.data.repository.FakeOrderRepository
 import com.gecesablon.app.data.repository.FakeProductRepository
@@ -59,6 +61,14 @@ class AppContainer(private val context: Context) {
      */
     val productRepository: ProductRepository by lazy {
         FakeProductRepository()
+    }
+
+    /**
+     * Repository kategori produk.
+     * TODO: ganti ke Retrofit di Tahap 8
+     */
+    val categoryRepository: CategoryRepository by lazy {
+        FakeCategoryRepository(productRepository = productRepository)
     }
 
     /**

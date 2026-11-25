@@ -56,7 +56,6 @@ import com.gecesablon.app.BuildConfig
 import com.gecesablon.app.R
 import com.gecesablon.app.core.util.Formatter
 import com.gecesablon.app.core.util.WhatsAppIntent
-import com.gecesablon.app.data.model.ProductCategory
 import com.gecesablon.app.ui.components.EmptyView
 import com.gecesablon.app.ui.components.ErrorView
 import com.gecesablon.app.ui.components.LoadingView
@@ -245,7 +244,7 @@ fun CatalogScreen(
                 )
             }
 
-            // 3. Chip Filter Kategori (Semua + 3 Kategori)
+            // 3. Chip Filter Kategori (Semua + Kategori dengan Produk Aktif)
             item {
                 Row(
                     modifier = Modifier
@@ -255,24 +254,16 @@ fun CatalogScreen(
                 ) {
                     CategoryChip(
                         label = stringResource(R.string.category_all),
-                        isSelected = uiState.selectedCategory == null,
+                        isSelected = uiState.selectedCategoryId == null,
                         onClick = { viewModel.onCategorySelected(null) }
                     )
-                    CategoryChip(
-                        label = stringResource(ProductCategory.KAOS_CUSTOM.titleRes),
-                        isSelected = uiState.selectedCategory == ProductCategory.KAOS_CUSTOM,
-                        onClick = { viewModel.onCategorySelected(ProductCategory.KAOS_CUSTOM) }
-                    )
-                    CategoryChip(
-                        label = stringResource(ProductCategory.KAOS_OVERSIZE.titleRes),
-                        isSelected = uiState.selectedCategory == ProductCategory.KAOS_OVERSIZE,
-                        onClick = { viewModel.onCategorySelected(ProductCategory.KAOS_OVERSIZE) }
-                    )
-                    CategoryChip(
-                        label = stringResource(ProductCategory.BAJU_POLO.titleRes),
-                        isSelected = uiState.selectedCategory == ProductCategory.BAJU_POLO,
-                        onClick = { viewModel.onCategorySelected(ProductCategory.BAJU_POLO) }
-                    )
+                    uiState.categories.forEach { cat ->
+                        CategoryChip(
+                            label = cat.nama,
+                            isSelected = uiState.selectedCategoryId == cat.id,
+                            onClick = { viewModel.onCategorySelected(cat.id) }
+                        )
+                    }
                 }
             }
 

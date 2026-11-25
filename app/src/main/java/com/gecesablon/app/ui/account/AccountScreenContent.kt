@@ -60,6 +60,7 @@ import com.gecesablon.app.ui.theme.ShapeControl
 import com.gecesablon.app.ui.theme.SurfaceCard
 import com.gecesablon.app.ui.theme.TextPrimary
 import com.gecesablon.app.ui.theme.TextSecondary
+import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.SupervisorAccount
 
@@ -79,6 +80,7 @@ fun AccountScreenContent(
     onLogout: () -> Unit,
     modifier: Modifier = Modifier,
     onNavigateToManageProducts: (() -> Unit)? = null,
+    onNavigateToManageCategories: (() -> Unit)? = null,
     onNavigateToManageAdmins: (() -> Unit)? = null
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -320,6 +322,18 @@ fun AccountScreenContent(
                             subtitle = stringResource(R.string.account_menu_manage_products_sub),
                             onClick = onNavigateToManageProducts
                         )
+                        if (onNavigateToManageCategories != null) {
+                            HorizontalDivider(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                color = BorderHairline
+                            )
+                            AccountMenuRow(
+                                icon = Icons.Default.Category,
+                                title = stringResource(R.string.account_menu_manage_categories),
+                                subtitle = stringResource(R.string.account_menu_manage_categories_sub),
+                                onClick = onNavigateToManageCategories
+                            )
+                        }
                         if (onNavigateToManageAdmins != null) {
                             HorizontalDivider(
                                 modifier = Modifier.padding(horizontal = 16.dp),
