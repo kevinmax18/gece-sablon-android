@@ -9,6 +9,7 @@ import com.gecesablon.app.core.util.Resource
 import com.gecesablon.app.data.model.Order
 import com.gecesablon.app.data.model.Product
 import com.gecesablon.app.data.model.ProductColor
+import com.gecesablon.app.data.model.ProductMaterial
 import com.gecesablon.app.data.model.ProductSize
 import com.gecesablon.app.data.model.Session
 import com.gecesablon.app.data.repository.OrderRepository
@@ -25,6 +26,7 @@ data class AdminManualOrderUiState(
     val noHpPelanggan: String = "",
     val availableProducts: List<Product> = emptyList(),
     val selectedProductId: String? = null,
+    val selectedMaterialName: String? = null,
     val selectedColorName: String? = null,
     val selectedSizeLabel: String? = null,
     val quantity: Int = 1,
@@ -35,6 +37,7 @@ data class AdminManualOrderUiState(
     val namaError: String? = null,
     val hpError: String? = null,
     val productError: String? = null,
+    val materialError: String? = null,
     val colorError: String? = null,
     val sizeError: String? = null,
     val quantityError: String? = null,
@@ -69,6 +72,7 @@ class AdminManualOrderViewModel(
                 is Resource.Success -> {
                     val products = res.data
                     val firstProduct = products.firstOrNull()
+                    val defaultMaterial = firstProduct?.daftarBahan?.find { it.isDefault } ?: firstProduct?.daftarBahan?.firstOrNull()
                     val firstColor = firstProduct?.daftarWarna?.firstOrNull()?.nama
                     val firstSize = firstProduct?.daftarUkuran?.firstOrNull()?.label
 
@@ -77,6 +81,7 @@ class AdminManualOrderViewModel(
                             isLoading = false,
                             availableProducts = products,
                             selectedProductId = firstProduct?.id,
+                            selectedMaterialName = defaultMaterial?.nama,
                             selectedColorName = firstColor,
                             selectedSizeLabel = firstSize
                         )
@@ -100,18 +105,26 @@ class AdminManualOrderViewModel(
 
     fun onProductSelected(productId: String) {
         val product = _uiState.value.availableProducts.find { it.id == productId }
+        val defaultMaterial = product?.daftarBahan?.find { it.isDefault } ?: product?.daftarBahan?.firstOrNull()
         val newColor = product?.daftarWarna?.firstOrNull()?.nama
         val newSize = product?.daftarUkuran?.firstOrNull()?.label
         _uiState.update {
             it.copy(
                 selectedProductId = productId,
+                selectedMaterialName = defaultMaterial?.nama,
                 selectedColorName = newColor,
                 selectedSizeLabel = newSize,
                 productError = null,
+                materialError = null,
                 colorError = null,
                 sizeError = null
             )
         }
+        recalculatePrice()
+    }
+
+    fun onMaterialSelected(materialName: String) {
+        _uiState.update { it.copy(selectedMaterialName = materialName, materialError = null) }
         recalculatePrice()
     }
 
@@ -142,10 +155,15 @@ class AdminManualOrderViewModel(
     private fun recalculatePrice() {
         val current = _uiState.value
         val product = current.availableProducts.find { it.id == current.selectedProductId }
+        val material = product?.daftarBahan?.find { it.nama.equals(current.selectedMaterialName, ignoreCase = true) }
         val size = product?.daftarUkuran?.find { it.label.equals(current.selectedSizeLabel, ignoreCase = true) }
 
         val unitPrice = if (product != null && size != null) {
-            PriceCalculator.calculateUnitPrice(product.hargaDasar, size.tambahanHarga)
+            PriceCalculator.calculateUnitPrice(
+                basePrice = product.hargaDasar,
+                sizeExtra = size.tambahanHarga,
+                materialExtra = material?.tambahanHarga ?: 0L
+            )
         } else {
             0L
         }
@@ -180,6 +198,10 @@ class AdminManualOrderViewModel(
             _uiState.update { it.copy(productError = "Pilih produk sablon.") }
             hasError = true
         }
+        if (current.selectedMaterialName == null) {
+            _uiState.update { it.copy(materialError = "Pilih varian bahan.") }
+            hasError = true
+        }
         if (current.selectedColorName == null) {
             _uiState.update { it.copy(colorError = "Pilih varian warna.") }
             hasError = true
@@ -208,6 +230,7 @@ class AdminManualOrderViewModel(
                 namaPelanggan = current.namaPelanggan.trim(),
                 noHpPelanggan = cleanPhone,
                 productId = current.selectedProductId!!,
+                materialName = current.selectedMaterialName,
                 colorName = current.selectedColorName!!,
                 sizeLabel = current.selectedSizeLabel!!,
                 quantity = current.quantity,

@@ -69,11 +69,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.gecesablon.app.R
 import com.gecesablon.app.core.util.Formatter
 import com.gecesablon.app.data.model.ProductColor
+import com.gecesablon.app.data.model.ProductMaterial
 import com.gecesablon.app.data.model.ProductSize
 import com.gecesablon.app.ui.components.ErrorView
 import com.gecesablon.app.ui.components.LoadingView
@@ -321,7 +323,7 @@ fun OrderFormScreen(
                                         color = MaterialTheme.colorScheme.onBackground
                                     )
                                     Text(
-                                        text = "Bahan: ${product.bahan}",
+                                        text = "Bahan: ${uiState.selectedMaterial?.nama ?: product.bahan}",
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -329,6 +331,103 @@ fun OrderFormScreen(
                                         text = "Harga Satuan: ${Formatter.formatRupiah(uiState.hargaSatuan)} /pcs",
                                         style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
                                         color = MaterialTheme.colorScheme.onBackground
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    // 2. Pilih Bahan Kain
+                    if (product.daftarBahan.isNotEmpty()) {
+                        item {
+                            Column {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.order_form_material_section),
+                                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                                        color = MaterialTheme.colorScheme.onBackground
+                                    )
+                                    Text(
+                                        text = "${product.daftarBahan.size} Opsi",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+
+                                Spacer(modifier = Modifier.height(10.dp))
+
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .horizontalScroll(rememberScrollState()),
+                                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                                ) {
+                                    product.daftarBahan.forEach { materialItem ->
+                                        val isSelected = uiState.selectedMaterial == materialItem
+                                        Card(
+                                            shape = ShapeControl,
+                                            colors = CardDefaults.cardColors(
+                                                containerColor = if (isSelected) GeceColors.PrimaryInk else MaterialTheme.colorScheme.surface
+                                            ),
+                                            border = BorderStroke(
+                                                1.dp,
+                                                if (isSelected) GeceColors.PrimaryInk else MaterialTheme.colorScheme.outline
+                                            ),
+                                            modifier = Modifier.clickable { viewModel.onMaterialSelected(materialItem) }
+                                        ) {
+                                            Row(
+                                                modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                                                verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                            ) {
+                                                Column {
+                                                    Row(
+                                                        verticalAlignment = Alignment.CenterVertically,
+                                                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                                    ) {
+                                                        Text(
+                                                            text = materialItem.nama,
+                                                            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                                                            color = if (isSelected) GeceColors.Background else MaterialTheme.colorScheme.onSurface
+                                                        )
+                                                        if (materialItem.isDefault) {
+                                                            Box(
+                                                                modifier = Modifier
+                                                                    .clip(ShapePill)
+                                                                    .background(if (isSelected) GeceColors.Accent else MaterialTheme.colorScheme.surfaceVariant)
+                                                                    .padding(horizontal = 6.dp, vertical = 2.dp)
+                                                            ) {
+                                                                Text(
+                                                                    text = stringResource(R.string.order_form_material_badge_default),
+                                                                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
+                                                                    color = if (isSelected) GeceColors.PrimaryInk else MaterialTheme.colorScheme.onSurfaceVariant
+                                                                )
+                                                            }
+                                                        }
+                                                    }
+                                                    if (materialItem.tambahanHarga > 0L) {
+                                                        Text(
+                                                            text = "+${Formatter.formatRupiah(materialItem.tambahanHarga)}",
+                                                            style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
+                                                            color = if (isSelected) GeceColors.Accent else MaterialTheme.colorScheme.onSurfaceVariant
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                uiState.materialErrorRes?.let { errRes ->
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Text(
+                                        text = stringResource(errRes),
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.error
                                     )
                                 }
                             }

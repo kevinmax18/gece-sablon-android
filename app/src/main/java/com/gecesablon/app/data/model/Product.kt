@@ -9,6 +9,7 @@ package com.gecesablon.app.data.model
  * @param deskripsi Uraian deskripsi produk.
  * @param hargaDasar Harga dasar per pcs untuk ukuran standar.
  * @param gambarUrl URL atau path gambar produk (opsional/nullable).
+ * @param daftarBahan Daftar pilihan bahan kain per produk.
  * @param daftarWarna Daftar pilihan warna produk.
  * @param daftarUkuran Daftar pilihan ukuran produk beserta selisih harga.
  * @param aktif Status ketersediaan produk (true = aktif di katalog pelanggan, false = nonaktif).
@@ -21,6 +22,7 @@ data class Product(
     val deskripsi: String,
     val hargaDasar: Long,
     val gambarUrl: String? = null,
+    val daftarBahan: List<ProductMaterial> = emptyList(),
     val daftarWarna: List<ProductColor> = emptyList(),
     val daftarUkuran: List<ProductSize> = emptyList(),
     val aktif: Boolean = true

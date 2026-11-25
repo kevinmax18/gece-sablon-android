@@ -5,22 +5,24 @@ package com.gecesablon.app.core.util
  * Menjamin rumus harga konsisten di satu tempat dan tidak diletakkan di UI.
  *
  * Rumus:
- *   hargaSatuan = hargaDasar + tambahanUkuran
+ *   hargaSatuan = hargaDasar + tambahanBahan + tambahanUkuran
  *   totalHarga  = hargaSatuan * jumlah
  */
 object PriceCalculator {
 
     /**
-     * Menghitung harga satuan per pcs dari harga dasar produk ditambah biaya variasi ukuran.
+     * Menghitung harga satuan per pcs dari harga dasar produk ditambah biaya variasi bahan dan ukuran.
      *
      * @param basePrice Harga dasar produk (Rupiah)
      * @param sizeExtra Additional cost untuk ukuran khusus (misal XXL +Rp5.000)
+     * @param materialExtra Additional cost untuk bahan kain khusus (misal Cotton Combed 24s +Rp5.000)
      * @return Harga satuan per pcs
      */
-    fun calculateUnitPrice(basePrice: Long, sizeExtra: Long): Long {
+    fun calculateUnitPrice(basePrice: Long, sizeExtra: Long, materialExtra: Long = 0L): Long {
         val safeBase = if (basePrice < 0L) 0L else basePrice
-        val safeExtra = if (sizeExtra < 0L) 0L else sizeExtra
-        return safeBase + safeExtra
+        val safeSizeExtra = if (sizeExtra < 0L) 0L else sizeExtra
+        val safeMaterialExtra = if (materialExtra < 0L) 0L else materialExtra
+        return safeBase + safeSizeExtra + safeMaterialExtra
     }
 
     /**

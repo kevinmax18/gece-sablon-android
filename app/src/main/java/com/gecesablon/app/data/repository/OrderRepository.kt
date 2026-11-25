@@ -4,6 +4,7 @@ import com.gecesablon.app.core.util.Resource
 import com.gecesablon.app.data.model.Order
 import com.gecesablon.app.data.model.Product
 import com.gecesablon.app.data.model.ProductColor
+import com.gecesablon.app.data.model.ProductMaterial
 import com.gecesablon.app.data.model.ProductSize
 import com.gecesablon.app.data.model.ProductionState
 import com.gecesablon.app.data.model.Session
@@ -40,6 +41,7 @@ interface OrderRepository {
      *
      * @param userId         ID pembuat pesanan (TODO: di API asli diambil dari token)
      * @param product        Produk yang dipesan
+     * @param material       Pilihan bahan kain terpilih (wajib ada pada produk aktif)
      * @param color          Varian warna terpilih
      * @param size           Varian ukuran terpilih
      * @param quantity       Jumlah pesanan dalam pcs
@@ -51,6 +53,7 @@ interface OrderRepository {
     suspend fun createOrder(
         userId: String,
         product: Product,
+        material: ProductMaterial? = null,
         color: ProductColor,
         size: ProductSize,
         quantity: Int,
@@ -127,6 +130,7 @@ interface OrderRepository {
      * @param namaPelanggan Nama lengkap pelanggan
      * @param noHpPelanggan Nomor WhatsApp pelanggan (format 08... / 628...)
      * @param productId     ID produk tekstil yang dipesan
+     * @param materialName  Nama bahan yang dipilih (wajib ada pada produk aktif)
      * @param colorName     Nama warna yang dipilih
      * @param sizeLabel     Label ukuran yang dipilih
      * @param quantity      Jumlah pesanan (1..999 pcs)
@@ -139,6 +143,7 @@ interface OrderRepository {
         namaPelanggan: String,
         noHpPelanggan: String,
         productId: String,
+        materialName: String? = null,
         colorName: String,
         sizeLabel: String,
         quantity: Int,

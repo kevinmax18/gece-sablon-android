@@ -7,15 +7,17 @@ package com.gecesablon.app.data.model
  * @param id          ID item (opsional/palsu)
  * @param productId   ID produk yang dipesan
  * @param namaProduk  Nama produk saat pemesanan
+ * @param bahanNama   Salinan nama bahan kain terpilih saat pemesanan
  * @param warnaNama   Nama varian warna yang dipilih
  * @param ukuranLabel Label ukuran yang dipilih (S, M, L, XL, XXL, XXXL, dll)
  * @param jumlah      Jumlah pemesanan (pcs)
- * @param hargaSatuan Harga satuan (harga dasar + tambahan ukuran)
+ * @param hargaSatuan Harga satuan (harga dasar + tambahan bahan + tambahan ukuran)
  */
 data class OrderItem(
     val id: String = "",
     val productId: String,
     val namaProduk: String,
+    val bahanNama: String = "",
     val warnaNama: String,
     val ukuranLabel: String,
     val jumlah: Int,

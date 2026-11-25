@@ -4,6 +4,7 @@ import com.gecesablon.app.core.util.ProductRules
 import com.gecesablon.app.core.util.Resource
 import com.gecesablon.app.data.model.Product
 import com.gecesablon.app.data.model.ProductColor
+import com.gecesablon.app.data.model.ProductMaterial
 import com.gecesablon.app.data.model.ProductSize
 import com.gecesablon.app.data.model.Role
 import com.gecesablon.app.data.model.Session
@@ -52,6 +53,10 @@ class FakeProductRepository : ProductRepository {
             deskripsi = "Kaos katun combed premium dengan rajutan halus, adem, dan menyerap keringat. Cocok untuk kaos komunitas, polo merchandise brand, atau seragam event dengan cetak DTF full color presisi dan tahan lama.",
             hargaDasar = 65000L,
             gambarUrl = null,
+            daftarBahan = listOf(
+                ProductMaterial(id = "mat-kaos-combed-30s", nama = "Cotton Combed 30s", tambahanHarga = 0L, isDefault = true),
+                ProductMaterial(id = "mat-kaos-combed-24s", nama = "Cotton Combed 24s", tambahanHarga = 5000L, isDefault = false)
+            ),
             daftarWarna = standardColors,
             daftarUkuran = standardSizes,
             aktif = true
@@ -64,6 +69,10 @@ class FakeProductRepository : ProductRepository {
             deskripsi = "Kaos kombinasi warna lengan raglan dengan bahan katun combed lembut dan sablon DTF presisi berdaya rekat tinggi.",
             hargaDasar = 70000L,
             gambarUrl = null,
+            daftarBahan = listOf(
+                ProductMaterial(id = "mat-raglan-combed-24s", nama = "Cotton Combed 24s", tambahanHarga = 0L, isDefault = true),
+                ProductMaterial(id = "mat-raglan-combed-20s", nama = "Cotton Combed 20s", tambahanHarga = 5000L, isDefault = false)
+            ),
             daftarWarna = listOf(
                 ProductColor(nama = "Putih - Hitam", hex = "#FFFFFF"),
                 ProductColor(nama = "Abu - Navy", hex = "#858383"),
@@ -80,6 +89,10 @@ class FakeProductRepository : ProductRepository {
             deskripsi = "Kaos potongan loose-fit vintage streetwear dengan bahan katun tebal kaku berkualitas tinggi dan cetak grafis DTF tajam.",
             hargaDasar = 85000L,
             gambarUrl = null,
+            daftarBahan = listOf(
+                ProductMaterial(id = "mat-oversize-heavy-20s", nama = "Heavyweight Cotton 20s", tambahanHarga = 0L, isDefault = true),
+                ProductMaterial(id = "mat-oversize-heavy-16s", nama = "Heavyweight Cotton 16s", tambahanHarga = 10000L, isDefault = false)
+            ),
             daftarWarna = listOf(
                 ProductColor(nama = "Vintage Black", hex = "#1C1B1B"),
                 ProductColor(nama = "Broken White", hex = "#F5F5F0"),
@@ -96,6 +109,10 @@ class FakeProductRepository : ProductRepository {
             deskripsi = "Potongan boxy cut modern dengan kerah tebal elastis dan cetak DTF full color presisi di area dada dan punggung.",
             hargaDasar = 80000L,
             gambarUrl = null,
+            daftarBahan = listOf(
+                ProductMaterial(id = "mat-boxy-cotton-24s", nama = "Heavyweight Cotton 24s", tambahanHarga = 0L, isDefault = true),
+                ProductMaterial(id = "mat-boxy-cotton-20s", nama = "Heavyweight Cotton 20s", tambahanHarga = 5000L, isDefault = false)
+            ),
             daftarWarna = standardColors,
             daftarUkuran = standardSizes,
             aktif = true
@@ -108,6 +125,10 @@ class FakeProductRepository : ProductRepository {
             deskripsi = "Baju polo berkerah rajut dengan tekstur pori pique mewah, adem dipakai untuk seragam kerja maupun pakaian formal komunitas.",
             hargaDasar = 95000L,
             gambarUrl = null,
+            daftarBahan = listOf(
+                ProductMaterial(id = "mat-polo-lacoste-cvc", nama = "Lacoste CVC Pique", tambahanHarga = 0L, isDefault = true),
+                ProductMaterial(id = "mat-polo-lacoste-cotton", nama = "Lacoste 100% Cotton", tambahanHarga = 10000L, isDefault = false)
+            ),
             daftarWarna = listOf(
                 ProductColor(nama = "Hitam Jet", hex = "#0A0A0A"),
                 ProductColor(nama = "Putih Salju", hex = "#FFFFFF"),
@@ -125,6 +146,9 @@ class FakeProductRepository : ProductRepository {
             deskripsi = "Polo shirt kombinasi kerah sporty dengan daya serap keringat tinggi, ideal untuk seragam kantor dan apparel organisasi.",
             hargaDasar = 90000L,
             gambarUrl = null,
+            daftarBahan = listOf(
+                ProductMaterial(id = "mat-polo-cvc-double", nama = "Polo CVC Double Knit", tambahanHarga = 0L, isDefault = true)
+            ),
             daftarWarna = listOf(
                 ProductColor(nama = "Navy - Putih", hex = "#1B2A4A"),
                 ProductColor(nama = "Hitam - Merah", hex = "#111111"),

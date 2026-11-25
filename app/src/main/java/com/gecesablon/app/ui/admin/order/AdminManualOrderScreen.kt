@@ -235,6 +235,41 @@ fun AdminManualOrderScreen(
                         }
                     }
 
+                    // Pilihan Bahan
+                    if (selectedProduct != null && selectedProduct.daftarBahan.isNotEmpty()) {
+                        Text(
+                            text = stringResource(R.string.admin_manual_order_material_label),
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Medium,
+                            color = GeceColors.TextMuted
+                        )
+                        FlowRow(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            selectedProduct.daftarBahan.forEach { material ->
+                                val isSelected = uiState.selectedMaterialName.equals(material.nama, ignoreCase = true)
+                                FilterChip(
+                                    selected = isSelected,
+                                    onClick = { viewModel.onMaterialSelected(material.nama) },
+                                    label = {
+                                        Text(
+                                            if (material.tambahanHarga > 0L) {
+                                                "${material.nama} (+${rupiahFormat.format(material.tambahanHarga)})"
+                                            } else {
+                                                material.nama
+                                            }
+                                        )
+                                    },
+                                    colors = FilterChipDefaults.filterChipColors(
+                                        selectedContainerColor = InkBlack,
+                                        selectedLabelColor = White
+                                    )
+                                )
+                            }
+                        }
+                    }
+
                     // Pilihan Warna
                     if (selectedProduct != null) {
                         Text(

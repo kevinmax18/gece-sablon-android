@@ -13,6 +13,7 @@ import com.gecesablon.app.core.util.Resource
 import com.gecesablon.app.data.model.Order
 import com.gecesablon.app.data.model.Product
 import com.gecesablon.app.data.model.ProductColor
+import com.gecesablon.app.data.model.ProductMaterial
 import com.gecesablon.app.data.model.ProductSize
 import com.gecesablon.app.data.repository.OrderRepository
 import com.gecesablon.app.data.repository.ProductRepository
@@ -26,6 +27,7 @@ import kotlinx.coroutines.launch
 data class OrderDraftUiState(
     val isLoadingProduct: Boolean = true,
     val product: Product? = null,
+    val selectedMaterial: ProductMaterial? = null,
     val selectedColor: ProductColor? = null,
     val selectedSize: ProductSize? = null,
     val quantity: Int = 1,
@@ -40,6 +42,7 @@ data class OrderDraftUiState(
     val totalHarga: Long = 0L,
 
     // Error validasi per field
+    @StringRes val materialErrorRes: Int? = null,
     @StringRes val colorErrorRes: Int? = null,
     @StringRes val sizeErrorRes: Int? = null,
     @StringRes val quantityErrorRes: Int? = null,
@@ -74,11 +77,14 @@ class OrderDraftViewModel(
             when (val result = productRepository.getProductById(productId)) {
                 is Resource.Success -> {
                     val product = result.data
+                    // Bahan bawaan terpilih lebih dulu
+                    val defaultMaterial = product.daftarBahan.find { it.isDefault } ?: product.daftarBahan.firstOrNull()
                     val defaultColor = product.daftarWarna.firstOrNull()
                     val defaultSize = product.daftarUkuran.firstOrNull()
                     val unitPrice = PriceCalculator.calculateUnitPrice(
                         basePrice = product.hargaDasar,
-                        sizeExtra = defaultSize?.tambahanHarga ?: 0L
+                        sizeExtra = defaultSize?.tambahanHarga ?: 0L,
+                        materialExtra = defaultMaterial?.tambahanHarga ?: 0L
                     )
                     val totalPrice = PriceCalculator.calculateTotalPrice(unitPrice, 1)
 
@@ -86,6 +92,7 @@ class OrderDraftViewModel(
                         it.copy(
                             isLoadingProduct = false,
                             product = product,
+                            selectedMaterial = defaultMaterial,
                             selectedColor = defaultColor,
                             selectedSize = defaultSize,
                             hargaSatuan = unitPrice,
@@ -106,6 +113,26 @@ class OrderDraftViewModel(
         }
     }
 
+    fun onMaterialSelected(material: ProductMaterial) {
+        _uiState.update { current ->
+            val product = current.product
+            val basePrice = product?.hargaDasar ?: 0L
+            val sizeExtra = current.selectedSize?.tambahanHarga ?: 0L
+            val unitPrice = PriceCalculator.calculateUnitPrice(
+                basePrice = basePrice,
+                sizeExtra = sizeExtra,
+                materialExtra = material.tambahanHarga
+            )
+            val totalPrice = PriceCalculator.calculateTotalPrice(unitPrice, current.quantity)
+            current.copy(
+                selectedMaterial = material,
+                materialErrorRes = null,
+                hargaSatuan = unitPrice,
+                totalHarga = totalPrice
+            )
+        }
+    }
+
     fun onColorSelected(color: ProductColor) {
         _uiState.update {
             it.copy(selectedColor = color, colorErrorRes = null)
@@ -116,7 +143,12 @@ class OrderDraftViewModel(
         _uiState.update { current ->
             val product = current.product
             val basePrice = product?.hargaDasar ?: 0L
-            val unitPrice = PriceCalculator.calculateUnitPrice(basePrice, size.tambahanHarga)
+            val materialExtra = current.selectedMaterial?.tambahanHarga ?: 0L
+            val unitPrice = PriceCalculator.calculateUnitPrice(
+                basePrice = basePrice,
+                sizeExtra = size.tambahanHarga,
+                materialExtra = materialExtra
+            )
             val totalPrice = PriceCalculator.calculateTotalPrice(unitPrice, current.quantity)
             current.copy(
                 selectedSize = size,
@@ -136,7 +168,12 @@ class OrderDraftViewModel(
             val product = current.product
             val basePrice = product?.hargaDasar ?: 0L
             val sizeExtra = current.selectedSize?.tambahanHarga ?: 0L
-            val unitPrice = PriceCalculator.calculateUnitPrice(basePrice, sizeExtra)
+            val materialExtra = current.selectedMaterial?.tambahanHarga ?: 0L
+            val unitPrice = PriceCalculator.calculateUnitPrice(
+                basePrice = basePrice,
+                sizeExtra = sizeExtra,
+                materialExtra = materialExtra
+            )
             val totalPrice = PriceCalculator.calculateTotalPrice(unitPrice, qty)
 
             val errorRes = if (qty !in 1..999 && filtered.isNotBlank()) {
@@ -199,6 +236,12 @@ class OrderDraftViewModel(
         val current = _uiState.value
         var isValid = true
 
+        var materialErr: Int? = null
+        if (current.selectedMaterial == null) {
+            materialErr = R.string.order_error_material_required
+            isValid = false
+        }
+
         var colorErr: Int? = null
         if (current.selectedColor == null) {
             colorErr = R.string.order_error_color_required
@@ -227,6 +270,7 @@ class OrderDraftViewModel(
 
         _uiState.update {
             it.copy(
+                materialErrorRes = materialErr,
                 colorErrorRes = colorErr,
                 sizeErrorRes = sizeErr,
                 quantityErrorRes = qtyErr,
@@ -247,6 +291,7 @@ class OrderDraftViewModel(
         if (!validateForm()) return
 
         val product = current.product ?: return
+        val material = current.selectedMaterial ?: return
         val color = current.selectedColor ?: return
         val size = current.selectedSize ?: return
 
@@ -261,6 +306,7 @@ class OrderDraftViewModel(
             val result = orderRepository.createOrder(
                 userId = finalUserId,
                 product = product,
+                material = material,
                 color = color,
                 size = size,
                 quantity = current.quantity,

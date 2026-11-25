@@ -525,8 +525,9 @@ fun OrderItemAndDesignSection(
 
                     Spacer(modifier = Modifier.height(4.dp))
 
+                    val detailBahan = if (item.bahanNama.isNotBlank()) "Bahan: ${item.bahanNama} • " else ""
                     Text(
-                        text = "Varian: ${item.warnaNama} • Ukuran ${item.ukuranLabel}",
+                        text = "${detailBahan}Varian: ${item.warnaNama} • Ukuran ${item.ukuranLabel}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

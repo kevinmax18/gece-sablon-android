@@ -49,6 +49,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -90,6 +92,7 @@ import com.gecesablon.app.ui.theme.SurfaceVariantColor
 import com.gecesablon.app.ui.theme.TextPrimary
 import com.gecesablon.app.ui.theme.TextSecondary
 import com.gecesablon.app.ui.theme.White
+import com.gecesablon.app.ui.theme.ShapePill
 
 /**
  * Layar Formulir Tambah / Ubah Produk Owner:
@@ -121,7 +124,7 @@ fun OwnerProductFormScreen(
     // Dialog Konfirmasi Hapus Produk (Mode Ubah)
     if (uiState.showDeleteDialog) {
         AlertDialog(
-            onDismissRequest = viewModel::dismissDelete,
+            onDismissRequest = viewModel::dismissDeleteDialog,
             title = {
                 Text(
                     text = stringResource(R.string.owner_product_delete_dialog_title),
@@ -139,7 +142,7 @@ fun OwnerProductFormScreen(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        viewModel.deleteProduct(onDeleted = onNavigateBack)
+                        viewModel.confirmDelete(onDeleted = onNavigateBack)
                     }
                 ) {
                     Text(
@@ -150,7 +153,7 @@ fun OwnerProductFormScreen(
                 }
             },
             dismissButton = {
-                TextButton(onClick = viewModel::dismissDelete) {
+                TextButton(onClick = viewModel::dismissDeleteDialog) {
                     Text(
                         text = stringResource(R.string.owner_product_delete_cancel),
                         color = TextSecondary
@@ -521,7 +524,92 @@ fun OwnerProductFormScreen(
                 }
 
                 // =====================================================================
-                // 2. DAFTAR VARIASI WARNA
+                // 2. PILIHAN BAHAN KAIN
+                // =====================================================================
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = ShapeCard,
+                    colors = CardDefaults.cardColors(containerColor = SurfaceCard),
+                    border = BorderStroke(1.dp, BorderHairline)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = stringResource(R.string.owner_product_material_title),
+                                    style = MaterialTheme.typography.titleMedium.copy(
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 15.sp
+                                    ),
+                                    color = TextPrimary,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                                Text(
+                                    text = stringResource(R.string.owner_product_material_subtitle),
+                                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
+                                    color = TextSecondary,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
+
+                            TextButton(
+                                onClick = viewModel::addMaterialRow,
+                                colors = ButtonDefaults.textButtonColors(contentColor = InkBlack)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Add,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(
+                                    text = stringResource(R.string.owner_product_btn_add_material),
+                                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold)
+                                )
+                            }
+                        }
+
+                        uiState.daftarBahanError?.let { err ->
+                            Text(
+                                text = err,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.error,
+                                modifier = Modifier.padding(bottom = 2.dp)
+                            )
+                        }
+
+                        // Baris-baris variasi bahan
+                        uiState.materialRows.forEachIndexed { index, rowItem ->
+                            MaterialRowEditor(
+                                item = rowItem,
+                                onUpdate = { nama, extra ->
+                                    viewModel.updateMaterialRow(index, nama, extra)
+                                },
+                                onSetDefault = {
+                                    viewModel.setMaterialDefault(index)
+                                },
+                                onRemove = {
+                                    viewModel.removeMaterialRow(index)
+                                },
+                                canRemove = uiState.materialRows.size > 1
+                            )
+                        }
+                    }
+                }
+
+                // =====================================================================
+                // 3. DAFTAR VARIASI WARNA
                 // =====================================================================
                 Card(
                     modifier = Modifier.fillMaxWidth(),
@@ -827,7 +915,7 @@ fun OwnerProductFormScreen(
                 // Tombol Hapus pada Mode Ubah
                 if (uiState.isEditMode) {
                     OutlinedButton(
-                        onClick = viewModel::requestDelete,
+                        onClick = viewModel::showDeleteConfirmation,
                         enabled = !uiState.isSubmitting,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -860,6 +948,119 @@ fun OwnerProductFormScreen(
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
+            }
+        }
+    }
+}
+
+/**
+ * Komponen editor untuk satu baris variasi bahan kain.
+ * Memuat nama bahan, tambahan harga, radio button penanda default, dan tombol hapus baris.
+ */
+@Composable
+private fun MaterialRowEditor(
+    item: MaterialRowItem,
+    onUpdate: (nama: String, tambahanHarga: String) -> Unit,
+    onSetDefault: () -> Unit,
+    onRemove: () -> Unit,
+    canRemove: Boolean,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(ShapeControl)
+            .background(GeceColors.Background)
+            .border(1.dp, BorderHairline, ShapeControl)
+            .padding(8.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            // Radio Button Jadikan Default
+            RadioButton(
+                selected = item.isDefault,
+                onClick = onSetDefault,
+                colors = RadioButtonDefaults.colors(
+                    selectedColor = InkBlack,
+                    unselectedColor = TextSecondary
+                ),
+                modifier = Modifier.size(24.dp)
+            )
+
+            // Nama Bahan
+            OutlinedTextField(
+                value = item.nama,
+                onValueChange = { newNama -> onUpdate(newNama, item.tambahanHargaInput) },
+                placeholder = {
+                    Text(
+                        text = stringResource(R.string.owner_product_material_name_placeholder),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextSecondary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                },
+                singleLine = true,
+                shape = ShapeControl,
+                colors = formTextFieldColors(),
+                modifier = Modifier.weight(1.4f)
+            )
+
+            // Tambahan Harga
+            OutlinedTextField(
+                value = item.tambahanHargaInput,
+                onValueChange = { newPrice -> onUpdate(item.nama, newPrice) },
+                placeholder = {
+                    Text(
+                        text = stringResource(R.string.owner_product_material_extra_placeholder),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextSecondary
+                    )
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                singleLine = true,
+                shape = ShapeControl,
+                colors = formTextFieldColors(),
+                modifier = Modifier.weight(1f)
+            )
+
+            // Tombol Hapus Baris
+            IconButton(
+                onClick = onRemove,
+                enabled = canRemove,
+                modifier = Modifier.size(32.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = stringResource(R.string.owner_product_btn_remove_material_row),
+                    tint = if (canRemove) MaterialTheme.colorScheme.error else TextSecondary.copy(alpha = 0.4f),
+                    modifier = Modifier.size(18.dp)
+                )
+            }
+        }
+
+        if (item.isDefault) {
+            Row(
+                modifier = Modifier.padding(start = 32.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .clip(ShapePill)
+                        .background(AccentYellow)
+                        .padding(horizontal = 6.dp, vertical = 2.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.owner_product_material_badge_default),
+                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp, fontWeight = FontWeight.Bold),
+                        color = InkBlack
+                    )
+                }
             }
         }
     }

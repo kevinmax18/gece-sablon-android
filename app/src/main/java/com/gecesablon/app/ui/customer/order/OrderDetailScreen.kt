@@ -392,8 +392,9 @@ fun OrderDetailScreen(
                                             }
                                         }
 
+                                        val detailBahan = if (item.bahanNama.isNotBlank()) "Bahan: ${item.bahanNama} • " else ""
                                         Text(
-                                            text = "Warna: ${item.warnaNama} • Ukuran: ${item.ukuranLabel}",
+                                            text = "${detailBahan}Warna: ${item.warnaNama} • Ukuran: ${item.ukuranLabel}",
                                             style = MaterialTheme.typography.bodySmall,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant
                                         )

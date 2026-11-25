@@ -2,10 +2,10 @@ package com.gecesablon.app.core.util
 
 import com.gecesablon.app.data.model.Product
 import com.gecesablon.app.data.model.ProductColor
+import com.gecesablon.app.data.model.ProductMaterial
 import com.gecesablon.app.data.model.ProductSize
 import com.gecesablon.app.data.repository.FakeCategoryRepository
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -17,11 +17,17 @@ import org.junit.Test
  * - Kategori (categoryId) dan bahan wajib
  * - Deskripsi maksimal 500 karakter
  * - Harga dasar 1.000 - 10.000.000
+ * - Minimal 1 bahan, tepat 1 bahan default, nama 2-80 karakter unik tanpa membedakan huruf besar-kecil, tambahan harga 0-10.000.000
  * - Minimal 1 warna (nama + kode #RRGGBB valid) tanpa duplikat
  * - Minimal 1 ukuran (S-XXXL) dengan tambahan harga >= 0 tanpa duplikat
  * - Pengembalian error per kolom
  */
 class ProductRulesTest {
+
+    private val sampleValidMaterials = listOf(
+        ProductMaterial(id = "mat-1", nama = "Cotton Combed 30s", tambahanHarga = 0L, isDefault = true),
+        ProductMaterial(id = "mat-2", nama = "Cotton Combed 24s", tambahanHarga = 5000L, isDefault = false)
+    )
 
     private val sampleValidColors = listOf(
         ProductColor(nama = "Hitam Pekat", hex = "#111111"),
@@ -41,6 +47,7 @@ class ProductRulesTest {
         bahan = "Cotton Combed 24s",
         deskripsi = "Kaos polos berkualitas untuk sablon DTF.",
         hargaDasar = 65000L,
+        daftarBahan = sampleValidMaterials,
         daftarWarna = sampleValidColors,
         daftarUkuran = sampleValidSizes,
         aktif = true
@@ -53,6 +60,7 @@ class ProductRulesTest {
         assertNull(result.namaError)
         assertNull(result.kategoriError)
         assertNull(result.bahanError)
+        assertNull(result.daftarBahanError)
         assertNull(result.deskripsiError)
         assertNull(result.hargaDasarError)
         assertNull(result.warnaError)
@@ -92,12 +100,101 @@ class ProductRulesTest {
     }
 
     @Test
+    fun testValidasiDaftarBahan_minimalSatuDanTepatSatuDefault() {
+        // Kosong
+        assertNotNull(ProductRules.validateDaftarBahan(emptyList()))
+
+        // Tanpa bahan default
+        val noDefault = listOf(
+            ProductMaterial(id = "1", nama = "Combed 30s", tambahanHarga = 0L, isDefault = false)
+        )
+        assertNotNull(ProductRules.validateDaftarBahan(noDefault))
+
+        // Lebih dari 1 default
+        val twoDefaults = listOf(
+            ProductMaterial(id = "1", nama = "Combed 30s", tambahanHarga = 0L, isDefault = true),
+            ProductMaterial(id = "2", nama = "Combed 24s", tambahanHarga = 5000L, isDefault = true)
+        )
+        assertNotNull(ProductRules.validateDaftarBahan(twoDefaults))
+
+        // Valid: tepat 1 default
+        val validOneDefault = listOf(
+            ProductMaterial(id = "1", nama = "Combed 30s", tambahanHarga = 0L, isDefault = true)
+        )
+        assertNull(ProductRules.validateDaftarBahan(validOneDefault))
+    }
+
+    @Test
+    fun testValidasiDaftarBahan_namaDanPanjang() {
+        // Nama kosong
+        val emptyName = listOf(
+            ProductMaterial(id = "1", nama = "   ", tambahanHarga = 0L, isDefault = true)
+        )
+        assertNotNull(ProductRules.validateDaftarBahan(emptyName))
+
+        // Nama kurang dari 2 karakter
+        val shortName = listOf(
+            ProductMaterial(id = "1", nama = "C", tambahanHarga = 0L, isDefault = true)
+        )
+        assertNotNull(ProductRules.validateDaftarBahan(shortName))
+
+        // Nama pas 2 karakter dan pas 80 karakter
+        val name2 = listOf(
+            ProductMaterial(id = "1", nama = "TC", tambahanHarga = 0L, isDefault = true)
+        )
+        assertNull(ProductRules.validateDaftarBahan(name2))
+
+        val name80 = listOf(
+            ProductMaterial(id = "1", nama = "A".repeat(80), tambahanHarga = 0L, isDefault = true)
+        )
+        assertNull(ProductRules.validateDaftarBahan(name80))
+
+        // Nama lebih dari 80 karakter
+        val name81 = listOf(
+            ProductMaterial(id = "1", nama = "A".repeat(81), tambahanHarga = 0L, isDefault = true)
+        )
+        assertNotNull(ProductRules.validateDaftarBahan(name81))
+    }
+
+    @Test
+    fun testValidasiDaftarBahan_keunikanNamaCaseInsensitive() {
+        val duplicateNames = listOf(
+            ProductMaterial(id = "1", nama = "Cotton Combed 24s", tambahanHarga = 0L, isDefault = true),
+            ProductMaterial(id = "2", nama = "cotton combed 24s", tambahanHarga = 3000L, isDefault = false)
+        )
+        assertNotNull(ProductRules.validateDaftarBahan(duplicateNames))
+    }
+
+    @Test
+    fun testValidasiDaftarBahan_tambahanHargaRentang() {
+        // Negatif
+        val negativeExtra = listOf(
+            ProductMaterial(id = "1", nama = "Combed 30s", tambahanHarga = -1000L, isDefault = true)
+        )
+        assertNotNull(ProductRules.validateDaftarBahan(negativeExtra))
+
+        // Melebihi 10.000.000
+        val overMaxExtra = listOf(
+            ProductMaterial(id = "1", nama = "Combed 30s", tambahanHarga = 10_000_001L, isDefault = true)
+        )
+        assertNotNull(ProductRules.validateDaftarBahan(overMaxExtra))
+
+        // Pas 0 dan pas 10.000.000
+        val validBoundary = listOf(
+            ProductMaterial(id = "1", nama = "Combed 30s", tambahanHarga = 0L, isDefault = true),
+            ProductMaterial(id = "2", nama = "Combed Premium", tambahanHarga = 10_000_000L, isDefault = false)
+        )
+        assertNull(ProductRules.validateDaftarBahan(validBoundary))
+    }
+
+    @Test
     fun testValidasiDeskripsi() {
         // Boleh kosong
         assertNull(ProductRules.validateDeskripsi(""))
         // Maksimal 500 karakter
         val deskripsi500 = "B".repeat(500)
         assertNull(ProductRules.validateDeskripsi(deskripsi500))
+
         // 501 karakter ditolak
         val deskripsi501 = "B".repeat(501)
         assertNotNull(ProductRules.validateDeskripsi(deskripsi501))

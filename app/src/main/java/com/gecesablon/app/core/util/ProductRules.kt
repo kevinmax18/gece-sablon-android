@@ -2,6 +2,7 @@ package com.gecesablon.app.core.util
 
 import com.gecesablon.app.data.model.Product
 import com.gecesablon.app.data.model.ProductColor
+import com.gecesablon.app.data.model.ProductMaterial
 import com.gecesablon.app.data.model.ProductSize
 
 /**
@@ -13,6 +14,7 @@ data class ProductValidationResult(
     val namaError: String? = null,
     val kategoriError: String? = null,
     val bahanError: String? = null,
+    val daftarBahanError: String? = null,
     val deskripsiError: String? = null,
     val hargaDasarError: String? = null,
     val warnaError: String? = null,
@@ -35,6 +37,11 @@ object ProductRules {
     const val MAX_DESKRIPSI_LENGTH = 500
     const val MIN_HARGA_DASAR = 1_000L
     const val MAX_HARGA_DASAR = 10_000_000L
+
+    const val MIN_MATERIAL_NAMA_LENGTH = 2
+    const val MAX_MATERIAL_NAMA_LENGTH = 80
+    const val MIN_MATERIAL_EXTRA = 0L
+    const val MAX_MATERIAL_EXTRA = 10_000_000L
 
     val ALLOWED_SIZE_LABELS = listOf("S", "M", "L", "XL", "XXL", "XXXL")
 
@@ -65,7 +72,7 @@ object ProductRules {
     }
 
     /**
-     * Memvalidasi bahan kain produk (wajib diisi).
+     * Memvalidasi bahan kain ringkasan produk (wajib diisi).
      */
     fun validateBahan(bahan: String): String? {
         return if (bahan.trim().isEmpty()) {
@@ -119,6 +126,57 @@ object ProductRules {
             .uppercase()
         val limited = hexOnly.take(6)
         return "#$limited"
+    }
+
+    /**
+     * Memvalidasi daftar bahan produk:
+     * - Minimal 1 bahan
+     * - Tepat 1 bahan bawaan (isDefault = true)
+     * - Setiap bahan: nama 2-80 karakter, unik per produk tanpa membedakan huruf besar-kecil
+     * - Tambahan harga 0 - 10.000.000
+     */
+    fun validateDaftarBahan(daftarBahan: List<ProductMaterial>): String? {
+        if (daftarBahan.isEmpty()) {
+            return "Minimal 1 pilihan bahan wajib ditambahkan."
+        }
+
+        val defaultCount = daftarBahan.count { it.isDefault }
+        if (defaultCount == 0) {
+            return "Tepat 1 bahan harus dipilih sebagai bahan bawaan (default)."
+        }
+        if (defaultCount > 1) {
+            return "Hanya boleh ada 1 bahan bawaan (default) yang dipilih."
+        }
+
+        val seenNames = mutableSetOf<String>()
+
+        for ((index, item) in daftarBahan.withIndex()) {
+            val trimmedName = item.nama.trim()
+            if (trimmedName.isEmpty()) {
+                return "Nama bahan pada baris ke-${index + 1} tidak boleh kosong."
+            }
+            if (trimmedName.length < MIN_MATERIAL_NAMA_LENGTH) {
+                return "Nama bahan minimal $MIN_MATERIAL_NAMA_LENGTH karakter."
+            }
+            if (trimmedName.length > MAX_MATERIAL_NAMA_LENGTH) {
+                return "Nama bahan maksimal $MAX_MATERIAL_NAMA_LENGTH karakter."
+            }
+
+            val lowerName = trimmedName.lowercase()
+            if (lowerName in seenNames) {
+                return "Terdapat bahan duplikat: nama '$trimmedName' sudah digunakan."
+            }
+            seenNames.add(lowerName)
+
+            if (item.tambahanHarga < MIN_MATERIAL_EXTRA) {
+                return "Tambahan harga bahan '${item.nama}' tidak boleh bernilai negatif."
+            }
+            if (item.tambahanHarga > MAX_MATERIAL_EXTRA) {
+                return "Tambahan harga bahan '${item.nama}' maksimal Rp10.000.000."
+            }
+        }
+
+        return null
     }
 
     /**
@@ -205,25 +263,29 @@ object ProductRules {
         bahan: String,
         deskripsi: String,
         hargaDasar: Long,
+        daftarBahan: List<ProductMaterial> = emptyList(),
         daftarWarna: List<ProductColor>,
         daftarUkuran: List<ProductSize>
     ): ProductValidationResult {
         val namaErr = validateNama(nama)
         val kategoriErr = validateCategoryId(categoryId)
         val bahanErr = validateBahan(bahan)
+        val daftarBahanErr = validateDaftarBahan(daftarBahan)
         val deskripsiErr = validateDeskripsi(deskripsi)
         val hargaErr = validateHargaDasar(hargaDasar)
         val warnaErr = validateWarna(daftarWarna)
         val ukuranErr = validateUkuran(daftarUkuran)
 
         val hasError = namaErr != null || kategoriErr != null || bahanErr != null ||
-            deskripsiErr != null || hargaErr != null || warnaErr != null || ukuranErr != null
+            daftarBahanErr != null || deskripsiErr != null || hargaErr != null ||
+            warnaErr != null || ukuranErr != null
 
         return ProductValidationResult(
             isValid = !hasError,
             namaError = namaErr,
             kategoriError = kategoriErr,
             bahanError = bahanErr,
+            daftarBahanError = daftarBahanErr,
             deskripsiError = deskripsiErr,
             hargaDasarError = hargaErr,
             warnaError = warnaErr,
@@ -242,6 +304,7 @@ object ProductRules {
             bahan = product.bahan,
             deskripsi = product.deskripsi,
             hargaDasar = product.hargaDasar,
+            daftarBahan = product.daftarBahan,
             daftarWarna = product.daftarWarna,
             daftarUkuran = product.daftarUkuran
         )

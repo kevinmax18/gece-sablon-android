@@ -3,6 +3,7 @@ package com.gecesablon.app.data.repository
 import com.gecesablon.app.core.util.Resource
 import com.gecesablon.app.data.model.Product
 import com.gecesablon.app.data.model.ProductColor
+import com.gecesablon.app.data.model.ProductMaterial
 import com.gecesablon.app.data.model.ProductSize
 import com.gecesablon.app.data.model.Role
 import com.gecesablon.app.data.model.Session
@@ -50,6 +51,11 @@ class FakeProductRepositoryTest {
         role = Role.CUSTOMER
     )
 
+    private val sampleMaterials = listOf(
+        ProductMaterial(id = "mat-1", nama = "Cotton Combed 30s", tambahanHarga = 0L, isDefault = true),
+        ProductMaterial(id = "mat-2", nama = "Cotton Combed 24s", tambahanHarga = 5000L, isDefault = false)
+    )
+
     private val sampleColors = listOf(
         ProductColor(nama = "Hitam", hex = "#111111"),
         ProductColor(nama = "Putih", hex = "#FFFFFF")
@@ -74,6 +80,8 @@ class FakeProductRepositoryTest {
         assertEquals("Seed produk awal harus berjumlah 6", 6, products.size)
         assertTrue("Semua produk seed awal harus berstatus aktif", products.all { it.aktif })
         assertTrue("Semua produk seed awal harus memiliki categoryId valid", products.all { it.categoryId.isNotBlank() })
+        assertTrue("Setiap produk seed awal harus memiliki minimal 1 bahan", products.all { it.daftarBahan.isNotEmpty() })
+        assertTrue("Setiap produk seed awal harus memiliki tepat 1 bahan bawaan (isDefault)", products.all { it.daftarBahan.count { b -> b.isDefault } == 1 })
     }
 
     @Test
@@ -159,6 +167,7 @@ class FakeProductRepositoryTest {
             bahan = "Combed 30s",
             deskripsi = "Deskripsi",
             hargaDasar = 60000L,
+            daftarBahan = sampleMaterials,
             daftarWarna = sampleColors,
             daftarUkuran = sampleSizes
         )
@@ -189,6 +198,7 @@ class FakeProductRepositoryTest {
             bahan = "Heavyweight 16s",
             deskripsi = "Kaos edisi khusus sablon DTF.",
             hargaDasar = 99000L,
+            daftarBahan = sampleMaterials,
             daftarWarna = sampleColors,
             daftarUkuran = sampleSizes,
             aktif = true
@@ -288,6 +298,7 @@ class FakeProductRepositoryTest {
             bahan = "Cotton Combed 30s",
             deskripsi = "Deskripsi stream test",
             hargaDasar = 75000L,
+            daftarBahan = sampleMaterials,
             daftarWarna = sampleColors,
             daftarUkuran = sampleSizes,
             aktif = true

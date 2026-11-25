@@ -356,7 +356,7 @@ fun OrderConfirmScreen(
                                             color = MaterialTheme.colorScheme.onBackground
                                         )
                                         Text(
-                                            text = "Bahan: ${product.bahan}",
+                                            text = "Bahan: ${uiState.selectedMaterial?.nama ?: product.bahan}",
                                             style = MaterialTheme.typography.bodySmall,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant
                                         )

@@ -872,4 +872,18 @@
     <string name="owner_categories_dialog_delete_msg">Apakah Anda yakin ingin menghapus kategori \"%1$s\"?</string>
     <string name="owner_categories_dialog_delete_confirm">Ya, Hapus</string>
     <string name="owner_categories_badge_role">OWNER</string>
+
+    <!-- Tahap 6D-3: Pilihan Bahan per Produk -->
+    <string name="order_form_material_section">Pilih Bahan Kain</string>
+    <string name="order_form_material_badge_default">Bawaan</string>
+    <string name="order_error_material_required">Pilih jenis bahan kain terlebih dahulu.</string>
+    <string name="admin_manual_order_material_label">Pilihan Bahan Kain</string>
+    <string name="owner_product_material_title">Pilihan Bahan Kain</string>
+    <string name="owner_product_material_subtitle">Minimal 1 bahan dan tepat 1 bahan bawaan terpilih</string>
+    <string name="owner_product_btn_add_material">Tambah Bahan</string>
+    <string name="owner_product_material_name_placeholder">Contoh: Cotton Combed 24s</string>
+    <string name="owner_product_material_extra_placeholder">+Rp Tambahan</string>
+    <string name="owner_product_material_badge_default">Bawaan</string>
+    <string name="owner_product_material_set_default">Jadikan Bawaan</string>
+    <string name="owner_product_btn_remove_material_row">Hapus Baris Bahan</string>
 </resources>

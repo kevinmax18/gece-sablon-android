@@ -10,6 +10,7 @@ import com.gecesablon.app.data.model.OrderItem
 import com.gecesablon.app.data.model.OrderStatus
 import com.gecesablon.app.data.model.Product
 import com.gecesablon.app.data.model.ProductColor
+import com.gecesablon.app.data.model.ProductMaterial
 import com.gecesablon.app.data.model.ProductSize
 import com.gecesablon.app.data.model.ProductionStage
 import com.gecesablon.app.data.model.ProductionState
@@ -60,6 +61,7 @@ class FakeOrderRepository(
                         id = "item-001",
                         productId = "prod-combed-24s",
                         namaProduk = "Kaos Custom Cotton Combed 24s",
+                        bahanNama = "Cotton Combed 24s",
                         warnaNama = "Hitam Solid",
                         ukuranLabel = "L",
                         jumlah = 24,
@@ -111,6 +113,7 @@ class FakeOrderRepository(
                         id = "item-002",
                         productId = "prod-polo-pique",
                         namaProduk = "Baju Polo Pique Premium",
+                        bahanNama = "Cotton Combed 24s",
                         warnaNama = "Navy Blue",
                         ukuranLabel = "XL",
                         jumlah = 36,
@@ -158,6 +161,7 @@ class FakeOrderRepository(
                         id = "item-003",
                         productId = "prod-combed-24s",
                         namaProduk = "Kaos Custom Cotton Combed 24s",
+                        bahanNama = "Cotton Combed 24s",
                         warnaNama = "Putih Bersih",
                         ukuranLabel = "M",
                         jumlah = 10,
@@ -204,6 +208,7 @@ class FakeOrderRepository(
                         id = "item-004",
                         productId = "prod-combed-24s",
                         namaProduk = "Kaos Custom Cotton Combed 24s",
+                        bahanNama = "Cotton Combed 24s",
                         warnaNama = "Broken White",
                         ukuranLabel = "S",
                         jumlah = 12,
@@ -238,6 +243,7 @@ class FakeOrderRepository(
                         id = "item-005",
                         productId = "prod-combed-24s",
                         namaProduk = "Kaos Custom Cotton Combed 24s",
+                        bahanNama = "Cotton Combed 24s",
                         warnaNama = "Hitam Solid",
                         ukuranLabel = "L",
                         jumlah = 50,
@@ -284,6 +290,7 @@ class FakeOrderRepository(
                         id = "item-006",
                         productId = "prod-polo-pique",
                         namaProduk = "Baju Polo Pique Premium",
+                        bahanNama = "Cotton Combed 24s",
                         warnaNama = "Maroon Red",
                         ukuranLabel = "M",
                         jumlah = 25,
@@ -330,6 +337,7 @@ class FakeOrderRepository(
                         id = "item-007",
                         productId = "prod-combed-24s",
                         namaProduk = "Kaos Custom Cotton Combed 24s",
+                        bahanNama = "Cotton Combed 24s",
                         warnaNama = "Forest Green",
                         ukuranLabel = "XL",
                         jumlah = 40,
@@ -380,6 +388,7 @@ class FakeOrderRepository(
                         id = "item-008",
                         productId = "prod-combed-24s",
                         namaProduk = "Kaos Custom Cotton Combed 24s",
+                        bahanNama = "Cotton Combed 24s",
                         warnaNama = "Baby Blue",
                         ukuranLabel = "M",
                         jumlah = 15,
@@ -431,6 +440,7 @@ class FakeOrderRepository(
                         id = "item-009",
                         productId = "prod-combed-24s",
                         namaProduk = "Kaos Custom Cotton Combed 24s",
+                        bahanNama = "Cotton Combed 24s",
                         warnaNama = "Hitam Solid",
                         ukuranLabel = "S",
                         jumlah = 8,
@@ -470,6 +480,7 @@ class FakeOrderRepository(
                         id = "item-010",
                         productId = "prod-kaos-custom",
                         namaProduk = "Kaos Custom Cotton Combed",
+                        bahanNama = "Cotton Combed 24s",
                         warnaNama = "Hitam Pekat",
                         ukuranLabel = "L",
                         jumlah = 5,
@@ -505,6 +516,7 @@ class FakeOrderRepository(
                         id = "item-011",
                         productId = "prod-combed-24s",
                         namaProduk = "Kaos Custom Cotton Combed 24s",
+                        bahanNama = "Cotton Combed 24s",
                         warnaNama = "Hitam Solid",
                         ukuranLabel = "L",
                         jumlah = 30,
@@ -552,6 +564,7 @@ class FakeOrderRepository(
                         id = "item-012",
                         productId = "prod-combed-24s",
                         namaProduk = "Kaos Custom Cotton Combed 24s",
+                        bahanNama = "Cotton Combed 24s",
                         warnaNama = "Navy Blue",
                         ukuranLabel = "XL",
                         jumlah = 40,
@@ -599,6 +612,7 @@ class FakeOrderRepository(
                         id = "item-013",
                         productId = "prod-combed-24s",
                         namaProduk = "Kaos Custom Cotton Combed 24s",
+                        bahanNama = "Cotton Combed 24s",
                         warnaNama = "Forest Green",
                         ukuranLabel = "L",
                         jumlah = 60,
@@ -646,6 +660,7 @@ class FakeOrderRepository(
                         id = "item-014",
                         productId = "prod-combed-24s",
                         namaProduk = "Kaos Custom Cotton Combed 24s",
+                        bahanNama = "Cotton Combed 24s",
                         warnaNama = "Hitam Solid",
                         ukuranLabel = "M",
                         jumlah = 40,
@@ -688,6 +703,7 @@ class FakeOrderRepository(
                         id = "item-015",
                         productId = "prod-combed-30s",
                         namaProduk = "Kaos Custom Cotton Combed 30s",
+                        bahanNama = "Cotton Combed 24s",
                         warnaNama = "Navy Blue",
                         ukuranLabel = "L",
                         jumlah = 50,
@@ -730,6 +746,7 @@ class FakeOrderRepository(
                         id = "item-016",
                         productId = "prod-polo-pique",
                         namaProduk = "Polo Shirt Custom CVC Pique",
+                        bahanNama = "Cotton Combed 24s",
                         warnaNama = "Hitam Solid",
                         ukuranLabel = "XL",
                         jumlah = 30,
@@ -772,6 +789,7 @@ class FakeOrderRepository(
                         id = "item-017",
                         productId = "prod-combed-24s",
                         namaProduk = "Kaos Custom Cotton Combed 24s",
+                        bahanNama = "Cotton Combed 24s",
                         warnaNama = "Cream",
                         ukuranLabel = "M",
                         jumlah = 30,
@@ -814,6 +832,7 @@ class FakeOrderRepository(
                         id = "item-018",
                         productId = "prod-polo-pique",
                         namaProduk = "Polo Shirt Custom CVC Pique",
+                        bahanNama = "Cotton Combed 24s",
                         warnaNama = "Navy Blue",
                         ukuranLabel = "L",
                         jumlah = 80,
@@ -856,6 +875,7 @@ class FakeOrderRepository(
                         id = "item-019",
                         productId = "prod-combed-24s",
                         namaProduk = "Kaos Custom Cotton Combed 24s",
+                        bahanNama = "Cotton Combed 24s",
                         warnaNama = "Hitam Solid",
                         ukuranLabel = "XL",
                         jumlah = 70,
@@ -904,6 +924,7 @@ class FakeOrderRepository(
     override suspend fun createOrder(
         userId: String,
         product: Product,
+        material: ProductMaterial?,
         color: ProductColor,
         size: ProductSize,
         quantity: Int,
@@ -919,8 +940,31 @@ class FakeOrderRepository(
         if (productCheck !is Resource.Success || !productCheck.data.aktif) {
             return Resource.Error("Produk tidak tersedia atau sedang dinonaktifkan.")
         }
+        val activeProduct = productCheck.data
 
-        val unitPrice = PriceCalculator.calculateUnitPrice(product.hargaDasar, size.tambahanHarga)
+        // Validasi bahan kain (menolak bahan yang tidak ada pada produk aktif tersebut)
+        val selectedMaterial = if (material != null) {
+            activeProduct.daftarBahan.find {
+                it.id == material.id || it.nama.equals(material.nama, ignoreCase = true)
+            } ?: return Resource.Error("Bahan '${material.nama}' tidak tersedia pada produk aktif ini.")
+        } else {
+            // Ambil bahan default jika ada, atau tolak jika produk punya bahan tapi tidak ada yang dipilih
+            activeProduct.daftarBahan.find { it.isDefault }
+                ?: activeProduct.daftarBahan.firstOrNull()
+                ?: return Resource.Error("Produk tidak memiliki pilihan bahan yang valid.")
+        }
+
+        // Validasi warna dan ukuran pada produk aktif
+        val selectedColor = activeProduct.daftarWarna.find { it.nama.equals(color.nama, ignoreCase = true) }
+            ?: return Resource.Error("Varian warna '${color.nama}' tidak tersedia pada produk ini.")
+        val selectedSize = activeProduct.daftarUkuran.find { it.label.equals(size.label, ignoreCase = true) }
+            ?: return Resource.Error("Varian ukuran '${size.label}' tidak tersedia pada produk ini.")
+
+        val unitPrice = PriceCalculator.calculateUnitPrice(
+            basePrice = activeProduct.hargaDasar,
+            sizeExtra = selectedSize.tambahanHarga,
+            materialExtra = selectedMaterial.tambahanHarga
+        )
         val totalPrice = PriceCalculator.calculateTotalPrice(unitPrice, quantity)
 
         val dateString = dateFormat.format(Date())
@@ -928,10 +972,11 @@ class FakeOrderRepository(
 
         val orderItem = OrderItem(
             id = UUID.randomUUID().toString(),
-            productId = product.id,
-            namaProduk = product.nama,
-            warnaNama = color.nama,
-            ukuranLabel = size.label,
+            productId = activeProduct.id,
+            namaProduk = activeProduct.nama,
+            bahanNama = selectedMaterial.nama,
+            warnaNama = selectedColor.nama,
+            ukuranLabel = selectedSize.label,
             jumlah = quantity,
             hargaSatuan = unitPrice
         )
@@ -1177,6 +1222,7 @@ class FakeOrderRepository(
         namaPelanggan: String,
         noHpPelanggan: String,
         productId: String,
+        materialName: String?,
         colorName: String,
         sizeLabel: String,
         quantity: Int,
@@ -1208,13 +1254,26 @@ class FakeOrderRepository(
         }
         val product = productRes.data
 
+        val material = if (!materialName.isNullOrBlank()) {
+            product.daftarBahan.find { it.nama.equals(materialName, ignoreCase = true) }
+                ?: return Resource.Error("Bahan '$materialName' tidak ditemukan pada produk ini.")
+        } else {
+            product.daftarBahan.find { it.isDefault }
+                ?: product.daftarBahan.firstOrNull()
+                ?: return Resource.Error("Produk tidak memiliki pilihan bahan yang valid.")
+        }
+
         val color = product.daftarWarna.find { it.nama.equals(colorName, ignoreCase = true) }
             ?: return Resource.Error("Varian warna tidak ditemukan pada produk ini.")
 
         val size = product.daftarUkuran.find { it.label.equals(sizeLabel, ignoreCase = true) }
             ?: return Resource.Error("Varian ukuran tidak ditemukan pada produk ini.")
 
-        val unitPrice = PriceCalculator.calculateUnitPrice(product.hargaDasar, size.tambahanHarga)
+        val unitPrice = PriceCalculator.calculateUnitPrice(
+            basePrice = product.hargaDasar,
+            sizeExtra = size.tambahanHarga,
+            materialExtra = material.tambahanHarga
+        )
         val totalPrice = PriceCalculator.calculateTotalPrice(unitPrice, quantity)
 
         val dateString = dateFormat.format(Date())
@@ -1224,6 +1283,7 @@ class FakeOrderRepository(
             id = UUID.randomUUID().toString(),
             productId = product.id,
             namaProduk = product.nama,
+            bahanNama = material.nama,
             warnaNama = color.nama,
             ukuranLabel = size.label,
             jumlah = quantity,
