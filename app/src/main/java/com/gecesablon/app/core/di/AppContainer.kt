@@ -2,7 +2,9 @@ package com.gecesablon.app.core.di
 
 import android.content.Context
 import com.gecesablon.app.core.datastore.SessionStore
+import com.gecesablon.app.core.network.ApiClient
 import com.gecesablon.app.data.local.AccountStore
+import com.gecesablon.app.data.remote.GeceRemoteApi
 import com.gecesablon.app.data.repository.AccountRepository
 import com.gecesablon.app.data.repository.AuthRepository
 import com.gecesablon.app.data.repository.CategoryRepository
@@ -16,6 +18,13 @@ import com.gecesablon.app.data.repository.FakeStockRepository
 import com.gecesablon.app.data.repository.FinanceRepository
 import com.gecesablon.app.data.repository.OrderRepository
 import com.gecesablon.app.data.repository.ProductRepository
+import com.gecesablon.app.data.repository.RemoteAccountRepository
+import com.gecesablon.app.data.repository.RemoteAuthRepository
+import com.gecesablon.app.data.repository.RemoteCategoryRepository
+import com.gecesablon.app.data.repository.RemoteFinanceRepository
+import com.gecesablon.app.data.repository.RemoteOrderRepository
+import com.gecesablon.app.data.repository.RemoteProductRepository
+import com.gecesablon.app.data.repository.RemoteStockRepository
 import com.gecesablon.app.data.repository.StockRepository
 
 /**
@@ -24,14 +33,35 @@ import com.gecesablon.app.data.repository.StockRepository
  */
 class AppContainer(private val context: Context) {
 
+    /**
+     * Saklar global pengalih data palsu (in-memory) dan remote API.
+     * Bernilai false untuk menghubungkan ke REST API Laravel nyata.
+     */
+    private val useFakeData = false
+
+    /**
+     * Saklar modular per fitur (aktif saat useFakeData == false).
+     */
+    private val remoteProducts = true
+    private val remoteOrders = true
+    private val remoteStock = true
+    private val remoteFinance = true
+    private val remoteAccounts = true
+
     val sessionStore: SessionStore by lazy {
         SessionStore(context.applicationContext)
     }
 
     /**
+     * Instance GeceRemoteApi tunggal yang berbagi sessionStore yang sama untuk autentikasi token.
+     */
+    val remoteApi: GeceRemoteApi by lazy {
+        ApiClient.createGeceRemoteApi(sessionStore)
+    }
+
+    /**
      * Penyimpanan akun bersama di memori (single source of truth) untuk
-     * autentikasi dan manajemen akun staf admin.
-     * TODO: ganti ke database server saat integrasi API di Tahap 8.
+     * autentikasi dan manajemen akun staf admin tiruan.
      */
     val accountStore: AccountStore by lazy {
         AccountStore()
@@ -39,59 +69,86 @@ class AppContainer(private val context: Context) {
 
     /**
      * Repository autentikasi.
-     * Menggunakan accountStore bersama agar sinkron dengan manajemen akun admin.
-     * TODO: Hapus FakeAuthRepository di Tahap 8 — ganti dengan RemoteAuthRepository.
+     * Menggunakan RemoteAuthRepository bila useFakeData == false.
      */
     val authRepository: AuthRepository by lazy {
-        FakeAuthRepository(accountStore = accountStore)
-    }
-
-    /**
-     * Repository akun dan staf admin (khusus Owner).
-     * Menggunakan accountStore bersama.
-     * TODO: ganti ke Retrofit di Tahap 8.
-     */
-    val accountRepository: AccountRepository by lazy {
-        FakeAccountRepository(accountStore = accountStore)
+        if (useFakeData) {
+            FakeAuthRepository(accountStore = accountStore)
+        } else {
+            RemoteAuthRepository(api = remoteApi)
+        }
     }
 
     /**
      * Repository produk.
-     * TODO: ganti ke Retrofit di Tahap 8
      */
     val productRepository: ProductRepository by lazy {
-        FakeProductRepository()
+        if (useFakeData || !remoteProducts) {
+            FakeProductRepository()
+        } else {
+            RemoteProductRepository(api = remoteApi)
+        }
     }
 
     /**
      * Repository kategori produk.
-     * TODO: ganti ke Retrofit di Tahap 8
      */
     val categoryRepository: CategoryRepository by lazy {
-        FakeCategoryRepository(productRepository = productRepository)
+        if (useFakeData || !remoteProducts) {
+            FakeCategoryRepository(productRepository = productRepository)
+        } else {
+            RemoteCategoryRepository(productRepository = productRepository)
+        }
     }
 
     /**
      * Repository pesanan.
-     * TODO: ganti ke Retrofit di Tahap 8
      */
     val orderRepository: OrderRepository by lazy {
-        FakeOrderRepository(productRepository = productRepository)
+        if (useFakeData || !remoteOrders) {
+            FakeOrderRepository(productRepository = productRepository)
+        } else {
+            RemoteOrderRepository(
+                api = remoteApi,
+                context = context.applicationContext,
+                productRepository = productRepository
+            )
+        }
     }
 
     /**
      * Repository stok persediaan dan bahan baku sablon.
-     * TODO: ganti ke Retrofit di Tahap 8
      */
     val stockRepository: StockRepository by lazy {
-        FakeStockRepository()
+        if (useFakeData || !remoteStock) {
+            FakeStockRepository()
+        } else {
+            RemoteStockRepository(api = remoteApi)
+        }
     }
 
     /**
      * Repository keuangan (hanya dapat diakses oleh Owner).
-     * TODO: ganti ke Retrofit di Tahap 8
      */
     val financeRepository: FinanceRepository by lazy {
-        FakeFinanceRepository(orderRepository = orderRepository)
+        if (useFakeData || !remoteFinance) {
+            FakeFinanceRepository(orderRepository = orderRepository)
+        } else {
+            RemoteFinanceRepository(
+                api = remoteApi,
+                orderRepository = orderRepository
+            )
+        }
+    }
+
+    /**
+     * Repository akun dan staf admin (khusus Owner).
+     */
+    val accountRepository: AccountRepository by lazy {
+        if (useFakeData || !remoteAccounts) {
+            FakeAccountRepository(accountStore = accountStore)
+        } else {
+            RemoteAccountRepository(api = remoteApi)
+        }
     }
 }
