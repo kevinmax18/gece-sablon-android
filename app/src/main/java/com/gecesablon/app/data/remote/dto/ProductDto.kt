@@ -12,6 +12,7 @@ data class ProductMaterialDto(
     @SerialName("product_id") val productId: Int? = null,
     @SerialName("name") val name: String,
     @SerialName("extra_price") val extraPrice: Long? = 0L,
+    @Serializable(with = LenientBooleanSerializer::class)
     @SerialName("is_default") val isDefault: Boolean? = false
 )
 
@@ -49,6 +50,7 @@ data class ProductDto(
     @SerialName("description") val description: String? = null,
     @SerialName("image_path") val imagePath: String? = null,
     @SerialName("base_price") val basePrice: Long,
+    @Serializable(with = LenientBooleanSerializer::class)
     @SerialName("is_active") val isActive: Boolean = true,
     @SerialName("materials") val materials: List<ProductMaterialDto> = emptyList(),
     @SerialName("colors") val colors: List<ProductColorDto> = emptyList(),
