@@ -500,7 +500,7 @@ private fun OwnerProductItemCard(
                         )
                     }
                     Text(
-                        text = "• ${product.daftarUkuran.size} ukuran",
+                        text = "\u2022 ${product.daftarUkuran.size} ukuran",
                         style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
                         color = TextSecondary,
                         maxLines = 1,

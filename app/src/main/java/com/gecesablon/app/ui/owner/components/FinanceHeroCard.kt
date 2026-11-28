@@ -64,7 +64,7 @@ fun FinanceHeroCard(
     val marginText = if (marginPercentage != null) {
         Formatter.formatPercent(marginPercentage, 1)
     } else {
-        "—"
+        "\u2014"
     }
 
     Card(
@@ -127,7 +127,7 @@ fun FinanceHeroCard(
                             )
                         }
                         Text(
-                            text = if (marginPercentage != null) "$marginText Margin" else "— Margin",
+                            text = if (marginPercentage != null) "$marginText Margin" else "\u2014 Margin",
                             style = MaterialTheme.typography.labelSmall.copy(
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 11.sp

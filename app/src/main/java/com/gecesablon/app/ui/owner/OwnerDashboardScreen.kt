@@ -435,7 +435,7 @@ private fun OwnerFinancialSummarySection(
     val marginText = if (margin != null) {
         String.format(Locale.US, "%.1f%%", margin)
     } else {
-        "—"
+        "\u2014"
     }
 
     Column(modifier = modifier.fillMaxWidth()) {
@@ -668,7 +668,7 @@ private fun OwnerFinancialSummarySection(
                         TransactionCategory.OPERASIONAL -> stringResource(R.string.tx_category_operasional)
                         TransactionCategory.GAJI -> stringResource(R.string.tx_category_gaji)
                         TransactionCategory.PENGELUARAN_LAINNYA -> stringResource(R.string.tx_category_pengeluaran_lainnya)
-                        else -> "—"
+                        else -> "\u2014"
                     }
 
                     Text(
@@ -988,7 +988,7 @@ private fun RecentOrderItemCard(
             val productSummary = if (firstItem != null) {
                 "${firstItem.namaProduk} (${firstItem.jumlah} pcs)"
             } else {
-                "—"
+                "\u2014"
             }
 
             Text(

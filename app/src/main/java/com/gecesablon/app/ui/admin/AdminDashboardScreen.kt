@@ -232,7 +232,7 @@ fun AdminDashboardScreen(
                                     val firstItem = order.items.firstOrNull()
                                     val itemName = firstItem?.namaProduk ?: "Pesanan Sablon Custom"
                                     val itemVariant = if (firstItem != null) {
-                                        "${firstItem.warnaNama} • ${firstItem.ukuranLabel}"
+                                        "${firstItem.warnaNama} \u2022 ${firstItem.ukuranLabel}"
                                     } else {
                                         ""
                                     }
@@ -332,7 +332,7 @@ fun AdminDashboardScreen(
                                 val firstItem = order.items.firstOrNull()
                                 val itemName = firstItem?.namaProduk ?: "Pesanan Sablon Custom"
                                 val itemVariant = if (firstItem != null) {
-                                    "${firstItem.warnaNama} • ${firstItem.ukuranLabel}"
+                                    "${firstItem.warnaNama} \u2022 ${firstItem.ukuranLabel}"
                                 } else {
                                     ""
                                 }

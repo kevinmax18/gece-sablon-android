@@ -54,6 +54,7 @@ import com.gecesablon.app.ui.components.AdminTopBar
 import com.gecesablon.app.ui.components.EmptyState
 import com.gecesablon.app.ui.components.ErrorView
 import com.gecesablon.app.ui.components.LoadingView
+import com.gecesablon.app.ui.components.OwnerHeader
 import com.gecesablon.app.ui.components.StatusChip
 import com.gecesablon.app.ui.theme.GeceColors
 import com.gecesablon.app.ui.theme.ShapeBadge
@@ -69,6 +70,7 @@ import com.gecesablon.app.ui.theme.ShapeControl
 fun StaffProcessScreen(
     onNavigateToDetail: (String) -> Unit = {},
     onNavigateToAccount: () -> Unit = {},
+    isOwner: Boolean = false,
     modifier: Modifier = Modifier,
     viewModel: StaffProcessViewModel = viewModel(
         factory = StaffProcessViewModel.factory(
@@ -82,10 +84,17 @@ fun StaffProcessScreen(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
-            AdminTopBar(
-                tabName = "Proses",
-                onProfileClick = onNavigateToAccount
-            )
+            if (isOwner) {
+                OwnerHeader(
+                    subtitle = stringResource(R.string.nav_process),
+                    onProfileClick = onNavigateToAccount
+                )
+            } else {
+                AdminTopBar(
+                    tabName = stringResource(R.string.nav_process),
+                    onProfileClick = onNavigateToAccount
+                )
+            }
         },
         containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
@@ -292,7 +301,7 @@ fun ProcessOrderCard(
             if (firstItem != null) {
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = "${firstItem.namaProduk} • ${firstItem.jumlah} pcs (${firstItem.warnaNama})",
+                    text = "${firstItem.namaProduk} \u2022 ${firstItem.jumlah} pcs (${firstItem.warnaNama})",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,

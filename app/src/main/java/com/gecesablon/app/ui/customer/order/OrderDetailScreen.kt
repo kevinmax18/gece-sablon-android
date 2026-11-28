@@ -392,9 +392,9 @@ fun OrderDetailScreen(
                                             }
                                         }
 
-                                        val detailBahan = if (item.bahanNama.isNotBlank()) "Bahan: ${item.bahanNama} • " else ""
+                                        val detailBahan = if (item.bahanNama.isNotBlank()) "Bahan: ${item.bahanNama} \u2022 " else ""
                                         Text(
-                                            text = "${detailBahan}Warna: ${item.warnaNama} • Ukuran: ${item.ukuranLabel}",
+                                            text = "${detailBahan}Warna: ${item.warnaNama} \u2022 Ukuran: ${item.ukuranLabel}",
                                             style = MaterialTheme.typography.bodySmall,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant
                                         )
@@ -500,7 +500,7 @@ fun OrderDetailScreen(
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     Text(
-                                        text = "“${order.catatan}”",
+                                        text = "\u201C${order.catatan}\u201D",
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onBackground,
                                         modifier = Modifier.padding(14.dp)

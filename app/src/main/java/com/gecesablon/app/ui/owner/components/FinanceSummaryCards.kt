@@ -141,7 +141,7 @@ fun FinanceSummaryCards(
                     val ratioOmzetText = if (expenseRatioToIncome != null) {
                         stringResource(R.string.owner_finance_percent_omzet, Formatter.formatPercent(expenseRatioToIncome, 0))
                     } else {
-                        stringResource(R.string.owner_finance_percent_omzet, "—")
+                        stringResource(R.string.owner_finance_percent_omzet, "\u2014")
                     }
 
                     Text(

@@ -57,6 +57,7 @@ import com.gecesablon.app.ui.components.EmptyState
 import com.gecesablon.app.ui.components.ErrorView
 import com.gecesablon.app.ui.components.LoadingView
 import com.gecesablon.app.ui.components.OrderCard
+import com.gecesablon.app.ui.components.OwnerHeader
 import com.gecesablon.app.ui.theme.GeceColors
 import com.gecesablon.app.ui.theme.ShapeBadge
 import com.gecesablon.app.ui.theme.ShapeControl
@@ -70,6 +71,7 @@ import androidx.compose.foundation.layout.width
 fun StaffOrdersScreen(
     onNavigateToDetail: (String) -> Unit = {},
     onNavigateToAccount: () -> Unit = {},
+    isOwner: Boolean = false,
     modifier: Modifier = Modifier,
     viewModel: StaffOrdersViewModel = viewModel(
         factory = StaffOrdersViewModel.factory(
@@ -83,10 +85,17 @@ fun StaffOrdersScreen(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
-            AdminTopBar(
-                tabName = "Pesanan",
-                onProfileClick = onNavigateToAccount
-            )
+            if (isOwner) {
+                OwnerHeader(
+                    subtitle = stringResource(R.string.nav_orders),
+                    onProfileClick = onNavigateToAccount
+                )
+            } else {
+                AdminTopBar(
+                    tabName = stringResource(R.string.nav_orders),
+                    onProfileClick = onNavigateToAccount
+                )
+            }
         },
         containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
@@ -166,7 +175,7 @@ fun StaffOrdersScreen(
                                 val firstItem = order.items.firstOrNull()
                                 val itemName = firstItem?.namaProduk ?: "Pesanan Sablon Custom"
                                 val itemVariant = if (firstItem != null) {
-                                    "${firstItem.warnaNama} • ${firstItem.ukuranLabel}"
+                                    "${firstItem.warnaNama} \u2022 ${firstItem.ukuranLabel}"
                                 } else {
                                     ""
                                 }

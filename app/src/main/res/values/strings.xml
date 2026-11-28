@@ -59,8 +59,8 @@
     <string name="splash_brand_title">GeCe</string>
     <string name="splash_studio_pill">SCREEN PRINTING</string>
     <string name="splash_tagline">Spesialis Sablon DTF &amp; Kaos Custom Berkualitas</string>
-    <string name="splash_loading">Menyiapkan Bengkel Sablonâ€¦</string>
-    <string name="splash_footer">v%1$s â€¢ GeCe Studio Platform</string>
+    <string name="splash_loading">Menyiapkan Bengkel Sablon&#8230;</string>
+    <string name="splash_footer">v%1$s &#8226; GeCe Studio Platform</string>
 
     <!-- Onboarding Screen -->
     <string name="onboarding_studio_badge">GECE STUDIO</string>
@@ -107,9 +107,9 @@
     <string name="onboarding_feat_desc_3_2">Setiap hasil cetak dicek sebelum diserahkan kepada pelanggan.</string>
 
     <!-- Welcome Screen -->
-    <string name="welcome_badge_title">GeCe â€¢ SCREEN PRINTING</string>
+    <string name="welcome_badge_title">GeCe &#8226; SCREEN PRINTING</string>
     <string name="welcome_studio_spec">Studio Spec</string>
-    <string name="welcome_high_precision">HIGH PRECISION â€¢ SABLON DTF</string>
+    <string name="welcome_high_precision">HIGH PRECISION &#8226; SABLON DTF</string>
     <string name="welcome_title">Sablon DTF Kaos &amp; Baju Polo</string>
     <string name="welcome_subtitle">Spesialis cetak sablon DTF presisi untuk Kaos Custom, Kaos Oversize, dan Baju Polo premium.</string>
     <string name="welcome_chip_1">Kaos &amp; Polo Premium</string>
@@ -118,7 +118,7 @@
     <string name="welcome_btn_login">Masuk</string>
     <string name="welcome_btn_register">Daftar</string>
     <string name="welcome_btn_guest">Jelajahi sebagai Tamu</string>
-    <string name="welcome_footer">v%1$s â€¢ GeCe Screen Printing Studio</string>
+    <string name="welcome_footer">v%1$s &#8226; GeCe Screen Printing Studio</string>
     <string name="welcome_about_link">Tentang Aplikasi</string>
 
     <!-- Header Beranda (Home) -->
@@ -173,7 +173,7 @@
     <string name="profile_role_owner">Owner GeCe Studio</string>
     <string name="profile_label_phone">Nomor HP / WhatsApp</string>
     <string name="profile_label_email">Email</string>
-    <string name="profile_placeholder_contact">â€”</string>
+    <string name="profile_placeholder_contact">&#8212;</string>
     <string name="menu_about_app">Tentang Aplikasi</string>
     <string name="menu_logout">Keluar</string>
     <string name="profile_logout_dialog_title">Konfirmasi Keluar</string>
@@ -224,7 +224,7 @@
     <string name="home_badge_specialist">SPESIALIS SABLON DTF KAOS &amp; BAJU POLO PRESISI</string>
     <string name="home_welcome_title">Selamat Datang di GeCe</string>
     <string name="home_welcome_subtitle">Wujudkan Kaos &amp; Baju Polo kustom berkualitas dengan cetak DTF presisi tanpa minimal order.</string>
-    <string name="home_banner_badge">â˜… SPESIALIS DTF PREMIUM</string>
+    <string name="home_banner_badge">&#9733; SPESIALIS DTF PREMIUM</string>
     <string name="home_banner_title">Sablon DTF Kaos\n&amp; Polo</string>
     <string name="home_banner_subtitle">Presisi tinggi, warna tajam, langsung pesan sekarang.</string>
     <string name="home_banner_btn">Pesan Sekarang</string>
@@ -244,15 +244,15 @@
     <!-- Katalog Produk -->
     <string name="catalog_badge">KATALOG RESMI</string>
     <string name="catalog_title">Katalog Produk</string>
-    <string name="catalog_subtitle">Cetak DTF Presisi Tinggi â€¢ Tinta Premium â€¢ Mulai 1 Pcs</string>
+    <string name="catalog_subtitle">Cetak DTF Presisi Tinggi &#8226; Tinta Premium &#8226; Mulai 1 Pcs</string>
     <string name="catalog_search_placeholder">Cari produk sablon...</string>
     <string name="catalog_filter_desc">Filter kategori</string>
     <string name="catalog_custom_spec_badge">BESPOKE TEXTILE STUDIO</string>
     <string name="catalog_custom_spec_title">Punya Spek Custom\nSendiri?</string>
     <string name="catalog_custom_spec_desc">Konsultasikan kebutuhan cetak DTF khusus kaos dan baju polo Anda. Master printer GeCe siap bantu setting resolusi desain, color management, dan tes print presisi.</string>
     <string name="catalog_custom_spec_btn">Diskusi via WhatsApp</string>
-    <string name="catalog_badge_mockup">âœ“ Free Mockup</string>
-    <string name="catalog_badge_guarantee">âœ“ Garansi Sablon Presisi</string>
+    <string name="catalog_badge_mockup">&#10003; Free Mockup</string>
+    <string name="catalog_badge_guarantee">&#10003; Garansi Sablon Presisi</string>
     <string name="catalog_empty_title">Produk Tidak Ditemukan</string>
     <string name="catalog_empty_desc">Tidak ada produk sablon yang sesuai dengan kata kunci atau filter yang Anda pilih.</string>
 
@@ -260,7 +260,7 @@
     <string name="detail_product_title">Detail Produk</string>
     <string name="detail_product_badge_dtf">CETAK DTF PRESISI</string>
     <string name="detail_product_tag_exclusive">Eksklusif Cetak DTF</string>
-    <string name="detail_product_meta">4.9 (120+ Ulasan) â€¢ Tanpa Minimal Order</string>
+    <string name="detail_product_meta">4.9 (120+ Ulasan) &#8226; Tanpa Minimal Order</string>
     <string name="detail_product_fabric_title">Pilihan Bahan</string>
     <string name="detail_product_fabric_desc">Tentukan ketebalan katun sesuai kebutuhan</string>
     <string name="detail_product_fabric_sub">Bahan standar distro, sejuk dan nyaman dipakai</string>
@@ -317,7 +317,7 @@
     <string name="order_form_notes_placeholder">Tulis catatan pesanan... (contoh: Posisi sablon dada kiri A6 &amp; punggung belakang A3, tinta doff matte pekat).</string>
     <string name="order_form_notes_char_counter">%1$d / 500</string>
     <string name="order_form_cost_title">Estimasi Biaya</string>
-    <string name="order_form_cost_subtotal_label">Subtotal Produk (%1$d pcs Ã— %2$s)</string>
+    <string name="order_form_cost_subtotal_label">Subtotal Produk (%1$d pcs &#215; %2$s)</string>
     <string name="order_form_cost_free_proof">Proofing Sample Digital</string>
     <string name="order_form_cost_free_label">Gratis</string>
     <string name="order_form_cost_total_label">Total Estimasi</string>
@@ -348,7 +348,7 @@
     <string name="order_confirm_notes_empty">Tidak ada catatan tambahan</string>
     <string name="order_confirm_btn_edit">Ubah</string>
     <string name="order_confirm_btn_submit">Konfirmasi &amp; Kirim Pesanan</string>
-    <string name="order_confirm_submitting">Mengirim pesananâ€¦</string>
+    <string name="order_confirm_submitting">Mengirim pesanan&#8230;</string>
 
     <!-- Pesanan Berhasil (Order Success) -->
     <string name="order_success_title">Pesanan Berhasil!</string>
@@ -460,16 +460,6 @@
     <string name="admin_stock_empty_title">Stok Tidak Ditemukan</string>
     <string name="admin_stock_empty_desc">Belum ada item stok yang sesuai dengan filter atau pencarian ini.</string>
     <string name="admin_stock_min_threshold">Batas Min: %1$d %2$s</string>
-    <string name="admin_stock_btn_adjust">Ubah Jumlah</string>
-    <string name="admin_stock_dialog_adjust_title">Ubah Jumlah Stok</string>
-    <string name="admin_stock_dialog_adjust_item">Item: %1$s</string>
-    <string name="admin_stock_dialog_adjust_current">Stok saat ini: %1$d %2$s</string>
-    <string name="admin_stock_dialog_adjust_type_add">Tambah Stok (+)</string>
-    <string name="admin_stock_dialog_adjust_type_reduce">Kurangi Stok (-)</string>
-    <string name="admin_stock_dialog_adjust_qty_label">Jumlah Perubahan</string>
-    <string name="admin_stock_dialog_adjust_notes_label">Keterangan / Alasan (Opsional)</string>
-    <string name="admin_stock_dialog_adjust_confirm">Simpan Perubahan</string>
-    <string name="admin_stock_dialog_adjust_cancel">Batal</string>
     <string name="admin_stock_dialog_delete_title">Hapus Item Stok</string>
     <string name="admin_stock_dialog_delete_desc">Apakah Anda yakin ingin menghapus \"%1$s\" dari inventaris stok workshop?</string>
     <string name="admin_stock_dialog_delete_confirm">Hapus Item</string>
@@ -508,7 +498,7 @@
     <string name="admin_manual_order_total_price">Total Estimasi: %1$s</string>
     <string name="admin_manual_order_btn_submit">Simpan &amp; Buat Pesanan</string>
     <string name="admin_manual_order_err_name">Nama pelanggan wajib diisi.</string>
-    <string name="admin_manual_order_err_phone">Nomor HP harus format Indonesia (08/628, 10–14 digit).</string>
+    <string name="admin_manual_order_err_phone">Nomor HP harus format Indonesia (08/628, 10&#8211;14 digit).</string>
     <string name="admin_manual_order_err_qty">Jumlah pesanan harus antara 1 sampai 999 pcs.</string>
     <string name="admin_manual_order_err_product">Silakan pilih produk sablon.</string>
     <string name="admin_manual_order_err_color">Silakan pilih warna.</string>
@@ -639,7 +629,7 @@
     <string name="owner_finance_detail_filter_all">Semua</string>
     <string name="owner_finance_detail_filter_income">Pemasukan</string>
     <string name="owner_finance_detail_filter_expense">Pengeluaran</string>
-    <string name="owner_finance_detail_search_hint">Cari keterangan…</string>
+    <string name="owner_finance_detail_search_hint">Cari keterangan&#8230;</string>
     <string name="owner_finance_detail_empty">Tidak ada transaksi ditemukan.</string>
     <string name="owner_finance_badge_order">PESANAN</string>
 

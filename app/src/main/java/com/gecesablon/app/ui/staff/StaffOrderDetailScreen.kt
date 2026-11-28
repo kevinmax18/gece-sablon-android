@@ -525,9 +525,9 @@ fun OrderItemAndDesignSection(
 
                     Spacer(modifier = Modifier.height(4.dp))
 
-                    val detailBahan = if (item.bahanNama.isNotBlank()) "Bahan: ${item.bahanNama} • " else ""
+                    val detailBahan = if (item.bahanNama.isNotBlank()) "Bahan: ${item.bahanNama} \u2022 " else ""
                     Text(
-                        text = "${detailBahan}Varian: ${item.warnaNama} • Ukuran ${item.ukuranLabel}",
+                        text = "${detailBahan}Varian: ${item.warnaNama} \u2022 Ukuran ${item.ukuranLabel}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -855,7 +855,7 @@ fun StageChecklistItem(
             if (!disabledReason.isNullOrBlank()) {
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "• $disabledReason",
+                    text = "\u2022 $disabledReason",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.error,
                     modifier = Modifier.padding(start = 48.dp)
@@ -902,7 +902,7 @@ fun MaterialToggleRow(
 
         if (!disabledReason.isNullOrBlank()) {
             Text(
-                text = "• $disabledReason",
+                text = "\u2022 $disabledReason",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.error
             )
@@ -975,7 +975,7 @@ fun ActivityHistorySection(
                                 )
                                 Spacer(modifier = Modifier.height(2.dp))
                                 Text(
-                                    text = "Oleh ${entry.aktor} • ${Formatter.formatDateIndo(entry.waktu)}",
+                                    text = "Oleh ${entry.aktor} \u2022 ${Formatter.formatDateIndo(entry.waktu)}",
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )

@@ -22,7 +22,6 @@ data class AdminStockUiState(
     val filteredItems: List<StockItem> = emptyList(),
     val searchQuery: String = "",
     val selectedCategory: StockCategory? = null,
-    val adjustingItem: StockItem? = null,
     val itemToDelete: StockItem? = null,
     val errorMessage: String? = null,
     val successMessage: String? = null
@@ -97,40 +96,6 @@ class AdminStockViewModel(
                 selectedCategory = category,
                 filteredItems = filterItems(current.items, current.searchQuery, category)
             )
-        }
-    }
-
-    fun onOpenAdjustDialog(item: StockItem) {
-        _uiState.update { it.copy(adjustingItem = item) }
-    }
-
-    fun onCloseAdjustDialog() {
-        _uiState.update { it.copy(adjustingItem = null) }
-    }
-
-    fun onConfirmAdjust(delta: Int, keterangan: String?) {
-        val target = _uiState.value.adjustingItem ?: return
-        viewModelScope.launch {
-            val session = getSession() ?: return@launch
-            when (val res = stockRepository.updateQuantity(target.id, delta, keterangan, session)) {
-                is Resource.Loading -> {
-                    _uiState.update { it.copy(isLoading = true) }
-                }
-                is Resource.Success -> {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            adjustingItem = null,
-                            successMessage = "Stok \"${target.nama}\" berhasil disesuaikan."
-                        )
-                    }
-                }
-                is Resource.Error -> {
-                    _uiState.update {
-                        it.copy(isLoading = false, errorMessage = res.message)
-                    }
-                }
-            }
         }
     }
 

@@ -260,7 +260,7 @@ fun OrderScreen(
                             val firstItem = order.items.firstOrNull()
                             val itemName = firstItem?.namaProduk ?: "Pesanan Sablon DTF"
                             val itemVariant = if (firstItem != null) {
-                                "${firstItem.warnaNama} • Ukuran ${firstItem.ukuranLabel}"
+                                "${firstItem.warnaNama} \u2022 Ukuran ${firstItem.ukuranLabel}"
                             } else {
                                 ""
                             }
