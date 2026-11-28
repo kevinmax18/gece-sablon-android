@@ -51,17 +51,14 @@ import com.gecesablon.app.BuildConfig
 import com.gecesablon.app.R
 import com.gecesablon.app.ui.components.OwnerHeader
 import com.gecesablon.app.ui.theme.AccentYellow
-import com.gecesablon.app.ui.theme.BorderHairline
 import com.gecesablon.app.ui.theme.GeceColors
 import com.gecesablon.app.ui.theme.InkBlack
 import com.gecesablon.app.ui.theme.ShapeBadge
 import com.gecesablon.app.ui.theme.ShapeCard
 import com.gecesablon.app.ui.theme.ShapeControl
-import com.gecesablon.app.ui.theme.SurfaceCard
-import com.gecesablon.app.ui.theme.TextPrimary
-import com.gecesablon.app.ui.theme.TextSecondary
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.Layers
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SupervisorAccount
 
 /**
@@ -76,6 +73,7 @@ fun AccountScreenContent(
     roleBadge: String,
     accessText: String,
     onNavigateToChangePassword: () -> Unit,
+    onNavigateToSettings: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onLogout: () -> Unit,
     modifier: Modifier = Modifier,
@@ -139,8 +137,8 @@ fun AccountScreenContent(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = ShapeCard,
-                colors = CardDefaults.cardColors(containerColor = SurfaceCard),
-                border = androidx.compose.foundation.BorderStroke(1.dp, BorderHairline)
+                colors = CardDefaults.cardColors(containerColor = GeceColors.Surface),
+                border = androidx.compose.foundation.BorderStroke(1.dp, GeceColors.Border)
             ) {
                 Column(
                     modifier = Modifier
@@ -158,7 +156,7 @@ fun AccountScreenContent(
                                 modifier = Modifier
                                     .size(54.dp)
                                     .clip(CircleShape)
-                                    .background(InkBlack),
+                                    .background(GeceColors.PrimaryInk),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
@@ -177,7 +175,7 @@ fun AccountScreenContent(
                                     .size(18.dp)
                                     .clip(CircleShape)
                                     .background(AccentYellow)
-                                    .border(1.5.dp, SurfaceCard, CircleShape)
+                                    .border(1.5.dp, GeceColors.Surface, CircleShape)
                                     .align(Alignment.BottomEnd),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -199,7 +197,7 @@ fun AccountScreenContent(
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 16.sp
                                 ),
-                                color = TextPrimary,
+                                color = GeceColors.TextMain,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
@@ -235,7 +233,7 @@ fun AccountScreenContent(
                             .fillMaxWidth()
                             .clip(ShapeControl)
                             .background(GeceColors.Background)
-                            .border(1.dp, BorderHairline, ShapeControl)
+                            .border(1.dp, GeceColors.Border, ShapeControl)
                             .padding(12.dp)
                     ) {
                         Row(
@@ -245,7 +243,7 @@ fun AccountScreenContent(
                             Icon(
                                 imageVector = Icons.Default.Shield,
                                 contentDescription = null,
-                                tint = InkBlack,
+                                tint = GeceColors.PrimaryInk,
                                 modifier = Modifier
                                     .size(18.dp)
                                     .padding(top = 2.dp)
@@ -257,7 +255,7 @@ fun AccountScreenContent(
                                     fontSize = 12.sp,
                                     lineHeight = 16.sp
                                 ),
-                                color = TextPrimary,
+                                color = GeceColors.TextMain,
                                 modifier = Modifier.weight(1f),
                                 softWrap = true
                             )
@@ -276,21 +274,31 @@ fun AccountScreenContent(
                         fontWeight = FontWeight.Bold,
                         fontSize = 11.sp
                     ),
-                    color = TextSecondary,
+                    color = GeceColors.TextMuted,
                     modifier = Modifier.padding(horizontal = 4.dp, vertical = 6.dp)
                 )
 
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = ShapeCard,
-                    colors = CardDefaults.cardColors(containerColor = SurfaceCard),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, BorderHairline)
+                    colors = CardDefaults.cardColors(containerColor = GeceColors.Surface),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, GeceColors.Border)
                 ) {
                     AccountMenuRow(
                         icon = Icons.Default.LockReset,
                         title = stringResource(R.string.account_menu_change_password),
                         subtitle = stringResource(R.string.account_menu_change_password_sub),
                         onClick = onNavigateToChangePassword
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        color = GeceColors.Border
+                    )
+                    AccountMenuRow(
+                        icon = Icons.Default.Settings,
+                        title = stringResource(R.string.account_menu_settings),
+                        subtitle = stringResource(R.string.account_menu_settings_sub),
+                        onClick = onNavigateToSettings
                     )
                 }
             }
@@ -306,15 +314,15 @@ fun AccountScreenContent(
                             fontWeight = FontWeight.Bold,
                             fontSize = 11.sp
                         ),
-                        color = TextSecondary,
+                        color = GeceColors.TextMuted,
                         modifier = Modifier.padding(horizontal = 4.dp, vertical = 6.dp)
                     )
 
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = ShapeCard,
-                        colors = CardDefaults.cardColors(containerColor = SurfaceCard),
-                        border = androidx.compose.foundation.BorderStroke(1.dp, BorderHairline)
+                        colors = CardDefaults.cardColors(containerColor = GeceColors.Surface),
+                        border = androidx.compose.foundation.BorderStroke(1.dp, GeceColors.Border)
                     ) {
                         AccountMenuRow(
                             icon = Icons.Default.Layers,
@@ -325,7 +333,7 @@ fun AccountScreenContent(
                         if (onNavigateToManageCategories != null) {
                             HorizontalDivider(
                                 modifier = Modifier.padding(horizontal = 16.dp),
-                                color = BorderHairline
+                                color = GeceColors.Border
                             )
                             AccountMenuRow(
                                 icon = Icons.Default.Category,
@@ -337,7 +345,7 @@ fun AccountScreenContent(
                         if (onNavigateToManageAdmins != null) {
                             HorizontalDivider(
                                 modifier = Modifier.padding(horizontal = 16.dp),
-                                color = BorderHairline
+                                color = GeceColors.Border
                             )
                             AccountMenuRow(
                                 icon = Icons.Default.SupervisorAccount,
@@ -360,20 +368,20 @@ fun AccountScreenContent(
                         fontWeight = FontWeight.Bold,
                         fontSize = 11.sp
                     ),
-                    color = TextSecondary,
+                    color = GeceColors.TextMuted,
                     modifier = Modifier.padding(horizontal = 4.dp, vertical = 6.dp)
                 )
 
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = ShapeCard,
-                    colors = CardDefaults.cardColors(containerColor = SurfaceCard),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, BorderHairline)
+                    colors = CardDefaults.cardColors(containerColor = GeceColors.Surface),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, GeceColors.Border)
                 ) {
                     AccountMenuRow(
                         icon = Icons.Default.Info,
                         title = stringResource(R.string.account_menu_about),
-                        subtitle = "GeCe Screen Printing App",
+                        subtitle = stringResource(R.string.about_app_name),
                         trailingTag = "v${BuildConfig.VERSION_NAME}",
                         onClick = onNavigateToAbout
                     )
@@ -447,7 +455,7 @@ private fun AccountMenuRow(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = TextPrimary,
+                tint = GeceColors.TextMain,
                 modifier = Modifier.size(18.dp)
             )
         }
@@ -461,7 +469,7 @@ private fun AccountMenuRow(
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 14.sp
                 ),
-                color = TextPrimary,
+                color = GeceColors.TextMain,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -471,7 +479,7 @@ private fun AccountMenuRow(
                 Text(
                     text = subtitle,
                     style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
-                    color = TextSecondary,
+                    color = GeceColors.TextMuted,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -483,7 +491,7 @@ private fun AccountMenuRow(
                 modifier = Modifier
                     .clip(ShapeBadge)
                     .background(GeceColors.Background)
-                    .border(1.dp, BorderHairline, ShapeBadge)
+                    .border(1.dp, GeceColors.Border, ShapeBadge)
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             ) {
                 Text(
@@ -492,7 +500,7 @@ private fun AccountMenuRow(
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Medium
                     ),
-                    color = TextSecondary
+                    color = GeceColors.TextMuted
                 )
             }
             Spacer(modifier = Modifier.width(6.dp))
@@ -501,7 +509,7 @@ private fun AccountMenuRow(
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
             contentDescription = null,
-            tint = TextSecondary,
+            tint = GeceColors.TextMuted,
             modifier = Modifier.size(16.dp)
         )
     }

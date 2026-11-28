@@ -15,6 +15,7 @@ import com.gecesablon.app.ui.account.AccountViewModel
 fun AdminAccountScreen(
     viewModel: AccountViewModel,
     onNavigateToChangePassword: () -> Unit,
+    onNavigateToSettings: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onLogout: () -> Unit,
     modifier: Modifier = Modifier
@@ -26,6 +27,7 @@ fun AdminAccountScreen(
         roleBadge = stringResource(R.string.account_badge_admin),
         accessText = stringResource(R.string.account_access_admin),
         onNavigateToChangePassword = onNavigateToChangePassword,
+        onNavigateToSettings = onNavigateToSettings,
         onNavigateToAbout = onNavigateToAbout,
         onLogout = onLogout,
         modifier = modifier

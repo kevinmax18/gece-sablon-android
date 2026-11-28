@@ -15,6 +15,7 @@ import com.gecesablon.app.ui.account.AccountViewModel
 fun OwnerAccountScreen(
     viewModel: AccountViewModel,
     onNavigateToChangePassword: () -> Unit,
+    onNavigateToSettings: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onLogout: () -> Unit,
     modifier: Modifier = Modifier,
@@ -29,6 +30,7 @@ fun OwnerAccountScreen(
         roleBadge = stringResource(R.string.account_badge_owner),
         accessText = stringResource(R.string.account_access_owner),
         onNavigateToChangePassword = onNavigateToChangePassword,
+        onNavigateToSettings = onNavigateToSettings,
         onNavigateToAbout = onNavigateToAbout,
         onLogout = onLogout,
         onNavigateToManageProducts = onNavigateToManageProducts,

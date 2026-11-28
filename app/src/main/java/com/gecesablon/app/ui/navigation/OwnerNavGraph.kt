@@ -48,6 +48,7 @@ fun NavGraphBuilder.ownerNavGraph(
     navController: NavHostController,
     appContainer: AppContainer,
     accountViewModel: AccountViewModel,
+    onNavigateToSettings: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onLogout: () -> Unit,
     currentSession: Session? = null
@@ -206,6 +207,7 @@ fun NavGraphBuilder.ownerNavGraph(
                 onNavigateToManageAdmins = {
                     navController.navigate(Routes.OWNER_ADMIN_ACCOUNTS)
                 },
+                onNavigateToSettings = onNavigateToSettings,
                 onNavigateToAbout = onNavigateToAbout,
                 onLogout = onLogout
             )

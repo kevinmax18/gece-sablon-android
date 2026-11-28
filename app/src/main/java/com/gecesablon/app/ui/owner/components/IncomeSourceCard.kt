@@ -24,11 +24,8 @@ import androidx.compose.ui.unit.sp
 import com.gecesablon.app.R
 import com.gecesablon.app.core.util.FinanceCalculator.IncomeSourcesSummary
 import com.gecesablon.app.core.util.Formatter
-import com.gecesablon.app.ui.theme.BorderHairline
+import com.gecesablon.app.ui.theme.GeceColors
 import com.gecesablon.app.ui.theme.ShapeCard
-import com.gecesablon.app.ui.theme.SurfaceCard
-import com.gecesablon.app.ui.theme.TextPrimary
-import com.gecesablon.app.ui.theme.TextSecondary
 
 /**
  * Kartu Sumber Pemasukan.
@@ -44,8 +41,8 @@ fun IncomeSourceCard(
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = ShapeCard,
-        colors = CardDefaults.cardColors(containerColor = SurfaceCard),
-        border = BorderStroke(1.dp, BorderHairline)
+        colors = CardDefaults.cardColors(containerColor = GeceColors.Surface),
+        border = BorderStroke(1.dp, GeceColors.Border)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             // Header Baris: "Sumber Pemasukan" di kiri, Total di kanan
@@ -57,7 +54,7 @@ fun IncomeSourceCard(
                 Text(
                     text = stringResource(R.string.owner_finance_income_source_title),
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                    color = TextPrimary,
+                    color = GeceColors.TextMain,
                     maxLines = 1,
                     softWrap = false,
                     overflow = TextOverflow.Ellipsis,
@@ -67,7 +64,7 @@ fun IncomeSourceCard(
                 Text(
                     text = Formatter.formatRupiah(sources.totalIncome),
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                    color = TextPrimary,
+                    color = GeceColors.TextMain,
                     maxLines = 1,
                     softWrap = false
                 )
@@ -91,7 +88,7 @@ fun IncomeSourceCard(
                     Text(
                         text = stringResource(R.string.owner_finance_source_orders),
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-                        color = TextPrimary,
+                        color = GeceColors.TextMain,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -99,7 +96,7 @@ fun IncomeSourceCard(
                     Text(
                         text = stringResource(R.string.owner_finance_source_orders_count, sources.completedOrdersCount),
                         style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
-                        color = TextSecondary
+                        color = GeceColors.TextMuted
                     )
                 }
 
@@ -107,7 +104,7 @@ fun IncomeSourceCard(
                     Text(
                         text = Formatter.formatRupiah(sources.totalOrdersIncome),
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
-                        color = TextPrimary,
+                        color = GeceColors.TextMain,
                         maxLines = 1,
                         softWrap = false
                     )
@@ -115,13 +112,13 @@ fun IncomeSourceCard(
                     Text(
                         text = ordersPctText,
                         style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
-                        color = TextSecondary
+                        color = GeceColors.TextMuted
                     )
                 }
             }
 
             Spacer(modifier = Modifier.height(10.dp))
-            HorizontalDivider(thickness = 0.5.dp, color = BorderHairline)
+            HorizontalDivider(thickness = 0.5.dp, color = GeceColors.Border)
             Spacer(modifier = Modifier.height(10.dp))
 
             // Baris 2: Pemasukan Lain (Manual)
@@ -140,7 +137,7 @@ fun IncomeSourceCard(
                     Text(
                         text = stringResource(R.string.owner_finance_source_manual),
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-                        color = TextPrimary,
+                        color = GeceColors.TextMain,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -150,7 +147,7 @@ fun IncomeSourceCard(
                     Text(
                         text = Formatter.formatRupiah(sources.totalManualIncome),
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
-                        color = TextPrimary,
+                        color = GeceColors.TextMain,
                         maxLines = 1,
                         softWrap = false
                     )
@@ -158,7 +155,7 @@ fun IncomeSourceCard(
                     Text(
                         text = manualPctText,
                         style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
-                        color = TextSecondary
+                        color = GeceColors.TextMuted
                     )
                 }
             }

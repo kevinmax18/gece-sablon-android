@@ -59,7 +59,6 @@ import com.gecesablon.app.ui.components.LoadingView
 import com.gecesablon.app.ui.components.OrderCard
 import com.gecesablon.app.ui.components.StatusChip
 import com.gecesablon.app.ui.theme.GeceColors
-import com.gecesablon.app.ui.theme.InkBlack
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -83,7 +82,7 @@ fun AdminDashboardScreen(
         modifier = modifier.fillMaxSize(),
         topBar = {
             AdminTopBar(
-                tabName = "Beranda",
+                tabName = stringResource(R.string.nav_home),
                 onProfileClick = onNavigateToAccount
             )
         },
@@ -95,7 +94,7 @@ fun AdminDashboardScreen(
             }
             uiState.errorMessage != null && uiState.recentOrders.isEmpty() -> {
                 ErrorView(
-                    message = uiState.errorMessage ?: "Terjadi kesalahan.",
+                    message = uiState.errorMessage ?: stringResource(R.string.state_error_title),
                     onRetry = viewModel::loadDashboardData,
                     modifier = Modifier.fillMaxSize().padding(innerPadding)
                 )
@@ -114,7 +113,7 @@ fun AdminDashboardScreen(
                         text = stringResource(R.string.admin_dashboard_summary_title),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = InkBlack
+                        color = GeceColors.TextMain
                     )
 
                     Row(
@@ -125,14 +124,14 @@ fun AdminDashboardScreen(
                             label = stringResource(R.string.admin_dashboard_stat_new),
                             count = uiState.countBaru,
                             colorBg = GeceColors.StatusPendingBg.copy(alpha = 0.25f),
-                            colorText = InkBlack,
+                            colorText = GeceColors.TextMain,
                             modifier = Modifier.weight(1f),
                             onClick = onNavigateToOrders
                         )
                         StatCard(
                             label = stringResource(R.string.admin_dashboard_stat_process),
                             count = uiState.countDiproses,
-                            colorBg = InkBlack,
+                            colorBg = GeceColors.PrimaryInk,
                             colorText = GeceColors.Background,
                             modifier = Modifier.weight(1f),
                             onClick = onNavigateToOrders
@@ -141,7 +140,7 @@ fun AdminDashboardScreen(
                             label = stringResource(R.string.admin_dashboard_stat_ready),
                             count = uiState.countSiapDiambil,
                             colorBg = GeceColors.StatusReadyBg,
-                            colorText = InkBlack,
+                            colorText = GeceColors.TextMain,
                             modifier = Modifier.weight(1f),
                             onClick = onNavigateToOrders
                         )
@@ -149,7 +148,7 @@ fun AdminDashboardScreen(
                             label = stringResource(R.string.admin_dashboard_stat_stock_low),
                             count = uiState.countStokMenipis,
                             colorBg = if (uiState.countStokMenipis > 0) GeceColors.StatusCancelledBg else GeceColors.Surface,
-                            colorText = if (uiState.countStokMenipis > 0) GeceColors.StatusCancelledText else InkBlack,
+                            colorText = if (uiState.countStokMenipis > 0) GeceColors.StatusCancelledText else GeceColors.TextMain,
                             modifier = Modifier.weight(1f),
                             onClick = onNavigateToStock
                         )
@@ -160,7 +159,7 @@ fun AdminDashboardScreen(
                         text = stringResource(R.string.admin_dashboard_quick_actions),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = InkBlack
+                        color = GeceColors.TextMain
                     )
 
                     Row(
@@ -198,7 +197,7 @@ fun AdminDashboardScreen(
                                 text = stringResource(R.string.admin_dashboard_need_action),
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = InkBlack
+                                color = GeceColors.TextMain
                             )
                             if (uiState.pendingActionOrders.isNotEmpty()) {
                                 TextButton(onClick = onNavigateToOrders) {
@@ -206,7 +205,7 @@ fun AdminDashboardScreen(
                                         stringResource(R.string.admin_dashboard_see_all),
                                         style = MaterialTheme.typography.bodySmall,
                                         fontWeight = FontWeight.SemiBold,
-                                        color = InkBlack
+                                        color = GeceColors.TextMain
                                     )
                                 }
                             }
@@ -230,7 +229,7 @@ fun AdminDashboardScreen(
                             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                                 uiState.pendingActionOrders.forEach { order ->
                                     val firstItem = order.items.firstOrNull()
-                                    val itemName = firstItem?.namaProduk ?: "Pesanan Sablon Custom"
+                                    val itemName = firstItem?.namaProduk ?: stringResource(R.string.order_default_custom_name)
                                     val itemVariant = if (firstItem != null) {
                                         "${firstItem.warnaNama} \u2022 ${firstItem.ukuranLabel}"
                                     } else {
@@ -246,7 +245,7 @@ fun AdminDashboardScreen(
                                         itemName = itemName,
                                         itemVariant = itemVariant,
                                         quantityPcs = quantityPcs,
-                                        footerInfo = "Total: ${Formatter.formatRupiah(order.total)}",
+                                        footerInfo = stringResource(R.string.order_total_label, Formatter.formatRupiah(order.total)),
                                         customerName = order.namaPelanggan,
                                         onClick = { onNavigateToOrderDetail(order.id) }
                                     )
@@ -266,14 +265,14 @@ fun AdminDashboardScreen(
                                 text = stringResource(R.string.admin_dashboard_stock_info),
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = InkBlack
+                                color = GeceColors.TextMain
                             )
                             TextButton(onClick = onNavigateToStock) {
                                 Text(
                                     stringResource(R.string.admin_dashboard_see_all),
                                     style = MaterialTheme.typography.bodySmall,
                                     fontWeight = FontWeight.SemiBold,
-                                    color = InkBlack
+                                    color = GeceColors.TextMain
                                 )
                             }
                         }
@@ -315,14 +314,14 @@ fun AdminDashboardScreen(
                                 text = stringResource(R.string.admin_dashboard_recent_orders),
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = InkBlack
+                                color = GeceColors.TextMain
                             )
                             TextButton(onClick = onNavigateToOrders) {
                                 Text(
                                     stringResource(R.string.admin_dashboard_see_all),
                                     style = MaterialTheme.typography.bodySmall,
                                     fontWeight = FontWeight.SemiBold,
-                                    color = InkBlack
+                                    color = GeceColors.TextMain
                                 )
                             }
                         }
@@ -330,7 +329,7 @@ fun AdminDashboardScreen(
                         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                             uiState.recentOrders.forEach { order ->
                                 val firstItem = order.items.firstOrNull()
-                                val itemName = firstItem?.namaProduk ?: "Pesanan Sablon Custom"
+                                val itemName = firstItem?.namaProduk ?: stringResource(R.string.order_default_custom_name)
                                 val itemVariant = if (firstItem != null) {
                                     "${firstItem.warnaNama} \u2022 ${firstItem.ukuranLabel}"
                                 } else {
@@ -346,7 +345,7 @@ fun AdminDashboardScreen(
                                     itemName = itemName,
                                     itemVariant = itemVariant,
                                     quantityPcs = quantityPcs,
-                                    footerInfo = "Total: ${Formatter.formatRupiah(order.total)}",
+                                    footerInfo = stringResource(R.string.order_total_label, Formatter.formatRupiah(order.total)),
                                     customerName = order.namaPelanggan,
                                     onClick = { onNavigateToOrderDetail(order.id) }
                                 )
@@ -421,7 +420,7 @@ fun QuickActionButton(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = InkBlack,
+                tint = GeceColors.TextMain,
                 modifier = Modifier.size(24.dp)
             )
             Spacer(modifier = Modifier.height(6.dp))
@@ -429,7 +428,7 @@ fun QuickActionButton(
                 text = title,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.SemiBold,
-                color = InkBlack,
+                color = GeceColors.TextMain,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -481,19 +480,19 @@ fun LowStockCard(
                 text = item.nama,
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.Bold,
-                color = InkBlack,
+                color = GeceColors.TextMain,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Sisa: ${item.jumlah} ${item.satuan}",
+                text = stringResource(R.string.admin_stock_remaining_format, item.jumlah, item.satuan),
                 style = MaterialTheme.typography.bodySmall,
                 color = GeceColors.StatusCancelledText,
                 fontWeight = FontWeight.SemiBold
             )
             Text(
-                text = "Min: ${item.batasMinimum} ${item.satuan}",
+                text = stringResource(R.string.admin_stock_min_short_format, item.batasMinimum, item.satuan),
                 style = MaterialTheme.typography.bodySmall,
                 color = GeceColors.TextMuted,
                 fontSize = 11.sp

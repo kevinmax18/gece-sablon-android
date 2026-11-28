@@ -32,6 +32,7 @@ fun NavGraphBuilder.adminNavGraph(
     appContainer: AppContainer,
     navController: NavHostController,
     accountViewModel: AccountViewModel,
+    onNavigateToSettings: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onLogout: () -> Unit
 ) {
@@ -104,6 +105,7 @@ fun NavGraphBuilder.adminNavGraph(
                 onNavigateToChangePassword = {
                     navController.navigate(Routes.CHANGE_PASSWORD)
                 },
+                onNavigateToSettings = onNavigateToSettings,
                 onNavigateToAbout = onNavigateToAbout,
                 onLogout = onLogout
             )

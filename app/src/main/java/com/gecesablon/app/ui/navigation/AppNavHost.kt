@@ -29,6 +29,8 @@ import com.gecesablon.app.ui.auth.RegisterScreen
 import com.gecesablon.app.ui.auth.RegisterViewModel
 import com.gecesablon.app.ui.components.AppBottomBar
 import com.gecesablon.app.ui.onboarding.OnboardingScreen
+import com.gecesablon.app.ui.settings.SettingsScreen
+import com.gecesablon.app.ui.settings.SettingsViewModel
 import com.gecesablon.app.ui.splash.SplashScreen
 import com.gecesablon.app.ui.welcome.WelcomeScreen
 import kotlinx.coroutines.launch
@@ -134,6 +136,10 @@ fun AppNavHost(
 
     val handleNavigateToAbout: () -> Unit = {
         navController.navigate(Routes.ABOUT)
+    }
+
+    val handleNavigateToSettings: () -> Unit = {
+        navController.navigate(Routes.SETTINGS)
     }
 
     Scaffold(
@@ -356,6 +362,19 @@ fun AppNavHost(
                 )
             }
 
+            // Layar Pengaturan (Semua peran)
+            composable(Routes.SETTINGS) {
+                val settingsViewModel: SettingsViewModel = viewModel(
+                    factory = SettingsViewModel.factory(sessionStore = appContainer.sessionStore)
+                )
+                SettingsScreen(
+                    viewModel = settingsViewModel,
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
             // 6. NavGraph masing-masing peran
             val currentUserId = currentSession?.userId ?: ""
             customerNavGraph(
@@ -367,6 +386,7 @@ fun AppNavHost(
                 onNavigateToLogin = { redirect, productId ->
                     navController.navigate(Routes.loginRoute(redirect, productId))
                 },
+                onNavigateToSettings = handleNavigateToSettings,
                 onNavigateToAbout = handleNavigateToAbout,
                 onLogout = handleLogout
             )
@@ -375,6 +395,7 @@ fun AppNavHost(
                 appContainer = appContainer,
                 navController = navController,
                 accountViewModel = accountViewModel,
+                onNavigateToSettings = handleNavigateToSettings,
                 onNavigateToAbout = handleNavigateToAbout,
                 onLogout = handleLogout
             )
@@ -384,6 +405,7 @@ fun AppNavHost(
                 appContainer = appContainer,
                 accountViewModel = accountViewModel,
                 currentSession = currentSession,
+                onNavigateToSettings = handleNavigateToSettings,
                 onNavigateToAbout = handleNavigateToAbout,
                 onLogout = handleLogout
             )

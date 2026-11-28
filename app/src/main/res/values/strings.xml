@@ -876,4 +876,27 @@
     <string name="owner_product_material_badge_default">Bawaan</string>
     <string name="owner_product_material_set_default">Jadikan Bawaan</string>
     <string name="owner_product_btn_remove_material_row">Hapus Baris Bahan</string>
+
+    <!-- Tahap 7B: Pengaturan Bahasa & Tema -->
+    <string name="menu_settings">Pengaturan</string>
+    <string name="account_menu_settings">Pengaturan</string>
+    <string name="account_menu_settings_sub">Bahasa aplikasi dan tema tampilan</string>
+    <string name="settings_title">Pengaturan</string>
+    <string name="settings_language_section">Bahasa Aplikasi</string>
+    <string name="settings_language_desc">Pilih bahasa antarmuka. Mata uang tetap Rupiah dan data dari server tidak diterjemahkan.</string>
+    <string name="settings_option_system">Ikuti Sistem</string>
+    <string name="settings_language_id">Indonesia</string>
+    <string name="settings_language_en">English</string>
+    <string name="settings_theme_section">Tema Tampilan</string>
+    <string name="settings_theme_desc">Pilih mode terang atau gelap tanpa memulai ulang aplikasi.</string>
+    <string name="settings_theme_light">Terang</string>
+    <string name="settings_theme_dark">Gelap</string>
+
+    <!-- Teks Tambahan yang Dipindah dari Kode UI (Tahap 7B) -->
+    <string name="order_default_custom_name">Pesanan Sablon Custom</string>
+    <string name="order_total_label">Total: %1$s</string>
+    <string name="admin_stock_remaining_format">Sisa: %1$d %2$s</string>
+    <string name="admin_stock_min_short_format">Min: %1$d %2$s</string>
+    <string name="staff_orders_badge_workshop">WORKSHOP DTF</string>
+    <string name="owner_finance_portion_format">%1$s porsi</string>
 </resources>

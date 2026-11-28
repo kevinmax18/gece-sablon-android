@@ -24,13 +24,8 @@ import com.gecesablon.app.R
 import com.gecesablon.app.core.util.Formatter
 import com.gecesablon.app.data.model.TransactionCategory
 import com.gecesablon.app.data.model.displayName
-import com.gecesablon.app.ui.theme.BorderHairline
 import com.gecesablon.app.ui.theme.GeceColors
 import com.gecesablon.app.ui.theme.ShapeCard
-import com.gecesablon.app.ui.theme.SurfaceCard
-import com.gecesablon.app.ui.theme.TextPrimary
-import com.gecesablon.app.ui.theme.TextSecondary
-import java.util.Locale
 
 /**
  * Dua kartu ringkasan berdampingan: Pemasukan dan Pengeluaran.
@@ -55,8 +50,8 @@ fun FinanceSummaryCards(
         Card(
             modifier = Modifier.weight(1f),
             shape = ShapeCard,
-            colors = CardDefaults.cardColors(containerColor = SurfaceCard),
-            border = BorderStroke(1.dp, BorderHairline)
+            colors = CardDefaults.cardColors(containerColor = GeceColors.Surface),
+            border = BorderStroke(1.dp, GeceColors.Border)
         ) {
             Column(modifier = Modifier.padding(14.dp)) {
                 Row(
@@ -70,7 +65,7 @@ fun FinanceSummaryCards(
                             fontWeight = FontWeight.Bold,
                             fontSize = 9.sp
                         ),
-                        color = TextSecondary,
+                        color = GeceColors.TextMuted,
                         maxLines = 2,
                         softWrap = true,
                         modifier = Modifier.weight(1f)
@@ -79,7 +74,7 @@ fun FinanceSummaryCards(
                     if (incomeGrowthPercentage != null) {
                         val sign = if (incomeGrowthPercentage >= 0) "+" else ""
                         Text(
-                            text = "$sign${String.format(Locale.US, "%.0f%%", incomeGrowthPercentage)}",
+                            text = "$sign${Formatter.formatPercent(incomeGrowthPercentage, 0)}",
                             style = MaterialTheme.typography.labelSmall.copy(
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 10.sp
@@ -96,7 +91,7 @@ fun FinanceSummaryCards(
                 Text(
                     text = Formatter.formatRupiah(totalPemasukan),
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                    color = TextPrimary,
+                    color = GeceColors.TextMain,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -106,7 +101,7 @@ fun FinanceSummaryCards(
                 Text(
                     text = stringResource(R.string.owner_dashboard_orders_done_count, completedOrdersCount),
                     style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
-                    color = TextSecondary,
+                    color = GeceColors.TextMuted,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -117,8 +112,8 @@ fun FinanceSummaryCards(
         Card(
             modifier = Modifier.weight(1f),
             shape = ShapeCard,
-            colors = CardDefaults.cardColors(containerColor = SurfaceCard),
-            border = BorderStroke(1.dp, BorderHairline)
+            colors = CardDefaults.cardColors(containerColor = GeceColors.Surface),
+            border = BorderStroke(1.dp, GeceColors.Border)
         ) {
             Column(modifier = Modifier.padding(14.dp)) {
                 Row(
@@ -132,7 +127,7 @@ fun FinanceSummaryCards(
                             fontWeight = FontWeight.Bold,
                             fontSize = 9.sp
                         ),
-                        color = TextSecondary,
+                        color = GeceColors.TextMuted,
                         maxLines = 2,
                         softWrap = true,
                         modifier = Modifier.weight(1f)
@@ -150,7 +145,7 @@ fun FinanceSummaryCards(
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 10.sp
                         ),
-                        color = TextSecondary,
+                        color = GeceColors.TextMuted,
                         maxLines = 1,
                         softWrap = false
                     )
@@ -161,7 +156,7 @@ fun FinanceSummaryCards(
                 Text(
                     text = Formatter.formatRupiah(totalPengeluaran),
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                    color = TextPrimary,
+                    color = GeceColors.TextMain,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -185,7 +180,7 @@ fun FinanceSummaryCards(
                 Text(
                     text = catText,
                     style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
-                    color = TextSecondary,
+                    color = GeceColors.TextMuted,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

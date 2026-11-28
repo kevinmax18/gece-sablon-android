@@ -1,5 +1,6 @@
 package com.gecesablon.app.ui.owner.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -70,7 +71,8 @@ fun FinanceHeroCard(
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = ShapeCard,
-        colors = CardDefaults.cardColors(containerColor = InkBlack)
+        colors = CardDefaults.cardColors(containerColor = InkBlack),
+        border = BorderStroke(1.dp, GeceColors.Border)
     ) {
         Column(modifier = Modifier.padding(18.dp)) {
             // Baris Atas: Titik status + Label & Chip Margin

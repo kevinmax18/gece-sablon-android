@@ -173,7 +173,7 @@ fun StaffOrdersScreen(
                                 key = { it.id }
                             ) { order ->
                                 val firstItem = order.items.firstOrNull()
-                                val itemName = firstItem?.namaProduk ?: "Pesanan Sablon Custom"
+                                val itemName = firstItem?.namaProduk ?: stringResource(R.string.order_default_custom_name)
                                 val itemVariant = if (firstItem != null) {
                                     "${firstItem.warnaNama} \u2022 ${firstItem.ukuranLabel}"
                                 } else {
@@ -189,7 +189,7 @@ fun StaffOrdersScreen(
                                     itemName = itemName,
                                     itemVariant = itemVariant,
                                     quantityPcs = quantityPcs,
-                                    footerInfo = "Total: ${Formatter.formatRupiah(order.total)}",
+                                    footerInfo = stringResource(R.string.order_total_label, Formatter.formatRupiah(order.total)),
                                     customerName = order.namaPelanggan,
                                     onClick = { onNavigateToDetail(order.id) }
                                 )
@@ -223,9 +223,9 @@ fun StaffHeaderSection(
                     .padding(horizontal = 8.dp, vertical = 3.dp)
             ) {
                 Text(
-                    text = "WORKSHOP DTF",
+                    text = stringResource(R.string.staff_orders_badge_workshop),
                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                    color = GeceColors.PrimaryInk
+                    color = GeceColors.OnAccent
                 )
             }
         }

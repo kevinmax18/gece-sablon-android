@@ -37,17 +37,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gecesablon.app.R
+import com.gecesablon.app.core.util.Formatter
 import com.gecesablon.app.data.model.SixMonthTrend
-import com.gecesablon.app.ui.theme.AccentYellow
-import com.gecesablon.app.ui.theme.BorderHairline
 import com.gecesablon.app.ui.theme.GeceColors
-import com.gecesablon.app.ui.theme.InkBlack
 import com.gecesablon.app.ui.theme.ShapeCard
 import com.gecesablon.app.ui.theme.ShapeControl
-import com.gecesablon.app.ui.theme.SurfaceCard
-import com.gecesablon.app.ui.theme.TextPrimary
-import com.gecesablon.app.ui.theme.TextSecondary
-import java.util.Locale
 import kotlin.math.max
 
 /**
@@ -65,24 +59,24 @@ fun MonthlyTrendChart(
     val monthShortNames = stringArrayResource(R.array.month_short_names)
     val chartDescription = stringResource(R.string.owner_dashboard_trend_chart_desc)
 
-    val incomeNormalColor = AccentYellow
-    val incomeCurrentColor = InkBlack
-    val expenseNormalColor = Color(0xFFD2D2CC)
-    val expenseCurrentColor = Color(0xFF737373)
-    val gridLineColor = BorderHairline
+    val incomeNormalColor = GeceColors.Accent
+    val incomeCurrentColor = GeceColors.PrimaryInk
+    val expenseNormalColor = MaterialTheme.colorScheme.surfaceVariant
+    val expenseCurrentColor = GeceColors.TextMuted
+    val gridLineColor = GeceColors.Border
 
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = ShapeCard,
-        colors = CardDefaults.cardColors(containerColor = SurfaceCard),
-        border = BorderStroke(1.dp, BorderHairline)
+        colors = CardDefaults.cardColors(containerColor = GeceColors.Surface),
+        border = BorderStroke(1.dp, GeceColors.Border)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             // Header Tren 6 Bulan: Judul di baris sendiri
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                color = TextPrimary,
+                color = GeceColors.TextMain,
                 maxLines = 1,
                 softWrap = false,
                 overflow = TextOverflow.Ellipsis
@@ -94,7 +88,7 @@ fun MonthlyTrendChart(
             Text(
                 text = subtitle,
                 style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
-                color = TextSecondary,
+                color = GeceColors.TextMuted,
                 maxLines = 1,
                 softWrap = false,
                 overflow = TextOverflow.Ellipsis
@@ -116,12 +110,12 @@ fun MonthlyTrendChart(
                         modifier = Modifier
                             .size(8.dp)
                             .clip(CircleShape)
-                            .background(AccentYellow)
+                            .background(incomeNormalColor)
                     )
                     Text(
                         text = stringResource(R.string.owner_dashboard_legend_income),
                         style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
-                        color = TextSecondary,
+                        color = GeceColors.TextMuted,
                         maxLines = 1,
                         softWrap = false
                     )
@@ -142,7 +136,7 @@ fun MonthlyTrendChart(
                     Text(
                         text = stringResource(R.string.owner_dashboard_legend_expense),
                         style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
-                        color = TextSecondary,
+                        color = GeceColors.TextMuted,
                         maxLines = 1,
                         softWrap = false
                     )
@@ -237,7 +231,7 @@ fun MonthlyTrendChart(
                             fontWeight = if (bar.isCurrentMonth) FontWeight.Bold else FontWeight.Normal,
                             fontSize = 11.sp
                         ),
-                        color = if (bar.isCurrentMonth) TextPrimary else TextSecondary
+                        color = if (bar.isCurrentMonth) GeceColors.TextMain else GeceColors.TextMuted
                     )
                 }
             }
@@ -249,7 +243,7 @@ fun MonthlyTrendChart(
                 modifier = Modifier.fillMaxWidth(),
                 shape = ShapeControl,
                 color = GeceColors.Background,
-                border = BorderStroke(0.5.dp, BorderHairline)
+                border = BorderStroke(0.5.dp, GeceColors.Border)
             ) {
                 Row(
                     modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
@@ -259,11 +253,11 @@ fun MonthlyTrendChart(
                     Text(
                         text = stringResource(R.string.owner_dashboard_avg_margin),
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium),
-                        color = TextSecondary
+                        color = GeceColors.TextMuted
                     )
 
                     val avgMarginText = if (trend.averageMarginPercentage != null) {
-                        String.format(Locale.US, "%.1f%%", trend.averageMarginPercentage)
+                        Formatter.formatPercent(trend.averageMarginPercentage, 1)
                     } else {
                         "—"
                     }
@@ -271,7 +265,7 @@ fun MonthlyTrendChart(
                     Text(
                         text = avgMarginText,
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                        color = TextPrimary
+                        color = GeceColors.TextMain
                     )
                 }
             }

@@ -43,6 +43,7 @@ fun NavGraphBuilder.customerNavGraph(
     currentUserId: String,
     accountViewModel: AccountViewModel,
     onNavigateToLogin: (redirect: String?, productId: String?) -> Unit,
+    onNavigateToSettings: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onLogout: () -> Unit
 ) {
@@ -170,6 +171,7 @@ fun NavGraphBuilder.customerNavGraph(
                 onNavigateToChangePassword = {
                     navController.navigate(Routes.CHANGE_PASSWORD)
                 },
+                onNavigateToSettings = onNavigateToSettings,
                 onNavigateToAbout = onNavigateToAbout,
                 onLogout = onLogout
             )

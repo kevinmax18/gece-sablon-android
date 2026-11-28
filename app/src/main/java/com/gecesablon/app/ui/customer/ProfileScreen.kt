@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.LockReset
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -62,6 +63,7 @@ fun ProfileScreen(
     viewModel: AccountViewModel,
     onNavigateBack: () -> Unit,
     onNavigateToChangePassword: () -> Unit,
+    onNavigateToSettings: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onLogout: () -> Unit,
     modifier: Modifier = Modifier
@@ -192,6 +194,13 @@ fun ProfileScreen(
                         icon = { Icon(Icons.Default.LockReset, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp)) },
                         label = stringResource(R.string.account_menu_change_password),
                         onClick = onNavigateToChangePassword
+                    )
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
+                    // Pengaturan (Bahasa & Tema)
+                    ProfileMenuRow(
+                        icon = { Icon(Icons.Default.Settings, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp)) },
+                        label = stringResource(R.string.menu_settings),
+                        onClick = onNavigateToSettings
                     )
                     HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
                     // Tentang Aplikasi

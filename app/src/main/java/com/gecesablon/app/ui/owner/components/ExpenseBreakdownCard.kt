@@ -18,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -29,15 +28,9 @@ import com.gecesablon.app.core.util.FinanceCalculator.ExpenseCategoryBreakdown
 import com.gecesablon.app.core.util.Formatter
 import com.gecesablon.app.data.model.TransactionCategory
 import com.gecesablon.app.data.model.displayName
-import com.gecesablon.app.ui.theme.AccentYellow
-import com.gecesablon.app.ui.theme.BorderHairline
 import com.gecesablon.app.ui.theme.GeceColors
-import com.gecesablon.app.ui.theme.InkBlack
 import com.gecesablon.app.ui.theme.ShapeCard
 import com.gecesablon.app.ui.theme.ShapeControl
-import com.gecesablon.app.ui.theme.SurfaceCard
-import com.gecesablon.app.ui.theme.TextPrimary
-import com.gecesablon.app.ui.theme.TextSecondary
 
 /**
  * Kartu Rincian Pengeluaran / Struktur Beban.
@@ -56,8 +49,8 @@ fun ExpenseBreakdownCard(
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = ShapeCard,
-        colors = CardDefaults.cardColors(containerColor = SurfaceCard),
-        border = BorderStroke(1.dp, BorderHairline)
+        colors = CardDefaults.cardColors(containerColor = GeceColors.Surface),
+        border = BorderStroke(1.dp, GeceColors.Border)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             // Header Baris: Judul di kiri, Total di kanan
@@ -69,7 +62,7 @@ fun ExpenseBreakdownCard(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                    color = TextPrimary,
+                    color = GeceColors.TextMain,
                     maxLines = 1,
                     softWrap = false,
                     overflow = TextOverflow.Ellipsis,
@@ -79,7 +72,7 @@ fun ExpenseBreakdownCard(
                 Text(
                     text = Formatter.formatRupiah(totalExpense),
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                    color = TextPrimary,
+                    color = GeceColors.TextMain,
                     maxLines = 1,
                     softWrap = false
                 )
@@ -91,15 +84,15 @@ fun ExpenseBreakdownCard(
                 Text(
                     text = stringResource(R.string.owner_report_no_expense),
                     style = MaterialTheme.typography.bodySmall,
-                    color = TextSecondary
+                    color = GeceColors.TextMuted
                 )
             } else {
                 Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
                     breakdown.forEachIndexed { index, item ->
                         val barColor = when (index) {
-                            0 -> InkBlack
-                            1 -> AccentYellow
-                            else -> Color(0xFF737373)
+                            0 -> GeceColors.PrimaryInk
+                            1 -> GeceColors.Accent
+                            else -> GeceColors.TextMuted
                         }
 
                         val categoryName = when (item.category) {
@@ -121,7 +114,7 @@ fun ExpenseBreakdownCard(
                                 Text(
                                     text = "${index + 1}. $categoryName",
                                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-                                    color = TextPrimary,
+                                    color = GeceColors.TextMain,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
                                     modifier = Modifier.weight(1f, fill = false)
@@ -130,7 +123,7 @@ fun ExpenseBreakdownCard(
                                 Text(
                                     text = Formatter.formatRupiah(item.total),
                                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
-                                    color = TextPrimary,
+                                    color = GeceColors.TextMain,
                                     maxLines = 1,
                                     softWrap = false
                                 )
@@ -144,9 +137,9 @@ fun ExpenseBreakdownCard(
                                 horizontalArrangement = Arrangement.End
                             ) {
                                 Text(
-                                    text = "${Formatter.formatPercent(item.percentage, 1)} porsi",
+                                    text = stringResource(R.string.owner_finance_portion_format, Formatter.formatPercent(item.percentage, 1)),
                                     style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
-                                    color = TextSecondary
+                                    color = GeceColors.TextMuted
                                 )
                             }
 
@@ -158,7 +151,7 @@ fun ExpenseBreakdownCard(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(8.dp)
-                                    .background(BorderHairline, ShapeControl)
+                                    .background(GeceColors.Border, ShapeControl)
                             ) {
                                 Box(
                                     modifier = Modifier
@@ -172,7 +165,7 @@ fun ExpenseBreakdownCard(
                         if (index < breakdown.size - 1) {
                             HorizontalDivider(
                                 thickness = 0.5.dp,
-                                color = BorderHairline,
+                                color = GeceColors.Border,
                                 modifier = Modifier.padding(top = 2.dp)
                             )
                         }

@@ -7,8 +7,11 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.gecesablon.app.core.util.AppPreferencesRules
+import com.gecesablon.app.data.model.LanguageMode
 import com.gecesablon.app.data.model.Role
 import com.gecesablon.app.data.model.Session
+import com.gecesablon.app.data.model.ThemeMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -27,6 +30,8 @@ class SessionStore(private val context: Context) {
         val USER_ROLE = stringPreferencesKey("user_role")
         val USER_NAME = stringPreferencesKey("user_name")
         val USER_ID = stringPreferencesKey("user_id")
+        val LANGUAGE_MODE = stringPreferencesKey("language_mode")
+        val THEME_MODE = stringPreferencesKey("theme_mode")
     }
 
     val isOnboardingCompleted: Flow<Boolean> = context.sessionDataStore.data
@@ -82,6 +87,28 @@ class SessionStore(private val context: Context) {
             preferences.remove(PreferencesKeys.USER_ROLE)
             preferences.remove(PreferencesKeys.USER_NAME)
             preferences.remove(PreferencesKeys.USER_ID)
+        }
+    }
+
+    val languageMode: Flow<LanguageMode> = context.sessionDataStore.data
+        .map { preferences ->
+            AppPreferencesRules.parseLanguageMode(preferences[PreferencesKeys.LANGUAGE_MODE])
+        }
+
+    suspend fun setLanguageMode(mode: LanguageMode) {
+        context.sessionDataStore.edit { preferences ->
+            preferences[PreferencesKeys.LANGUAGE_MODE] = mode.name
+        }
+    }
+
+    val themeMode: Flow<ThemeMode> = context.sessionDataStore.data
+        .map { preferences ->
+            AppPreferencesRules.parseThemeMode(preferences[PreferencesKeys.THEME_MODE])
+        }
+
+    suspend fun setThemeMode(mode: ThemeMode) {
+        context.sessionDataStore.edit { preferences ->
+            preferences[PreferencesKeys.THEME_MODE] = mode.name
         }
     }
 }

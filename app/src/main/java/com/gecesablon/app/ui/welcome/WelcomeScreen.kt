@@ -147,7 +147,7 @@ fun WelcomeScreen(
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 11.sp
                             ),
-                            color = Color.White
+                            color = GeceColors.Background
                         )
                     }
                 }
@@ -157,7 +157,7 @@ fun WelcomeScreen(
                     modifier = Modifier
                         .align(Alignment.BottomStart)
                         .clip(CircleShape)
-                        .background(Color.White)
+                        .background(GeceColors.Background)
                         .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape)
                         .padding(horizontal = 12.dp, vertical = 6.dp)
                 ) {

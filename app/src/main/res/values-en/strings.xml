@@ -1,0 +1,900 @@
+<resources>
+    <string name="app_name">GeCe Sablon</string>
+
+    <!-- Buttons & Actions -->
+    <string name="btn_continue">Continue</string>
+    <string name="btn_order">Order Now</string>
+    <string name="btn_see_detail">View Details</string>
+    <string name="btn_retry">Try Again</string>
+    <string name="btn_whatsapp">Contact via WhatsApp</string>
+
+    <!-- Input & Form -->
+    <string name="content_desc_show_password">Show password</string>
+    <string name="content_desc_hide_password">Hide password</string>
+    <string name="content_desc_clear_text">Clear text</string>
+
+    <!-- Product Card -->
+    <string name="product_badge_dtf">DTF PRINT</string>
+    <string name="product_price_start_from">FROM</string>
+    <string name="product_action_select">Select product</string>
+
+    <!-- Order Card -->
+    <string name="order_action_detail">View Details</string>
+    <string name="order_pcs_format">%1$d pcs</string>
+
+    <!-- Order Status (OrderStatus) -->
+    <string name="status_diterima">Received</string>
+    <string name="status_sedang_diproses">In Progress</string>
+    <string name="status_cetak_dtf">DTF Printing</string>
+    <string name="status_pressing">Pressing</string>
+    <string name="status_siap_diambil">Ready for Pickup</string>
+    <string name="status_selesai">Completed</string>
+    <string name="status_dibatalkan">Cancelled</string>
+
+    <!-- Bottom Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_catalog">Catalog</string>
+    <string name="nav_order">Orders</string>
+    <string name="nav_orders">Orders</string>
+    <string name="nav_process">Process</string>
+    <string name="nav_contact">Contact</string>
+    <string name="nav_finance">Finance</string>
+    <string name="nav_account">Account</string>
+
+    <!-- Top Navigation -->
+    <string name="content_desc_back">Back</string>
+    <string name="content_desc_profile">User Profile</string>
+    <string name="content_desc_whatsapp">Contact Workshop</string>
+
+    <!-- State Views -->
+    <string name="state_loading">Loading data...</string>
+    <string name="state_empty_title">No Data Yet</string>
+    <string name="state_empty_desc">No data or orders found at the moment.</string>
+    <string name="state_error_title">An Error Occurred</string>
+    <string name="state_error_desc">Failed to load data. Please check your connection and try again.</string>
+    <string name="state_coming_soon_title">Coming Soon</string>
+    <string name="state_coming_soon_desc">This feature is currently under development.</string>
+
+    <!-- Splash Screen -->
+    <string name="splash_brand_title">GeCe</string>
+    <string name="splash_studio_pill">SCREEN PRINTING</string>
+    <string name="splash_tagline">Precision DTF Screen Printing &amp; Custom T-Shirts</string>
+    <string name="splash_loading">Preparing Screen Printing Studio&#8230;</string>
+    <string name="splash_footer">v%1$s &#8226; GeCe Studio Platform</string>
+
+    <!-- Onboarding Screen -->
+    <string name="onboarding_studio_badge">GECE STUDIO</string>
+    <string name="onboarding_studio_sub">DTF Production</string>
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_page_counter">%1$d / %2$d</string>
+    <string name="onboarding_standard_label">GeCe Print Standard</string>
+    <string name="onboarding_btn_next">NEXT</string>
+    <string name="onboarding_btn_start">GET STARTED</string>
+    <string name="onboarding_have_account">Already have an account?</string>
+    <string name="onboarding_login_link">Sign In</string>
+
+    <!-- Onboarding Page 1 -->
+    <string name="onboarding_tag_1">PRINTING SERVICE</string>
+    <string name="onboarding_title_1">Single &amp; Bulk Custom Printing</string>
+    <string name="onboarding_desc_1">Order custom t-shirts or polo shirts with quality DTF printing, starting from just 1 pc.</string>
+    <string name="onboarding_feat_title_1_1">Minimum Order</string>
+    <string name="onboarding_feat_tag_1_1">From 1 Pc</string>
+    <string name="onboarding_feat_desc_1_1">Ideal for personal needs, communities, and businesses.</string>
+    <string name="onboarding_feat_title_1_2">Sharp Print Results</string>
+    <string name="onboarding_feat_tag_1_2">DTF Print</string>
+    <string name="onboarding_feat_desc_1_2">Vibrant colors and comfortable to wear for daily activities.</string>
+
+    <!-- Onboarding Page 2 -->
+    <string name="onboarding_tag_2">FABRIC OPTIONS</string>
+    <string name="onboarding_title_2">Selected Quality Fabrics</string>
+    <string name="onboarding_desc_2">Available in breathable cotton combed and polo fabrics that are comfortable to wear.</string>
+    <string name="onboarding_feat_title_2_1">True-to-Design Colors</string>
+    <string name="onboarding_feat_tag_2_1">DTF Print</string>
+    <string name="onboarding_feat_desc_2_1">Print results match the design file you submit.</string>
+    <string name="onboarding_feat_title_2_2">Wide Selection</string>
+    <string name="onboarding_feat_tag_2_2">Ready Stock</string>
+    <string name="onboarding_feat_desc_2_2">Available in combed 24s/30s tees, oversize tees, and polo shirts.</string>
+
+    <!-- Onboarding Page 3 -->
+    <string name="onboarding_tag_3">ORDER STATUS</string>
+    <string name="onboarding_title_3">Track Progress Anytime</string>
+    <string name="onboarding_desc_3">Monitor your order from printing until it is ready for pickup or delivery.</string>
+    <string name="onboarding_feat_title_3_1">Order Updates</string>
+    <string name="onboarding_feat_tag_3_1">Notifications</string>
+    <string name="onboarding_feat_desc_3_1">Get order status updates directly via the app and WhatsApp.</string>
+    <string name="onboarding_feat_title_3_2">Quality Check</string>
+    <string name="onboarding_feat_tag_3_2">Studio Standard</string>
+    <string name="onboarding_feat_desc_3_2">Every print is inspected before being handed over to the customer.</string>
+
+    <!-- Welcome Screen -->
+    <string name="welcome_badge_title">GeCe &#8226; SCREEN PRINTING</string>
+    <string name="welcome_studio_spec">Studio Spec</string>
+    <string name="welcome_high_precision">HIGH PRECISION &#8226; DTF PRINTING</string>
+    <string name="welcome_title">DTF T-Shirt &amp; Polo Printing</string>
+    <string name="welcome_subtitle">Precision DTF screen printing specialist for Custom Tees, Oversize Tees, and premium Polo Shirts.</string>
+    <string name="welcome_chip_1">Premium Tees &amp; Polo</string>
+    <string name="welcome_chip_2">Sharp &amp; Detailed DTF</string>
+    <string name="welcome_chip_3">No Minimum Order</string>
+    <string name="welcome_btn_login">Sign In</string>
+    <string name="welcome_btn_register">Register</string>
+    <string name="welcome_btn_guest">Explore as Guest</string>
+    <string name="welcome_footer">v%1$s &#8226; GeCe Screen Printing Studio</string>
+    <string name="welcome_about_link">About App</string>
+
+    <!-- Home Header -->
+    <string name="home_header_brand">GECE</string>
+
+    <!-- Login Screen -->
+    <string name="login_title">Sign In</string>
+    <string name="login_subtitle">Sign in to place orders and track your order progress.</string>
+    <string name="login_explore_as_guest">Explore Catalog as Guest</string>
+    <string name="login_label_identifier">EMAIL / PHONE NO.</string>
+    <string name="login_placeholder_identifier">name@email.com</string>
+    <string name="login_label_password">PASSWORD</string>
+    <string name="login_placeholder_password">Enter your password</string>
+    <string name="login_forgot_password">Forgot Password?</string>
+    <string name="login_forgot_password_soon">Password reset feature is coming soon.</string>
+    <string name="login_btn_submit">Sign In</string>
+    <string name="login_no_account">Don\'t have an account?</string>
+    <string name="login_register_link">Register</string>
+    <string name="login_security_footer">Protected by GeCe Studio data encryption</string>
+
+    <!-- Register Screen -->
+    <string name="register_topbar_title">Create Account</string>
+    <string name="register_title">Create Customer Account</string>
+    <string name="register_subtitle">Register to place orders and track your order status.</string>
+    <string name="register_label_name">FULL NAME</string>
+    <string name="register_placeholder_name">Example: Budi Pratama</string>
+    <string name="register_label_phone">PHONE / WHATSAPP NO.</string>
+    <string name="register_placeholder_phone">Example: 08123456789</string>
+    <string name="register_label_email">EMAIL</string>
+    <string name="register_placeholder_email">name@email.com</string>
+    <string name="register_label_password">PASSWORD</string>
+    <string name="register_placeholder_password">Minimum 8 characters</string>
+    <string name="register_label_confirm_password">CONFIRM PASSWORD</string>
+    <string name="register_placeholder_confirm_password">Re-enter your password</string>
+    <string name="register_terms_prefix">I agree to the</string>
+    <string name="register_terms_link">Terms &amp; Conditions</string>
+    <string name="register_terms_and">and</string>
+    <string name="register_privacy_link">Privacy Policy</string>
+    <string name="register_terms_suffix">of GeCe Screen Printing</string>
+    <string name="register_btn_submit">Register</string>
+    <string name="register_have_account">Already have an account?</string>
+    <string name="register_login_link">Sign In</string>
+    <string name="register_terms_dialog_title">Terms &amp; Conditions</string>
+    <string name="register_terms_dialog_body">By using the GeCe Screen Printing app, you agree to the processing of your DTF printing order data and the use of your contact details for order status updates.</string>
+    <string name="register_terms_dialog_close">Close</string>
+
+    <!-- Profile & Account Screen -->
+    <string name="title_profile">My Profile</string>
+    <string name="profile_name_placeholder">GeCe User</string>
+    <string name="profile_role_customer">Customer</string>
+    <string name="profile_role_admin">Workshop Admin</string>
+    <string name="profile_role_owner">GeCe Studio Owner</string>
+    <string name="profile_label_phone">Phone / WhatsApp Number</string>
+    <string name="profile_label_email">Email</string>
+    <string name="profile_placeholder_contact">&#8212;</string>
+    <string name="menu_about_app">About App</string>
+    <string name="menu_logout">Sign Out</string>
+    <string name="profile_logout_dialog_title">Confirm Sign Out</string>
+    <string name="profile_logout_dialog_message">Are you sure you want to sign out of your account?</string>
+    <string name="profile_logout_dialog_confirm">Sign Out</string>
+    <string name="profile_logout_dialog_cancel">Cancel</string>
+
+    <!-- Screen Titles -->
+    <string name="title_home">Home</string>
+    <string name="title_catalog">Catalog</string>
+    <string name="title_order">Orders</string>
+    <string name="title_contact">Workshop Contact</string>
+    <string name="title_admin_dashboard">Admin Dashboard</string>
+    <string name="title_admin_account">Admin Account</string>
+    <string name="title_owner_dashboard">Owner Dashboard</string>
+    <string name="title_owner_finance">Finance</string>
+    <string name="title_owner_account">Owner Account</string>
+    <string name="title_staff_orders">Order List</string>
+    <string name="title_staff_process">Workshop Process</string>
+    <string name="title_login">Sign In</string>
+    <string name="title_register">Register</string>
+    <string name="title_about">About App</string>
+
+    <!-- About App -->
+    <string name="about_app_name">GeCe Screen Printing</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_description">Operational and precision DTF screen printing mobile app for GeCe Screen Printing. Supports custom ordering, production stage tracking, stock management, and operational reports.</string>
+    <string name="about_workshop_info_title">Workshop Information</string>
+    <string name="about_workshop_wa_label">Workshop WhatsApp</string>
+    <string name="about_whatsapp_not_found">WhatsApp is not installed on this device.</string>
+
+    <!-- Product Categories -->
+    <string name="category_all">All</string>
+    <string name="category_kaos_custom">Custom Tees</string>
+    <string name="category_kaos_oversize">Oversize Tees</string>
+    <string name="category_baju_polo">Polo Shirts</string>
+
+    <!-- Workshop Contact -->
+    <string name="contact_workshop_name">GeCe Screen Printing</string>
+    <string name="contact_studio_pill">STUDIO &amp; WORKSHOP</string>
+    <string name="contact_workshop_address_label">Workshop Address</string>
+    <string name="contact_workshop_address">[GeCe workshop address]</string>
+    <string name="contact_workshop_hours_label">Operating Hours</string>
+    <string name="contact_workshop_hours">[Operating hours]</string>
+    <string name="contact_whatsapp_btn">Contact via WhatsApp</string>
+
+    <!-- Customer Home -->
+    <string name="home_badge_specialist">PRECISION DTF T-SHIRT &amp; POLO PRINTING SPECIALIST</string>
+    <string name="home_welcome_title">Welcome to GeCe</string>
+    <string name="home_welcome_subtitle">Create quality custom T-Shirts &amp; Polo Shirts with precision DTF printing and no minimum order.</string>
+    <string name="home_banner_badge">&#9733; PREMIUM DTF SPECIALIST</string>
+    <string name="home_banner_title">DTF T-Shirt\n&amp; Polo Print</string>
+    <string name="home_banner_subtitle">High precision, sharp colors, order directly now.</string>
+    <string name="home_banner_btn">Order Now</string>
+    <string name="home_banner_tag">DTF POLO</string>
+    <string name="home_category_title">Product Categories</string>
+    <string name="home_category_subtitle">Focused on Precision DTF Custom Tees &amp; Polo Shirts.</string>
+    <string name="home_category_kaos_custom_desc">Cotton Combed, DTF</string>
+    <string name="home_category_kaos_oversize_desc">Heavyweight, DTF</string>
+    <string name="home_category_baju_polo_desc">Lacoste CVC, DTF</string>
+    <string name="home_portfolio_title">Our Portfolio</string>
+    <string name="home_portfolio_subtitle">Real results of precision DTF T-Shirt &amp; Polo printing.</string>
+    <string name="home_see_all">See All</string>
+    <string name="home_consultation_title">Free Consultation</string>
+    <string name="home_consultation_subtitle">Discuss ideas &amp; fabric estimates</string>
+    <string name="home_consultation_btn">Ask CS</string>
+
+    <!-- Product Catalog -->
+    <string name="catalog_badge">OFFICIAL CATALOG</string>
+    <string name="catalog_title">Product Catalog</string>
+    <string name="catalog_subtitle">High Precision DTF &#8226; Premium Ink &#8226; From 1 Pc</string>
+    <string name="catalog_search_placeholder">Search printing products...</string>
+    <string name="catalog_filter_desc">Filter category</string>
+    <string name="catalog_custom_spec_badge">BESPOKE TEXTILE STUDIO</string>
+    <string name="catalog_custom_spec_title">Have Your Own\nCustom Specs?</string>
+    <string name="catalog_custom_spec_desc">Consult your custom DTF printing needs for t-shirts and polo shirts. GeCe master printers are ready to help with design resolution, color management, and precision test prints.</string>
+    <string name="catalog_custom_spec_btn">Discuss via WhatsApp</string>
+    <string name="catalog_badge_mockup">&#10003; Free Mockup</string>
+    <string name="catalog_badge_guarantee">&#10003; Precision Print Guarantee</string>
+    <string name="catalog_empty_title">No Products Found</string>
+    <string name="catalog_empty_desc">No printing products match your search keywords or selected filter.</string>
+
+    <!-- Product Detail -->
+    <string name="detail_product_title">Product Details</string>
+    <string name="detail_product_badge_dtf">PRECISION DTF PRINT</string>
+    <string name="detail_product_tag_exclusive">Exclusive DTF Print</string>
+    <string name="detail_product_meta">4.9 (120+ Reviews) &#8226; No Minimum Order</string>
+    <string name="detail_product_fabric_title">Fabric Options</string>
+    <string name="detail_product_fabric_desc">Choose cotton thickness according to your needs</string>
+    <string name="detail_product_fabric_sub">Distro-grade fabric, cool and comfortable to wear</string>
+    <string name="detail_product_color_title">Color Options: %1$s</string>
+    <string name="detail_product_color_count">%1$d Color Options</string>
+    <string name="detail_product_size_title">Size Options</string>
+    <string name="detail_product_size_guide">Size Guide</string>
+    <string name="detail_product_spec_dtf_title">Print Technique: Precision DTF (Direct to Film)</string>
+    <string name="detail_product_spec_dtf_desc">All orders are printed using high-quality DTF technology, crack-resistant, with sharp gradient colors.</string>
+    <string name="detail_product_spec_mockup_title">Free Mockup &amp; File Setup</string>
+    <string name="detail_product_spec_mockup_desc">Free print preparation and design consultation for every order.</string>
+    <string name="detail_product_price_note">*Depends on quantity &amp; size variation</string>
+    <string name="detail_product_per_pcs">/pc</string>
+    <string name="detail_product_order_coming_soon">Order form coming soon in Stage 4B!</string>
+
+    <!-- Default WhatsApp Messages -->
+    <string name="whatsapp_msg_consultation">Hello GeCe Sablon, I would like to consult about a DTF printing order.</string>
+    <string name="whatsapp_msg_product">Hello GeCe Sablon, I am interested in %1$s. Please share more details.</string>
+    <string name="whatsapp_msg_order_status">Hello GeCe Sablon, I would like to ask about order status %1$s.</string>
+
+    <!-- ========================================================================= -->
+    <!-- CUSTOMER ORDERING (STAGE 4B) -->
+    <!-- ========================================================================= -->
+
+    <!-- Order Tab (Order List) -->
+    <string name="order_tab_all">All</string>
+    <string name="order_tab_active">Active</string>
+    <string name="order_tab_completed">Completed</string>
+    <string name="order_btn_create_new">Create New Order</string>
+    <string name="order_empty_all_title">No Orders Yet</string>
+    <string name="order_empty_all_desc">You haven\'t placed any printing orders yet. Start ordering custom tees or polo shirts now!</string>
+    <string name="order_empty_active_title">No Active Orders</string>
+    <string name="order_empty_active_desc">All of your orders have been completed or cancelled.</string>
+    <string name="order_empty_completed_title">No Completed Orders</string>
+    <string name="order_empty_completed_desc">Completed or cancelled orders will be recorded here.</string>
+
+    <!-- Order Form -->
+    <string name="order_form_title">Order Form</string>
+    <string name="order_form_summary_badge">Product Summary</string>
+    <string name="order_form_spec_title">Print Specification Details</string>
+    <string name="order_form_spec_tech_label">Print Technique</string>
+    <string name="order_form_spec_tech_value">Print Technique: Precision DTF (Direct to Film)</string>
+    <string name="order_form_spec_tech_desc">High-precision multi-gradient raster colors, wash-resistant, modern apparel standard</string>
+    <string name="order_form_spec_auto">Automatic</string>
+    <string name="order_form_upload_title">Upload Design / Mockup</string>
+    <string name="order_form_upload_max_size">Max 10 MB</string>
+    <string name="order_form_upload_drag_title">Choose mockup or artwork file</string>
+    <string name="order_form_upload_formats">Supported formats: PNG, JPG, WEBP</string>
+    <string name="order_form_btn_upload">Upload Design</string>
+    <string name="order_form_btn_change_file">Change File</string>
+    <string name="order_form_btn_delete_file">Remove</string>
+    <string name="order_form_uploaded_success">Design file selected successfully</string>
+    <string name="order_form_notes_title">Additional Production Notes</string>
+    <string name="order_form_notes_placeholder">Write order notes... (example: Left chest A6 &amp; back A3 print position, solid matte ink).</string>
+    <string name="order_form_notes_char_counter">%1$d / 500</string>
+    <string name="order_form_cost_title">Estimated Cost</string>
+    <string name="order_form_cost_subtotal_label">Product Subtotal (%1$d pcs &#215; %2$s)</string>
+    <string name="order_form_cost_free_proof">Digital Proofing Sample</string>
+    <string name="order_form_cost_free_label">Free</string>
+    <string name="order_form_cost_total_label">Estimated Total</string>
+    <string name="order_form_cost_disclaimer">Shipping fees (if any) are not included. Total adjusts based on variations and specifications.</string>
+    <string name="order_form_guarantee_title">GeCe Precision Guarantee</string>
+    <string name="order_form_guarantee_desc">Guaranteed high-precision DTF printing with premium transfer film &amp; garment oven heat press.</string>
+    <string name="order_form_btn_continue">Continue to Confirmation</string>
+
+    <!-- Order Form Validation -->
+    <string name="order_error_color_required">Please select a product color variant.</string>
+    <string name="order_error_size_required">Please select a product size.</string>
+    <string name="order_error_quantity_invalid">Order quantity must be between 1 and 999 pcs.</string>
+    <string name="order_error_design_or_note_required">Please upload a design file OR fill in print position notes.</string>
+    <string name="order_error_file_size_exceeded">File size is too large (maximum 10 MB).</string>
+    <string name="order_error_file_not_image">Invalid file format. Please select an image file (JPG, PNG, or WEBP).</string>
+
+    <!-- Review & Confirm -->
+    <string name="order_confirm_step">STEP 2 OF 2</string>
+    <string name="order_confirm_step_title">Review &amp; Confirm</string>
+    <string name="order_confirm_badge_check">Check Details</string>
+    <string name="order_confirm_banner_title">Final Production Validation</string>
+    <string name="order_confirm_banner_desc">Please review your order details before submitting to the GeCe production team for final mock-up approval.</string>
+    <string name="order_confirm_product_section">Apparel Product Summary</string>
+    <string name="order_confirm_design_section">Design &amp; Mockup File</string>
+    <string name="order_confirm_design_ready">Design file ready to process</string>
+    <string name="order_confirm_design_none">No design file attached (notes instruction only)</string>
+    <string name="order_confirm_notes_section">Special Print Notes</string>
+    <string name="order_confirm_notes_empty">No additional notes</string>
+    <string name="order_confirm_btn_edit">Edit</string>
+    <string name="order_confirm_btn_submit">Confirm &amp; Submit Order</string>
+    <string name="order_confirm_submitting">Submitting order&#8230;</string>
+
+    <!-- Order Success -->
+    <string name="order_success_title">Order Placed!</string>
+    <string name="order_success_desc">Thank you for ordering at GeCe. Your order has been saved and will be reviewed by our team shortly.</string>
+    <string name="order_success_code_label">ORDER NUMBER</string>
+    <string name="order_success_btn_copy">Copy</string>
+    <string name="order_success_code_copied">Order number copied to clipboard</string>
+    <string name="order_success_status_label">ORDER STATUS</string>
+    <string name="order_success_time_label">SUBMITTED AT</string>
+    <string name="order_success_next_steps_title">Next Steps</string>
+    <string name="order_success_next_steps_desc">The GeCe team will review your specifications and confirm your order via WhatsApp for print layout validation.</string>
+    <string name="order_success_btn_see_detail">View Order Status</string>
+    <string name="order_success_btn_home">Back to Home</string>
+
+    <!-- Customer Order Detail -->
+    <string name="order_detail_title">Order Details</string>
+    <string name="order_detail_badge">Summary</string>
+    <string name="order_detail_code_label">ORDER NUMBER</string>
+    <string name="order_detail_timeline_title">Order Progress Timeline</string>
+    <string name="order_detail_product_section">Product Details</string>
+    <string name="order_detail_cost_section">Estimated Cost Breakdown</string>
+    <string name="order_detail_btn_cancel">Cancel Order</string>
+    <string name="order_detail_cancel_dialog_title">Cancel Order?</string>
+    <string name="order_detail_cancel_dialog_desc">Are you sure you want to cancel order %1$s? This action cannot be undone.</string>
+    <string name="order_detail_cancel_dialog_confirm">Yes, Cancel</string>
+    <string name="order_detail_cancel_dialog_dismiss">Back</string>
+    <string name="order_detail_cancel_success">Order cancelled successfully.</string>
+    <string name="order_detail_whatsapp_btn">Contact Admin via WhatsApp</string>
+
+    <!-- Stage 5A: Internal Production Stages -->
+    <string name="stage_desain_mockup">Design &amp; Mockup</string>
+    <string name="stage_desain_mockup_desc">DTF artwork inspection and approval</string>
+    <string name="stage_pengadaan_baju">Blank Apparel Prep</string>
+    <string name="stage_pengadaan_baju_desc">Preparing apparel stock according to size and color</string>
+    <string name="stage_cetak_dtf">DTF Print &amp; Material</string>
+    <string name="stage_cetak_dtf_desc">Printing DTF transfer film sheets and curing powder</string>
+    <string name="stage_penyablonan">Workshop Pressing</string>
+    <string name="stage_penyablonan_desc">Heat press transfer film process onto garment fabric</string>
+    <string name="stage_qc">QC Inspection</string>
+    <string name="stage_qc_desc">Heat adhesion test, print sharpness check, and neat packing</string>
+
+    <!-- Stage 5A: Staff Orders Management -->
+    <string name="staff_orders_title">Order Management</string>
+    <string name="staff_orders_subtitle">Monitor order queue &amp; DTF printing production</string>
+    <string name="staff_orders_search_hint">Search code or customer name</string>
+    <string name="staff_orders_filter_all">All</string>
+    <string name="staff_orders_filter_new">New</string>
+    <string name="staff_orders_filter_processing">Processing</string>
+    <string name="staff_orders_filter_ready">Ready</string>
+    <string name="staff_orders_filter_done">Completed</string>
+    <string name="staff_orders_empty_search">No orders match your search.</string>
+
+    <!-- Stage 5A: Staff Process Screen -->
+    <string name="staff_process_title">Workshop Process</string>
+    <string name="staff_process_subtitle">Production workflow monitoring and printing table queue</string>
+    <string name="staff_process_filter_all_active">All Active</string>
+    <string name="staff_process_progress_format">%1$d of 5 Completed</string>
+    <string name="staff_process_mat_shirt">Shirt</string>
+    <string name="staff_process_mat_dtf">DTF</string>
+    <string name="staff_process_mat_ready">Ready to Press</string>
+    <string name="staff_process_mat_yes">Arrived</string>
+    <string name="staff_process_mat_no">Waiting</string>
+    <string name="staff_process_empty_desc">No active orders in this stage.</string>
+
+    <!-- Stage 5A: Staff Order Detail -->
+    <string name="staff_detail_title">Order Details</string>
+    <string name="staff_detail_customer_section">Customer Information</string>
+    <string name="staff_detail_origin_customer">App Order</string>
+    <string name="staff_detail_origin_manual">Manual Order</string>
+    <string name="staff_detail_btn_whatsapp">Contact Customer via WhatsApp</string>
+    <string name="staff_detail_whatsapp_message">Hello %1$s, we from the GeCe Sablon workshop team would like to confirm your order with code %2$s.</string>
+    <string name="staff_detail_production_title">Internal Production Checklist</string>
+    <string name="staff_detail_stage_status_done">Done</string>
+    <string name="staff_detail_stage_status_active">Active</string>
+    <string name="staff_detail_stage_status_pending">Waiting</string>
+    <string name="staff_detail_mat_title">Material &amp; Workshop Readiness</string>
+    <string name="staff_detail_action_shirt_arrived">Confirm Shirts Arrived at Workshop</string>
+    <string name="staff_detail_action_dtf_arrived">Update DTF Arrived at Workshop</string>
+    <string name="staff_detail_action_ready_press">Mark Ready to Press</string>
+    <string name="staff_detail_btn_accept_process">Accept &amp; Start Process</string>
+    <string name="staff_detail_btn_save_changes">Save Stage Changes</string>
+    <string name="staff_detail_btn_mark_completed">Mark Completed (Picked Up)</string>
+    <string name="staff_detail_save_success">Production stage changes saved successfully.</string>
+    <string name="staff_detail_accept_success">Order accepted and added to production queue.</string>
+    <string name="staff_detail_completed_success">Order has been marked as completed.</string>
+    <string name="staff_detail_history_title">Order Activity History</string>
+    <string name="staff_detail_history_empty">No activity history yet.</string>
+    <string name="staff_detail_last_updated">Last updated by %1$s at %2$s</string>
+    <string name="staff_detail_dialog_unsaved_title">Unsaved Changes</string>
+    <string name="staff_detail_dialog_unsaved_desc">There are unsaved production stage changes. Are you sure you want to leave without saving?</string>
+    <string name="staff_detail_dialog_unsaved_stay">Continue Editing</string>
+    <string name="staff_detail_dialog_unsaved_leave">Leave Without Saving</string>
+    <string name="staff_detail_dialog_complete_title">Confirm Order Completion</string>
+    <string name="staff_detail_dialog_complete_desc">Has order %1$s been picked up by the customer and completed?</string>
+    <string name="staff_detail_dialog_complete_confirm">Yes, Mark Completed</string>
+    <string name="staff_detail_dialog_complete_dismiss">Cancel</string>
+    <string name="staff_detail_diterima_hint">Order is Received. Tap \"Accept &amp; Start Process\" below to begin internal production stages.</string>
+
+    <!-- Stage 5B: Workshop Stock Management -->
+    <string name="admin_stock_title">Stock Management</string>
+    <string name="admin_stock_subtitle">Manage blank tee and printing material availability</string>
+    <string name="admin_stock_search_hint">Search item or material name...</string>
+    <string name="admin_stock_filter_all">All</string>
+    <string name="admin_stock_filter_baju">Blank Tees</string>
+    <string name="admin_stock_filter_material">DTF Material</string>
+    <string name="admin_stock_filter_lainnya">Others</string>
+    <string name="admin_stock_btn_add">Add Stock</string>
+    <string name="admin_stock_badge_low">Low</string>
+    <string name="admin_stock_empty_title">Stock Not Found</string>
+    <string name="admin_stock_empty_desc">No stock items match this filter or search.</string>
+    <string name="admin_stock_min_threshold">Min Limit: %1$d %2$s</string>
+    <string name="admin_stock_dialog_delete_title">Delete Stock Item</string>
+    <string name="admin_stock_dialog_delete_desc">Are you sure you want to delete \"%1$s\" from workshop stock inventory?</string>
+    <string name="admin_stock_dialog_delete_confirm">Delete Item</string>
+
+    <!-- Stage 5B: Stock Form -->
+    <string name="admin_stock_form_title_add">Add Stock Item</string>
+    <string name="admin_stock_form_title_edit">Edit Stock Data</string>
+    <string name="admin_stock_form_name_label">Item / Material Name</string>
+    <string name="admin_stock_form_name_hint">Example: Cotton Combed 24s Black</string>
+    <string name="admin_stock_form_category_label">Item Category</string>
+    <string name="admin_stock_form_unit_label">Unit</string>
+    <string name="admin_stock_form_qty_label">Physical Stock Quantity</string>
+    <string name="admin_stock_form_min_label">Low Stock Minimum Threshold</string>
+    <string name="admin_stock_form_btn_save">Save Stock Data</string>
+    <string name="admin_stock_form_err_name">Item name is required.</string>
+    <string name="admin_stock_form_err_qty">Stock quantity must be a positive integer.</string>
+    <string name="admin_stock_form_err_min">Minimum threshold must be a positive integer.</string>
+
+    <!-- Stage 5B: Staff Manual Order -->
+    <string name="admin_manual_order_title">Create Manual Order</string>
+    <string name="admin_manual_order_subtitle">Record walk-in or offline customer orders</string>
+    <string name="admin_manual_order_cust_name_label">Customer Name</string>
+    <string name="admin_manual_order_cust_name_hint">Customer\'s full name</string>
+    <string name="admin_manual_order_phone_label">WhatsApp / Phone Number</string>
+    <string name="admin_manual_order_phone_hint">Format: 08123456789 or 62812...</string>
+    <string name="admin_manual_order_product_label">Select Textile Product</string>
+    <string name="admin_manual_order_color_label">Color Variant</string>
+    <string name="admin_manual_order_size_label">Size Variant</string>
+    <string name="admin_manual_order_qty_label">Quantity (Pcs)</string>
+    <string name="admin_manual_order_notes_label">Print Notes / Position</string>
+    <string name="admin_manual_order_notes_hint">Example: Left chest A6 and back A3</string>
+    <string name="admin_manual_order_design_url_label">Design File Link / URI (Optional)</string>
+    <string name="admin_manual_order_design_url_hint">Google Drive link or artwork image URL</string>
+    <string name="admin_manual_order_summary_title">Cost Summary</string>
+    <string name="admin_manual_order_unit_price">Unit Price: %1$s</string>
+    <string name="admin_manual_order_total_price">Estimated Total: %1$s</string>
+    <string name="admin_manual_order_btn_submit">Save &amp; Create Order</string>
+    <string name="admin_manual_order_err_name">Customer name is required.</string>
+    <string name="admin_manual_order_err_phone">Phone number must be Indonesian format (08/628, 10&#8211;14 digits).</string>
+    <string name="admin_manual_order_err_qty">Order quantity must be between 1 and 999 pcs.</string>
+    <string name="admin_manual_order_err_product">Please select a printing product.</string>
+    <string name="admin_manual_order_err_color">Please select a color.</string>
+    <string name="admin_manual_order_err_size">Please select a size.</string>
+
+    <!-- Stage 5B: Admin Dashboard -->
+    <string name="admin_dashboard_summary_title">Today\'s Workshop Summary</string>
+    <string name="admin_dashboard_stat_new">New</string>
+    <string name="admin_dashboard_stat_process">Processing</string>
+    <string name="admin_dashboard_stat_ready">Ready</string>
+    <string name="admin_dashboard_stat_stock_low">Low Stock</string>
+    <string name="admin_dashboard_quick_actions">Quick Actions</string>
+    <string name="admin_dashboard_action_create_order">Create Order</string>
+    <string name="admin_dashboard_action_manage_orders">Manage Orders</string>
+    <string name="admin_dashboard_action_manage_stock">Manage Stock</string>
+    <string name="admin_dashboard_need_action">Needs Follow-up</string>
+    <string name="admin_dashboard_need_action_empty">No orders require urgent follow-up.</string>
+    <string name="admin_dashboard_recent_orders">Recent Orders</string>
+    <string name="admin_dashboard_see_all">See All</string>
+    <string name="admin_dashboard_stock_info">Workshop Stock Info</string>
+    <string name="admin_dashboard_stock_all_safe">All printing material stock levels are safe.</string>
+
+    <!-- General Action Buttons -->
+    <string name="action_back">Back</string>
+    <string name="action_cancel">Cancel</string>
+
+    <!-- Admin Top Bar & Date Filter -->
+    <string name="admin_role_badge">WORKSHOP ADMIN</string>
+    <string name="staff_orders_date_all">All Dates</string>
+    <string name="staff_orders_date_today">Today</string>
+    <string name="staff_orders_date_7days">Last 7 Days</string>
+    <string name="staff_orders_date_this_month">This Month</string>
+    <string name="staff_orders_count_format">Showing %1$d orders</string>
+    <string name="content_desc_notifications">Notifications</string>
+
+    <!-- Stage 6A: Owner Dashboard -->
+    <string name="owner_header_title">GECE OWNER</string>
+    <string name="owner_header_badge">WORKSHOP</string>
+    <string name="owner_header_tab_home">Home</string>
+
+    <string name="owner_greeting_label">WELCOME, OWNER</string>
+    <string name="owner_greeting_sub">Financial &amp; Operational Summary</string>
+
+    <string name="owner_dashboard_finance_title">Financial Summary</string>
+    <string name="owner_dashboard_finance_formula">Formula: Income - Expenses</string>
+    <string name="owner_dashboard_margin_healthy">Healthy Margin</string>
+    <string name="owner_dashboard_margin_defisit">Deficit Margin</string>
+    <string name="owner_dashboard_total_income">TOTAL INCOME</string>
+    <string name="owner_dashboard_orders_done_count">%1$d Completed orders</string>
+    <string name="owner_dashboard_total_expense">TOTAL EXPENSES</string>
+    <string name="owner_dashboard_biggest_expense_prefix">Largest: %1$s</string>
+
+    <string name="owner_dashboard_trend_title">6-Month Income &amp; Expense Trend</string>
+    <string name="owner_dashboard_trend_sub">Income vs Expense Comparison</string>
+    <string name="owner_dashboard_legend_income">Income</string>
+    <string name="owner_dashboard_legend_expense">Expenses</string>
+    <string name="owner_dashboard_avg_margin">Average Margin</string>
+    <string name="owner_dashboard_trend_chart_desc">Comparison chart of income and expenses over the last 6 months</string>
+
+    <string name="owner_dashboard_production_title">Workshop Production Status</string>
+    <string name="owner_dashboard_production_active_count">Total %1$d active orders</string>
+    <string name="owner_dashboard_queue_board">Queue Board</string>
+    <string name="owner_dashboard_stat_diterima">Incoming Orders</string>
+    <string name="owner_dashboard_stat_diproses">In Progress</string>
+    <string name="owner_dashboard_stat_cetak_press">Print &amp; Press</string>
+    <string name="owner_dashboard_stat_siap_ambil">Ready for Pickup</string>
+    <string name="owner_dashboard_badge_priority">Priority</string>
+
+    <string name="owner_dashboard_stock_title">Material Stock Status</string>
+    <string name="owner_dashboard_stock_sub">Blank Tee &amp; DTF Supply Stock</string>
+    <string name="owner_dashboard_stock_group_baju">Product Materials (Textile)</string>
+    <string name="owner_dashboard_stock_group_dtf">DTF Printing Consumables</string>
+    <string name="owner_dashboard_stock_available">Available</string>
+    <string name="owner_dashboard_stock_low">Low</string>
+
+    <string-array name="month_short_names">
+        <item>Jan</item>
+        <item>Feb</item>
+        <item>Mar</item>
+        <item>Apr</item>
+        <item>May</item>
+        <item>Jun</item>
+        <item>Jul</item>
+        <item>Aug</item>
+        <item>Sep</item>
+        <item>Oct</item>
+        <item>Nov</item>
+        <item>Dec</item>
+    </string-array>
+
+    <string name="owner_dashboard_finance_this_month">This Month\'s Finance</string>
+    <string name="owner_dashboard_income">Income</string>
+    <string name="owner_dashboard_expense">Expenses</string>
+    <string name="owner_dashboard_profit">Net Profit</string>
+    <string name="owner_dashboard_loss">Net Loss</string>
+    <string name="owner_dashboard_order_status">Order Status</string>
+    <string name="owner_dashboard_stat_new">New</string>
+    <string name="owner_dashboard_stat_process">Processing</string>
+    <string name="owner_dashboard_stat_ready">Ready</string>
+    <string name="owner_dashboard_quick_actions">Quick Actions</string>
+    <string name="owner_dashboard_action_create_order">Create\nOrder</string>
+    <string name="owner_dashboard_action_record_expense">Record\nExpense</string>
+    <string name="owner_dashboard_action_catalog">Product\nCatalog</string>
+    <string name="owner_dashboard_action_team">Print\nTeam</string>
+    <string name="owner_dashboard_attention">Needs Attention</string>
+    <string name="owner_dashboard_recent_orders">Recent Orders</string>
+    <string name="owner_dashboard_see_all">See All</string>
+    <string name="owner_dashboard_coming_soon">Coming soon in the next version</string>
+
+    <!-- Stage 6A: Owner Finance -->
+    <string name="owner_finance_period_this_month">This Month</string>
+    <string name="owner_finance_period_last_month">Last Month</string>
+    <string name="owner_finance_period_7days">7 Days</string>
+    <string name="owner_finance_period_30days">30 Days</string>
+    <string name="owner_finance_period_custom">Select Dates</string>
+    <string name="owner_finance_summary">Financial Summary</string>
+    <string name="owner_finance_btn_income">Record Income</string>
+    <string name="owner_finance_btn_expense">Record Expense</string>
+    <string name="owner_finance_recent_tx">Recent Transactions</string>
+    <string name="owner_finance_see_all">See All</string>
+    <string name="owner_finance_report">Reports</string>
+    <string name="owner_finance_no_transactions">No transactions in this period yet.</string>
+
+    <!-- Stage 6A: Finance Detail -->
+    <string name="owner_finance_detail_title">All Transactions</string>
+    <string name="owner_finance_detail_filter_all">All</string>
+    <string name="owner_finance_detail_filter_income">Income</string>
+    <string name="owner_finance_detail_filter_expense">Expenses</string>
+    <string name="owner_finance_detail_search_hint">Search description&#8230;</string>
+    <string name="owner_finance_detail_empty">No transactions found.</string>
+    <string name="owner_finance_badge_order">ORDER</string>
+
+    <!-- Stage 6A: Transaction Form -->
+    <string name="owner_tx_form_title_income">Record Income</string>
+    <string name="owner_tx_form_title_expense">Record Expense</string>
+    <string name="owner_tx_form_title_edit">Edit Transaction</string>
+    <string name="owner_tx_form_type_income">Income</string>
+    <string name="owner_tx_form_type_expense">Expense</string>
+    <string name="owner_tx_form_category_label">Category</string>
+    <string name="owner_tx_form_nominal_label">Amount</string>
+    <string name="owner_tx_form_nominal_prefix">Rp</string>
+    <string name="owner_tx_form_date_label">Date</string>
+    <string name="owner_tx_form_note_label">Description</string>
+    <string name="owner_tx_form_note_hint">Transaction description (max 200 characters)</string>
+    <string name="owner_tx_form_btn_save">Save</string>
+    <string name="owner_tx_form_err_nominal">Amount must be greater than Rp0 and not exceed Rp1,000,000,000.</string>
+    <string name="owner_tx_form_err_note_long">Description must be at most 200 characters.</string>
+
+    <!-- Stage 6A: Transaction Categories -->
+    <string name="tx_category_bahan_baku">Raw Materials</string>
+    <string name="tx_category_material_dtf">DTF Materials</string>
+    <string name="tx_category_operasional">Operations</string>
+    <string name="tx_category_gaji">Salaries</string>
+    <string name="tx_category_pengeluaran_lainnya">Other Expenses</string>
+    <string name="tx_category_penjualan_lain">Other Sales</string>
+    <string name="tx_category_pemasukan_lainnya">Other Income</string>
+    <string name="tx_category_pesanan">Orders</string>
+
+    <!-- Stage 6A: Transaction Detail -->
+    <string name="owner_tx_detail_title">Transaction Details</string>
+    <string name="owner_tx_detail_type">Type</string>
+    <string name="owner_tx_detail_category">Category</string>
+    <string name="owner_tx_detail_nominal">Amount</string>
+    <string name="owner_tx_detail_date">Date</string>
+    <string name="owner_tx_detail_note">Description</string>
+    <string name="owner_tx_detail_source">Source</string>
+    <string name="owner_tx_detail_created_by">Recorded By</string>
+    <string name="owner_tx_detail_source_manual">Manual</string>
+    <string name="owner_tx_detail_source_order">Automatic from Order</string>
+    <string name="owner_tx_detail_btn_edit">Edit</string>
+    <string name="owner_tx_detail_btn_delete">Delete</string>
+    <string name="owner_tx_detail_btn_view_order">View Order</string>
+    <string name="owner_tx_detail_delete_confirm_title">Delete Transaction?</string>
+    <string name="owner_tx_detail_delete_confirm_msg">This transaction will be permanently deleted.</string>
+    <string name="owner_tx_detail_delete_btn_confirm">Delete</string>
+    <string name="owner_tx_detail_delete_btn_cancel">Cancel</string>
+
+    <!-- Stage 6A: Reports -->
+    <string name="owner_report_title">Financial Report</string>
+    <string name="owner_report_summary">Profit/Loss Summary</string>
+    <string name="owner_report_completed_orders">Completed Orders</string>
+    <string name="owner_report_income_by_category">Income Breakdown by Category</string>
+    <string name="owner_report_expense_by_category">Expense Breakdown by Category</string>
+    <string name="owner_report_no_income">No income in this period.</string>
+    <string name="owner_report_no_expense">No expenses in this period.</string>
+
+    <!-- P2: Owner Finance & Report -->
+    <string name="owner_finance_header_subtitle">Finance</string>
+    <string name="owner_report_header_subtitle">Report</string>
+    <string name="owner_finance_title_detail">Financial Details</string>
+    <string name="owner_finance_badge_rahasia">CONFIDENTIAL</string>
+    <string name="owner_finance_desc_detail">Cash flow summary and net profit margin for GeCe workshop.</string>
+    <string name="owner_report_desc">Analysis of GeCe income, expenses, and profit</string>
+    <string name="owner_report_info_banner">Owner Only. This report cannot be accessed by Admin or production staff.</string>
+    <string name="owner_report_period_bar">Report Period: %1$s - %2$s</string>
+    <string name="owner_finance_formula_row">Income %1$s - Expenses %2$s</string>
+    <string name="owner_finance_vs_prev_diff">vs previous period %1$s</string>
+    <string name="owner_finance_percent_omzet">%1$s revenue</string>
+    <string name="owner_finance_no_expense_yet">No expenses yet</string>
+    <string name="owner_finance_structure_title">Expense Structure</string>
+    <string name="owner_report_expense_breakdown_title">Expense Breakdown</string>
+    <string name="owner_finance_income_source_title">Income Sources</string>
+    <string name="owner_finance_source_orders">Completed Orders</string>
+    <string name="owner_finance_source_manual">Other Income</string>
+    <string name="owner_finance_source_orders_count">%1$d orders</string>
+    <string name="owner_finance_tx_title">Financial Transactions</string>
+    <string name="owner_finance_tx_subtitle">Cash Book &amp; Production Expenses</string>
+    <string name="owner_finance_search_placeholder">Search transaction description</string>
+    <string name="owner_finance_btn_load_more">Load More Transactions</string>
+    <string name="owner_finance_btn_view_report">View Financial Report</string>
+    <string name="owner_report_financial_perf_title">Financial Performance</string>
+
+    <!-- P3: Owner & Admin Account, and Change Password -->
+    <string name="account_header_gece">GECE</string>
+    <string name="account_header_title">Account</string>
+    <string name="account_badge_owner">OWNER</string>
+    <string name="account_badge_admin">ADMIN</string>
+    <string name="account_access_owner">Access Level: Full (Owner)\nFull authority over Management, Financial Reports, and Production Monitoring modules of GeCe Screen Printing.</string>
+    <string name="account_access_admin">Access Level: Workshop Admin\nManages orders, production, and workshop stock.</string>
+    <string name="account_section_info">ACCOUNT INFORMATION</string>
+    <string name="account_menu_change_password">Change Password</string>
+    <string name="account_menu_change_password_sub">Update your account password</string>
+    <string name="account_section_help">HELP &amp; LEGAL</string>
+    <string name="account_menu_about">About App</string>
+    <string name="account_btn_logout">Sign Out</string>
+
+    <string name="change_password_title">Change Password</string>
+    <string name="change_password_subtitle">Update your account password to keep your access secure.</string>
+    <string name="change_password_old_label">Current Password</string>
+    <string name="change_password_old_placeholder">Enter current password</string>
+    <string name="change_password_new_label">New Password</string>
+    <string name="change_password_new_placeholder">Enter new password</string>
+    <string name="change_password_confirm_label">Confirm New Password</string>
+    <string name="change_password_confirm_placeholder">Re-enter new password</string>
+    <string name="change_password_hint_rules">Password must be at least 8 characters, contain letters and numbers, and cannot be the same as the current password.</string>
+    <string name="change_password_btn_submit">Save Password</string>
+    <string name="change_password_success">Password updated</string>
+
+    <!-- Stage 6B: Manage Products (Owner) -->
+    <string name="owner_products_header_subtitle">Product Catalog</string>
+    <string name="owner_products_title">Product Catalog</string>
+    <string name="owner_products_btn_add">Add Product</string>
+    <string name="owner_products_search_hint">Search product name or fabric...</string>
+    <string name="owner_products_category_all">All Categories</string>
+    <string name="owner_products_empty_title">No Products Yet</string>
+    <string name="owner_products_empty_desc">The workshop product catalog is empty or no products match your search.</string>
+    <string name="owner_product_status_active">Active</string>
+    <string name="owner_product_status_inactive">Inactive</string>
+    <string name="owner_product_base_price_label">Base Price</string>
+    <string name="owner_product_btn_edit">Edit Product</string>
+    <string name="owner_product_btn_delete">Delete Product</string>
+    <string name="owner_product_delete_dialog_title">Delete Product</string>
+    <string name="owner_product_delete_dialog_msg">Are you sure you want to delete product \"%1$s\"? This action cannot be undone.</string>
+    <string name="owner_product_delete_confirm">Delete</string>
+    <string name="owner_product_delete_cancel">Cancel</string>
+    <string name="owner_product_form_title_add">Add Product</string>
+    <string name="owner_product_form_title_edit">Edit Product</string>
+    <string name="owner_product_section_general">General Information</string>
+    <string name="owner_product_status_label">Availability Status</string>
+    <string name="owner_product_status_hint">Enable to show in catalog and allow customer orders</string>
+    <string name="owner_product_name_label">Product Name</string>
+    <string name="owner_product_name_placeholder">Example: Custom Tee Combed 24s</string>
+    <string name="owner_product_category_label">Category</string>
+    <string name="owner_product_category_placeholder">Select product category</string>
+    <string name="owner_product_fabric_label">Fabric Material</string>
+    <string name="owner_product_fabric_placeholder">Example: Cotton Combed 24s/30s</string>
+    <string name="owner_product_desc_label">Product Description</string>
+    <string name="owner_product_desc_placeholder">Describe product highlights and fabric specs...</string>
+    <string name="owner_product_price_label">Base Price (Standard Size)</string>
+    <string name="owner_product_price_placeholder">65000</string>
+    <string name="owner_product_image_title">Product Image Preview</string>
+    <string name="owner_product_image_note">Product image currently uses the default GeCe Studio placeholder.</string>
+    <string name="owner_product_color_title">Color Variants</string>
+    <string name="owner_product_color_subtitle">Minimum 1 color (valid name and hex code)</string>
+    <string name="owner_product_btn_add_color">Add Color</string>
+    <string name="owner_product_btn_remove_color_row">Remove color row</string>
+    <string name="owner_product_size_title">Size Options &amp; Extra Price</string>
+    <string name="owner_product_size_subtitle">Check available sizes and set extra price per size</string>
+    <string name="owner_product_btn_save_add">Save Product</string>
+    <string name="owner_product_btn_save_edit">Save Changes</string>
+    <string name="owner_product_btn_delete_product">Delete This Product</string>
+    <string name="account_section_management">WORKSHOP MANAGEMENT</string>
+    <string name="account_menu_manage_products">Manage Products</string>
+    <string name="account_menu_manage_products_sub">Manage catalog, prices, and product variants</string>
+
+    <!-- Owner Product Form Improvements -->
+    <string name="owner_product_color_name_placeholder">Name (example: Gray)</string>
+    <string name="owner_product_color_hex_placeholder">#1F2937</string>
+    <string name="owner_product_color_hex_error">Color code must be 6 characters 0-9 or A-F, e.g. #1F2937</string>
+    <string name="owner_product_color_preset_label">Quick Color Presets:</string>
+    <string name="owner_product_color_duplicate_msg">Color \"%1$s\" is already in the list.</string>
+
+    <!-- Manage Admin Accounts (Stage 6B-2) -->
+    <string name="owner_admin_accounts_title">Manage Admin Accounts</string>
+    <string name="owner_admin_accounts_subtitle">Manage operational workshop staff access</string>
+    <string name="owner_admin_accounts_empty_title">No Admin Staff Yet</string>
+    <string name="owner_admin_accounts_empty_desc">No admin accounts have been registered by the Owner yet.</string>
+    <string name="owner_admin_accounts_btn_add">Add Admin</string>
+    <string name="owner_admin_role_badge">Workshop Admin</string>
+    <string name="owner_admin_status_active">Active</string>
+    <string name="owner_admin_status_inactive">Deactivated</string>
+
+    <string name="owner_admin_form_title_add">Add Admin Account</string>
+    <string name="owner_admin_form_name_label">Full Name</string>
+    <string name="owner_admin_form_name_placeholder">Example: Budi Santoso</string>
+    <string name="owner_admin_form_email_label">Email Address</string>
+    <string name="owner_admin_form_email_placeholder">budi@gece.test</string>
+    <string name="owner_admin_form_phone_label">WhatsApp / Phone Number</string>
+    <string name="owner_admin_form_phone_placeholder">081234567890</string>
+    <string name="owner_admin_form_password_label">Initial Password</string>
+    <string name="owner_admin_form_password_placeholder">Minimum 8 characters (letters &amp; numbers)</string>
+    <string name="owner_admin_form_password_hint">Temporary password to be given to the admin staff.</string>
+    <string name="owner_admin_form_btn_submit">Create Admin Account</string>
+
+    <string name="owner_admin_detail_title">Admin Account Details</string>
+    <string name="owner_admin_detail_section_info">ACCOUNT INFORMATION</string>
+    <string name="owner_admin_detail_section_security">SECURITY SETTINGS</string>
+    <string name="owner_admin_detail_btn_save_name">Save Name</string>
+    <string name="owner_admin_detail_btn_deactivate">Deactivate Account</string>
+    <string name="owner_admin_detail_btn_activate">Reactivate Account</string>
+    <string name="owner_admin_detail_dialog_deactivate_title">Deactivate Admin Account?</string>
+    <string name="owner_admin_detail_dialog_deactivate_msg">Account %1$s will not be able to sign in or process orders until reactivated by the Owner.</string>
+    <string name="owner_admin_detail_dialog_activate_title">Activate Admin Account?</string>
+    <string name="owner_admin_detail_dialog_activate_msg">Account %1$s will be able to sign in and process workshop orders again.</string>
+    <string name="owner_admin_detail_dialog_confirm">Yes, Continue</string>
+    <string name="owner_admin_detail_dialog_cancel">Cancel</string>
+    <string name="owner_admin_detail_reset_password_title">Reset Password</string>
+    <string name="owner_admin_detail_reset_password_desc">Enter a new temporary password for this account.</string>
+    <string name="owner_admin_detail_reset_password_btn">Reset Password</string>
+    <string name="owner_admin_detail_reset_password_success">Password reset successfully.</string>
+
+    <string name="account_menu_manage_admins">Manage Admin Accounts</string>
+    <string name="account_menu_manage_admins_sub">Staff list, access rights, and password reset</string>
+
+    <!-- Stage 6C: Export Financial Report -->
+    <string name="owner_report_export_section_title">Export Report Document</string>
+    <string name="owner_report_btn_download_pdf">Download PDF</string>
+    <string name="owner_report_btn_download_csv">Download Excel (CSV)</string>
+    <string name="owner_report_export_loading_pdf">Preparing PDF document...</string>
+    <string name="owner_report_export_loading_csv">Preparing CSV file...</string>
+    <string name="owner_report_export_success">Report saved successfully.</string>
+    <string name="owner_report_export_failed">Failed to save report. Please try again.</string>
+
+    <!-- Stage 6D-2: Manage Product Categories -->
+    <string name="account_menu_manage_categories">Manage Categories</string>
+    <string name="account_menu_manage_categories_sub">List of printing and apparel product categories</string>
+    <string name="owner_categories_title">Manage Categories</string>
+    <string name="owner_categories_subtitle">Catalog product category settings</string>
+    <string name="owner_categories_btn_add">Add Category</string>
+    <string name="owner_categories_empty_title">No Categories Yet</string>
+    <string name="owner_categories_empty_desc">No product categories are registered in the system yet.</string>
+    <string name="owner_categories_dialog_add_title">Add New Category</string>
+    <string name="owner_categories_dialog_edit_title">Edit Category Name</string>
+    <string name="owner_categories_name_label">Category Name</string>
+    <string name="owner_categories_name_placeholder">Example: Oversize Tees</string>
+    <string name="owner_categories_dialog_save">Save</string>
+    <string name="owner_categories_dialog_cancel">Cancel</string>
+    <string name="owner_categories_dialog_delete_title">Delete Category?</string>
+    <string name="owner_categories_dialog_delete_msg">Are you sure you want to delete category \"%1$s\"?</string>
+    <string name="owner_categories_dialog_delete_confirm">Yes, Delete</string>
+    <string name="owner_categories_badge_role">OWNER</string>
+
+    <!-- Stage 6D-3: Fabric Material Options per Product -->
+    <string name="order_form_material_section">Select Fabric Material</string>
+    <string name="order_form_material_badge_default">Default</string>
+    <string name="order_error_material_required">Please select a fabric material first.</string>
+    <string name="admin_manual_order_material_label">Fabric Material Option</string>
+    <string name="owner_product_material_title">Fabric Material Options</string>
+    <string name="owner_product_material_subtitle">Minimum 1 material and exactly 1 default material selected</string>
+    <string name="owner_product_btn_add_material">Add Material</string>
+    <string name="owner_product_material_name_placeholder">Example: Cotton Combed 24s</string>
+    <string name="owner_product_material_extra_placeholder">+Rp Extra</string>
+    <string name="owner_product_material_badge_default">Default</string>
+    <string name="owner_product_material_set_default">Set as Default</string>
+    <string name="owner_product_btn_remove_material_row">Remove Material Row</string>
+
+    <!-- Stage 7B: Language & Theme Settings -->
+    <string name="menu_settings">Settings</string>
+    <string name="account_menu_settings">Settings</string>
+    <string name="account_menu_settings_sub">App language and display theme</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_language_section">App Language</string>
+    <string name="settings_language_desc">Choose interface language. Currency remains Rupiah and server data is not translated.</string>
+    <string name="settings_option_system">Follow System</string>
+    <string name="settings_language_id">Indonesia</string>
+    <string name="settings_language_en">English</string>
+    <string name="settings_theme_section">Display Theme</string>
+    <string name="settings_theme_desc">Choose light or dark mode without restarting the app.</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+
+    <!-- Additional Strings Extracted from UI Code (Stage 7B) -->
+    <string name="order_default_custom_name">Custom Printing Order</string>
+    <string name="order_total_label">Total: %1$s</string>
+    <string name="admin_stock_remaining_format">Left: %1$d %2$s</string>
+    <string name="admin_stock_min_short_format">Min: %1$d %2$s</string>
+    <string name="staff_orders_badge_workshop">DTF WORKSHOP</string>
+    <string name="owner_finance_portion_format">%1$s share</string>
+</resources>

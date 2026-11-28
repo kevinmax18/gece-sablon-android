@@ -39,9 +39,6 @@ import com.gecesablon.app.ui.components.AppTextField
 import com.gecesablon.app.ui.components.AppTopBar
 import com.gecesablon.app.ui.theme.GeceColors
 import com.gecesablon.app.ui.theme.ShapeCard
-import com.gecesablon.app.ui.theme.SurfaceCard
-import com.gecesablon.app.ui.theme.TextPrimary
-import com.gecesablon.app.ui.theme.TextSecondary
 import kotlinx.coroutines.flow.collectLatest
 
 /**
@@ -96,7 +93,7 @@ fun ChangePasswordScreen(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
                 ),
-                color = TextPrimary
+                color = GeceColors.TextMain
             )
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -104,7 +101,7 @@ fun ChangePasswordScreen(
             Text(
                 text = stringResource(R.string.change_password_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
-                color = TextSecondary
+                color = GeceColors.TextMuted
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -176,13 +173,13 @@ fun ChangePasswordScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(SurfaceCard, shape = ShapeCard)
+                    .background(GeceColors.Surface, shape = ShapeCard)
                     .padding(12.dp)
             ) {
                 Text(
                     text = stringResource(R.string.change_password_hint_rules),
                     style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
-                    color = TextSecondary
+                    color = GeceColors.TextMuted
                 )
             }
 

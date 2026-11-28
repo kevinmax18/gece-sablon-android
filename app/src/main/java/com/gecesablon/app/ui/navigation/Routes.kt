@@ -19,6 +19,7 @@ object Routes {
     const val REGISTER_WITH_REDIRECT = "register?redirect={redirect}&productId={productId}"
     const val ABOUT = "about"
     const val CHANGE_PASSWORD = "change_password"
+    const val SETTINGS = "settings"
 
     /** Daftar nilai redirect yang diizinkan. Nilai lain diabaikan. */
     val VALID_REDIRECTS = setOf("order", "product")

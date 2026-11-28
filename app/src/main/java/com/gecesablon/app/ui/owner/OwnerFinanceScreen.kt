@@ -138,7 +138,7 @@ fun OwnerFinanceScreen(
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 18.sp
                             ),
-                            color = TextPrimary
+                            color = GeceColors.TextMain
                         )
 
                         // Badge "RAHASIA"
@@ -166,7 +166,7 @@ fun OwnerFinanceScreen(
                     Text(
                         text = stringResource(R.string.owner_finance_desc_detail),
                         style = MaterialTheme.typography.bodySmall,
-                        color = TextSecondary
+                        color = GeceColors.TextMuted
                     )
                 }
             }
@@ -193,10 +193,10 @@ fun OwnerFinanceScreen(
                             },
                             label = { Text(label) },
                             colors = FilterChipDefaults.filterChipColors(
-                                selectedContainerColor = InkBlack,
-                                selectedLabelColor = AccentYellow,
+                                selectedContainerColor = GeceColors.PrimaryInk,
+                                selectedLabelColor = GeceColors.Accent,
                                 containerColor = GeceColors.Surface,
-                                labelColor = TextPrimary
+                                labelColor = GeceColors.TextMain
                             )
                         )
                     }
