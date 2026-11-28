@@ -105,7 +105,7 @@ fun ContactScreen(modifier: Modifier = Modifier) {
                             Box(
                                 modifier = Modifier
                                     .clip(ShapeBadge)
-                                    .background(GeceColors.PrimaryInk)
+                                    .background(GeceColors.HighlightContainer)
                                     .padding(horizontal = 8.dp, vertical = 2.dp)
                             ) {
                                 Text(
@@ -114,7 +114,7 @@ fun ContactScreen(modifier: Modifier = Modifier) {
                                         fontWeight = FontWeight.Bold,
                                         letterSpacing = 0.5.sp
                                     ),
-                                    color = GeceColors.Accent
+                                    color = GeceColors.HighlightAccent
                                 )
                             }
                             Spacer(modifier = Modifier.height(4.dp))
@@ -168,8 +168,8 @@ fun ContactScreen(modifier: Modifier = Modifier) {
                 },
                 shape = ShapeControl,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = GeceColors.PrimaryInk,
-                    contentColor = GeceColors.Background
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 modifier = Modifier.fillMaxWidth(),
                 contentPadding = PaddingValues(vertical = 14.dp)
@@ -178,7 +178,7 @@ fun ContactScreen(modifier: Modifier = Modifier) {
                     imageVector = Icons.Default.Chat,
                     contentDescription = null,
                     modifier = Modifier.size(20.dp),
-                    tint = GeceColors.Accent
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(

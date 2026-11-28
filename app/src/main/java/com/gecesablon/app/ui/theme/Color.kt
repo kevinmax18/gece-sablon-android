@@ -47,7 +47,11 @@ data class GeceColorPalette(
     val statusSuccessBg: Color,
     val statusSuccessText: Color,
     val statusCancelledBg: Color,
-    val statusCancelledText: Color
+    val statusCancelledText: Color,
+    val highlightContainer: Color,
+    val onHighlight: Color,
+    val onHighlightMuted: Color,
+    val highlightAccent: Color
 )
 
 val LightGeceColorPalette = GeceColorPalette(
@@ -68,7 +72,11 @@ val LightGeceColorPalette = GeceColorPalette(
     statusSuccessBg = Color(0xFFE6F4EA),
     statusSuccessText = Color(0xFF137333),
     statusCancelledBg = Color(0xFFFCE8E6),
-    statusCancelledText = Color(0xFFC5221F)
+    statusCancelledText = Color(0xFFC5221F),
+    highlightContainer = InkBlack,
+    onHighlight = BackgroundCanvas,
+    onHighlightMuted = Color(0xFFD2D2CC),
+    highlightAccent = AccentYellow
 )
 
 val DarkGeceColorPalette = GeceColorPalette(
@@ -89,7 +97,11 @@ val DarkGeceColorPalette = GeceColorPalette(
     statusSuccessBg = Color(0xFF1B3A24),
     statusSuccessText = Color(0xFF81C995),
     statusCancelledBg = Color(0xFF421A18),
-    statusCancelledText = Color(0xFFF28B82)
+    statusCancelledText = Color(0xFFF28B82),
+    highlightContainer = SurfaceCard,
+    onHighlight = InkBlack,
+    onHighlightMuted = Color(0xFF52524E),
+    highlightAccent = InkBlack
 )
 
 val LocalGeceColorPalette = staticCompositionLocalOf { LightGeceColorPalette }
@@ -122,4 +134,10 @@ object GeceColors {
 
     val StatusCancelledBg: Color @Composable get() = LocalGeceColorPalette.current.statusCancelledBg
     val StatusCancelledText: Color @Composable get() = LocalGeceColorPalette.current.statusCancelledText
+
+    // Kartu Sorotan (Highlight / Hero Banner)
+    val HighlightContainer: Color @Composable get() = LocalGeceColorPalette.current.highlightContainer
+    val OnHighlight: Color @Composable get() = LocalGeceColorPalette.current.onHighlight
+    val OnHighlightMuted: Color @Composable get() = LocalGeceColorPalette.current.onHighlightMuted
+    val HighlightAccent: Color @Composable get() = LocalGeceColorPalette.current.highlightAccent
 }

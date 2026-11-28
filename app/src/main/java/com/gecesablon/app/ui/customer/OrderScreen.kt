@@ -204,7 +204,7 @@ fun OrderScreen(
                             shape = ShapeControl,
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = GeceColors.Accent,
-                                contentColor = GeceColors.PrimaryInk
+                                contentColor = GeceColors.OnAccent
                             ),
                             contentPadding = PaddingValues(horizontal = 24.dp, vertical = 14.dp)
                         ) {

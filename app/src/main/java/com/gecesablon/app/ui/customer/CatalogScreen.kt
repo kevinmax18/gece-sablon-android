@@ -330,7 +330,7 @@ fun CatalogScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(ShapeCard)
-                        .background(GeceColors.PrimaryInk)
+                        .background(GeceColors.HighlightContainer)
                         .padding(16.dp)
                 ) {
                     Column(modifier = Modifier.fillMaxWidth()) {
@@ -341,7 +341,7 @@ fun CatalogScreen(
                                 letterSpacing = 0.5.sp,
                                 fontSize = 10.sp
                             ),
-                            color = GeceColors.Accent
+                            color = GeceColors.HighlightAccent
                         )
 
                         Spacer(modifier = Modifier.height(6.dp))
@@ -349,7 +349,7 @@ fun CatalogScreen(
                         Text(
                             text = stringResource(R.string.catalog_custom_spec_title),
                             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                            color = GeceColors.Background
+                            color = GeceColors.OnHighlight
                         )
 
                         Spacer(modifier = Modifier.height(6.dp))
@@ -357,7 +357,7 @@ fun CatalogScreen(
                         Text(
                             text = stringResource(R.string.catalog_custom_spec_desc),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = GeceColors.OnHighlightMuted
                         )
 
                         Spacer(modifier = Modifier.height(14.dp))
@@ -373,7 +373,7 @@ fun CatalogScreen(
                             shape = ShapeControl,
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = GeceColors.Accent,
-                                contentColor = GeceColors.PrimaryInk
+                                contentColor = GeceColors.OnAccent
                             ),
                             modifier = Modifier.fillMaxWidth(),
                             contentPadding = PaddingValues(vertical = 12.dp)
@@ -399,12 +399,12 @@ fun CatalogScreen(
                             Text(
                                 text = stringResource(R.string.catalog_badge_mockup),
                                 style = MaterialTheme.typography.labelSmall,
-                                color = GeceColors.Background
+                                color = GeceColors.OnHighlight
                             )
                             Text(
                                 text = stringResource(R.string.catalog_badge_guarantee),
                                 style = MaterialTheme.typography.labelSmall,
-                                color = GeceColors.Background
+                                color = GeceColors.OnHighlight
                             )
                         }
                     }

@@ -76,15 +76,14 @@ import com.gecesablon.app.ui.components.OwnerHeader
 import com.gecesablon.app.ui.owner.components.MonthlyTrendChart
 import com.gecesablon.app.ui.components.StatusChip
 import com.gecesablon.app.ui.theme.AccentYellow
-import com.gecesablon.app.ui.theme.BorderHairline
 import com.gecesablon.app.ui.theme.GeceColors
 import com.gecesablon.app.ui.theme.InkBlack
 import com.gecesablon.app.ui.theme.ShapeBadge
 import com.gecesablon.app.ui.theme.ShapeCard
 import com.gecesablon.app.ui.theme.ShapeControl
 import com.gecesablon.app.ui.theme.ShapePill
+import com.gecesablon.app.ui.theme.BorderHairline
 import com.gecesablon.app.ui.theme.SurfaceCard
-import com.gecesablon.app.ui.theme.SurfaceVariantColor
 import com.gecesablon.app.ui.theme.TextPrimary
 import com.gecesablon.app.ui.theme.TextSecondary
 import kotlinx.coroutines.launch
@@ -143,7 +142,7 @@ fun OwnerDashboardScreen(
                         .padding(top = innerPadding.calculateTopPadding()),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(color = InkBlack)
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 }
             }
 
@@ -272,7 +271,7 @@ private fun OwnerGreetingSection(
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 0.8.sp
                 ),
-                color = TextSecondary,
+                color = GeceColors.TextMuted,
                 maxLines = 1,
                 softWrap = false,
                 overflow = TextOverflow.Ellipsis,
@@ -284,13 +283,13 @@ private fun OwnerGreetingSection(
             // Chip rentang bulan berjalan
             Surface(
                 shape = ShapePill,
-                color = SurfaceVariantColor,
-                border = BorderStroke(0.5.dp, BorderHairline)
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                border = BorderStroke(0.5.dp, GeceColors.Border)
             ) {
                 Text(
                     text = rangeText,
                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
-                    color = TextPrimary,
+                    color = GeceColors.TextMain,
                     maxLines = 1,
                     softWrap = false,
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
@@ -306,7 +305,7 @@ private fun OwnerGreetingSection(
                 fontWeight = FontWeight.ExtraBold,
                 letterSpacing = (-0.5).sp
             ),
-            color = TextPrimary,
+            color = GeceColors.TextMain,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -316,7 +315,7 @@ private fun OwnerGreetingSection(
         Text(
             text = stringResource(R.string.owner_greeting_sub),
             style = MaterialTheme.typography.bodySmall,
-            color = TextSecondary,
+            color = GeceColors.TextMuted,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
@@ -383,9 +382,9 @@ private fun QuickActionTile(
             .clickable(onClick = onClick),
         shape = ShapeControl,
         colors = CardDefaults.cardColors(
-            containerColor = if (isPrimary) InkBlack else SurfaceCard
+            containerColor = if (isPrimary) InkBlack else GeceColors.Surface
         ),
-        border = if (isPrimary) null else BorderStroke(1.dp, BorderHairline)
+        border = BorderStroke(1.dp, GeceColors.Border)
     ) {
         Column(
             modifier = Modifier
@@ -397,7 +396,7 @@ private fun QuickActionTile(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = if (isPrimary) AccentYellow else TextPrimary,
+                tint = if (isPrimary) AccentYellow else GeceColors.TextMain,
                 modifier = Modifier.size(22.dp)
             )
             Spacer(modifier = Modifier.height(6.dp))
@@ -408,7 +407,7 @@ private fun QuickActionTile(
                     fontSize = 11.sp,
                     lineHeight = 13.sp
                 ),
-                color = if (isPrimary) AccentYellow else TextPrimary,
+                color = if (isPrimary) AccentYellow else GeceColors.TextMain,
                 textAlign = TextAlign.Center,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
@@ -442,7 +441,7 @@ private fun OwnerFinancialSummarySection(
         Text(
             text = stringResource(R.string.owner_dashboard_finance_title),
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-            color = TextPrimary
+            color = GeceColors.TextMain
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -451,7 +450,8 @@ private fun OwnerFinancialSummarySection(
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = ShapeCard,
-            colors = CardDefaults.cardColors(containerColor = InkBlack)
+            colors = CardDefaults.cardColors(containerColor = InkBlack),
+            border = BorderStroke(1.dp, GeceColors.Border)
         ) {
             Column(modifier = Modifier.padding(18.dp)) {
                 Row(
@@ -541,7 +541,7 @@ private fun OwnerFinancialSummarySection(
                     Text(
                         text = stringResource(R.string.owner_dashboard_finance_formula),
                         style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
-                        color = TextSecondary.copy(alpha = 0.9f),
+                        color = Color.White.copy(alpha = 0.75f),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f, fill = false)
@@ -575,8 +575,8 @@ private fun OwnerFinancialSummarySection(
             Card(
                 modifier = Modifier.weight(1f),
                 shape = ShapeCard,
-                colors = CardDefaults.cardColors(containerColor = SurfaceCard),
-                border = BorderStroke(1.dp, BorderHairline)
+                colors = CardDefaults.cardColors(containerColor = GeceColors.Surface),
+                border = BorderStroke(1.dp, GeceColors.Border)
             ) {
                 Column(modifier = Modifier.padding(14.dp)) {
                     Row(
@@ -590,7 +590,7 @@ private fun OwnerFinancialSummarySection(
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 10.sp
                             ),
-                            color = TextSecondary,
+                            color = GeceColors.TextMuted,
                             maxLines = 2,
                             softWrap = true,
                             modifier = Modifier.weight(1f)
@@ -708,14 +708,14 @@ private fun OwnerProductionStatusSection(
                 Text(
                     text = stringResource(R.string.owner_dashboard_production_title),
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                    color = TextPrimary,
+                    color = GeceColors.TextMain,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = stringResource(R.string.owner_dashboard_production_active_count, totalAktif),
                     style = MaterialTheme.typography.bodySmall,
-                    color = TextSecondary,
+                    color = GeceColors.TextMuted,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -728,7 +728,7 @@ private fun OwnerProductionStatusSection(
                 Text(
                     text = stringResource(R.string.owner_dashboard_queue_board),
                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                    color = TextPrimary,
+                    color = GeceColors.TextMain,
                     maxLines = 1,
                     softWrap = false
                 )
@@ -736,7 +736,7 @@ private fun OwnerProductionStatusSection(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                     contentDescription = null,
-                    tint = TextPrimary,
+                    tint = GeceColors.TextMain,
                     modifier = Modifier.size(14.dp)
                 )
             }
@@ -809,9 +809,9 @@ private fun ProductionStatusCard(
             .clickable(onClick = onClick),
         shape = ShapeCard,
         colors = CardDefaults.cardColors(
-            containerColor = if (isPriority) InkBlack else SurfaceCard
+            containerColor = if (isPriority) InkBlack else GeceColors.Surface
         ),
-        border = if (isPriority) null else BorderStroke(1.dp, BorderHairline)
+        border = BorderStroke(1.dp, GeceColors.Border)
     ) {
         Column(
             modifier = Modifier
@@ -827,7 +827,7 @@ private fun ProductionStatusCard(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = if (isPriority) AccentYellow else TextSecondary,
+                    tint = if (isPriority) AccentYellow else GeceColors.TextMuted,
                     modifier = Modifier.size(18.dp)
                 )
 
@@ -856,7 +856,7 @@ private fun ProductionStatusCard(
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 22.sp
                     ),
-                    color = if (isPriority) Color.White else TextPrimary
+                    color = if (isPriority) Color.White else GeceColors.TextMain
                 )
                 Text(
                     text = label,
@@ -864,7 +864,7 @@ private fun ProductionStatusCard(
                         fontWeight = FontWeight.Medium,
                         fontSize = 11.sp
                     ),
-                    color = if (isPriority) Color.White.copy(alpha = 0.85f) else TextSecondary,
+                    color = if (isPriority) Color.White.copy(alpha = 0.85f) else GeceColors.TextMuted,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -892,7 +892,7 @@ private fun OwnerRecentOrdersSection(
             Text(
                 text = stringResource(R.string.owner_dashboard_recent_orders),
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                color = TextPrimary,
+                color = GeceColors.TextMain,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1f)
@@ -904,7 +904,7 @@ private fun OwnerRecentOrdersSection(
                 Text(
                     text = stringResource(R.string.owner_dashboard_see_all),
                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                    color = TextPrimary,
+                    color = GeceColors.TextMain,
                     maxLines = 1,
                     softWrap = false
                 )
@@ -912,7 +912,7 @@ private fun OwnerRecentOrdersSection(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                     contentDescription = null,
-                    tint = TextPrimary,
+                    tint = GeceColors.TextMain,
                     modifier = Modifier.size(14.dp)
                 )
             }
@@ -924,7 +924,7 @@ private fun OwnerRecentOrdersSection(
             Text(
                 text = "Belum ada pesanan terbaru.",
                 style = MaterialTheme.typography.bodySmall,
-                color = TextSecondary,
+                color = GeceColors.TextMuted,
                 modifier = Modifier.padding(vertical = 12.dp)
             )
         } else {
@@ -949,8 +949,8 @@ private fun RecentOrderItemCard(
             .fillMaxWidth()
             .clickable(onClick = onClick),
         shape = ShapeCard,
-        colors = CardDefaults.cardColors(containerColor = SurfaceCard),
-        border = BorderStroke(1.dp, BorderHairline)
+        colors = CardDefaults.cardColors(containerColor = GeceColors.Surface),
+        border = BorderStroke(1.dp, GeceColors.Border)
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
             Row(
@@ -961,7 +961,7 @@ private fun RecentOrderItemCard(
                 Text(
                     text = order.kode,
                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                    color = TextSecondary,
+                    color = GeceColors.TextMuted,
                     maxLines = 1,
                     softWrap = false,
                     overflow = TextOverflow.Ellipsis,
@@ -978,7 +978,7 @@ private fun RecentOrderItemCard(
             Text(
                 text = order.namaPelanggan,
                 style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                color = TextPrimary,
+                color = GeceColors.TextMain,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -994,7 +994,7 @@ private fun RecentOrderItemCard(
             Text(
                 text = productSummary,
                 style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
-                color = TextSecondary,
+                color = GeceColors.TextMuted,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -1004,7 +1004,7 @@ private fun RecentOrderItemCard(
             Text(
                 text = Formatter.formatRupiah(order.total),
                 style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                color = TextPrimary
+                color = GeceColors.TextMain
             )
         }
     }
@@ -1025,12 +1025,12 @@ private fun OwnerStockMaterialSection(
         Text(
             text = stringResource(R.string.owner_dashboard_stock_title),
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-            color = TextPrimary
+            color = GeceColors.TextMain
         )
         Text(
             text = stringResource(R.string.owner_dashboard_stock_sub),
             style = MaterialTheme.typography.bodySmall,
-            color = TextSecondary
+            color = GeceColors.TextMuted
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -1062,8 +1062,8 @@ private fun StockGroupCard(
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = ShapeCard,
-        colors = CardDefaults.cardColors(containerColor = SurfaceCard),
-        border = BorderStroke(1.dp, BorderHairline)
+        colors = CardDefaults.cardColors(containerColor = GeceColors.Surface),
+        border = BorderStroke(1.dp, GeceColors.Border)
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
             Text(
@@ -1072,7 +1072,7 @@ private fun StockGroupCard(
                     fontWeight = FontWeight.Bold,
                     fontSize = 11.sp
                 ),
-                color = TextPrimary
+                color = GeceColors.TextMain
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -1088,7 +1088,7 @@ private fun StockGroupCard(
                         color = if (stock.isMenipis) GeceColors.StatusPendingBg.copy(alpha = 0.25f) else GeceColors.Background,
                         border = BorderStroke(
                             0.5.dp,
-                            if (stock.isMenipis) AccentYellow else BorderHairline
+                            if (stock.isMenipis) AccentYellow else GeceColors.Border
                         )
                     ) {
                         Column(modifier = Modifier.padding(10.dp)) {
@@ -1098,7 +1098,7 @@ private fun StockGroupCard(
                                     fontWeight = FontWeight.SemiBold,
                                     fontSize = 11.sp
                                 ),
-                                color = TextPrimary,
+                                color = GeceColors.TextMain,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
@@ -1108,7 +1108,7 @@ private fun StockGroupCard(
                             Text(
                                 text = "${stock.jumlah} ${stock.satuan}",
                                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                                color = TextPrimary
+                                color = GeceColors.TextMain
                             )
 
                             Spacer(modifier = Modifier.height(4.dp))

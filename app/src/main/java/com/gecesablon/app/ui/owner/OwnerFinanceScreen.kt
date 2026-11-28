@@ -193,8 +193,8 @@ fun OwnerFinanceScreen(
                             },
                             label = { Text(label) },
                             colors = FilterChipDefaults.filterChipColors(
-                                selectedContainerColor = GeceColors.PrimaryInk,
-                                selectedLabelColor = GeceColors.Accent,
+                                selectedContainerColor = MaterialTheme.colorScheme.primary,
+                                selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
                                 containerColor = GeceColors.Surface,
                                 labelColor = GeceColors.TextMain
                             )

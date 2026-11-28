@@ -206,7 +206,7 @@ fun CustomerHomeScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(ShapeCard)
-                        .background(GeceColors.PrimaryInk)
+                        .background(GeceColors.HighlightContainer)
                         .padding(16.dp)
                 ) {
                     Column(modifier = Modifier.fillMaxWidth()) {
@@ -217,7 +217,7 @@ fun CustomerHomeScreen(
                                 letterSpacing = 0.5.sp,
                                 fontSize = 10.sp
                             ),
-                            color = GeceColors.Accent
+                            color = GeceColors.HighlightAccent
                         )
 
                         Spacer(modifier = Modifier.height(4.dp))
@@ -225,7 +225,7 @@ fun CustomerHomeScreen(
                         Text(
                             text = stringResource(R.string.home_banner_title),
                             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                            color = GeceColors.Background
+                            color = GeceColors.OnHighlight
                         )
 
                         Spacer(modifier = Modifier.height(4.dp))
@@ -233,7 +233,7 @@ fun CustomerHomeScreen(
                         Text(
                             text = stringResource(R.string.home_banner_subtitle),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = GeceColors.OnHighlightMuted
                         )
 
                         Spacer(modifier = Modifier.height(12.dp))
@@ -248,7 +248,7 @@ fun CustomerHomeScreen(
                                 shape = ShapeControl,
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = GeceColors.Accent,
-                                    contentColor = GeceColors.PrimaryInk
+                                    contentColor = GeceColors.OnAccent
                                 ),
                                 contentPadding = PaddingValues(horizontal = 14.dp, vertical = 8.dp)
                             ) {
@@ -273,7 +273,7 @@ fun CustomerHomeScreen(
                                 Text(
                                     text = stringResource(R.string.home_banner_tag),
                                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                                    color = GeceColors.PrimaryInk
+                                    color = GeceColors.OnAccent
                                 )
                             }
                         }
@@ -320,7 +320,7 @@ fun CustomerHomeScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column {
+                    Column(modifier = Modifier.weight(1f)) {
                         Text(
                             text = stringResource(R.string.home_portfolio_title),
                             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
@@ -333,6 +333,8 @@ fun CustomerHomeScreen(
                         )
                     }
 
+                    Spacer(modifier = Modifier.width(8.dp))
+
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
@@ -343,7 +345,9 @@ fun CustomerHomeScreen(
                         Text(
                             text = stringResource(R.string.home_see_all),
                             style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.onBackground
+                            color = MaterialTheme.colorScheme.onBackground,
+                            maxLines = 1,
+                            softWrap = false
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Icon(
@@ -430,7 +434,7 @@ fun CustomerHomeScreen(
                             Icon(
                                 imageVector = Icons.Default.ChatBubbleOutline,
                                 contentDescription = null,
-                                tint = GeceColors.PrimaryInk,
+                                tint = GeceColors.OnAccent,
                                 modifier = Modifier.size(22.dp)
                             )
                         }

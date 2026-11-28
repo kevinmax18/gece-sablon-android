@@ -321,8 +321,8 @@ fun StaffFilterChips(
                 },
                 shape = ShapeBadge,
                 colors = FilterChipDefaults.filterChipColors(
-                    selectedContainerColor = GeceColors.PrimaryInk,
-                    selectedLabelColor = GeceColors.Accent,
+                    selectedContainerColor = MaterialTheme.colorScheme.primary,
+                    selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
                     containerColor = MaterialTheme.colorScheme.surface,
                     labelColor = MaterialTheme.colorScheme.onSurface
                 ),
