@@ -66,4 +66,27 @@ class AppPreferencesRulesTest {
         assertEquals(ThemeMode.GELAP, AppPreferencesRules.parseThemeMode("GELAP"))
         assertEquals(ThemeMode.TERANG, AppPreferencesRules.parseThemeMode("TERANG"))
     }
+
+    @Test
+    fun `shouldApplyLanguage hanya mengembalikan true bila berbeda dari locale aktif`() {
+        // Ikuti Sistem & locale kosong -> tidak diterapkan
+        assertFalse(AppPreferencesRules.shouldApplyLanguage(LanguageMode.SISTEM, ""))
+        assertFalse(AppPreferencesRules.shouldApplyLanguage(LanguageMode.SISTEM, "   "))
+        // Ikuti Sistem & locale sedang aktif -> diterapkan (reset ke sistem)
+        assertTrue(AppPreferencesRules.shouldApplyLanguage(LanguageMode.SISTEM, "en"))
+        assertTrue(AppPreferencesRules.shouldApplyLanguage(LanguageMode.SISTEM, "id"))
+
+        // Pilihan sama -> tidak diterapkan
+        assertFalse(AppPreferencesRules.shouldApplyLanguage(LanguageMode.INDONESIA, "id"))
+        assertFalse(AppPreferencesRules.shouldApplyLanguage(LanguageMode.INDONESIA, "id-ID"))
+        assertFalse(AppPreferencesRules.shouldApplyLanguage(LanguageMode.INDONESIA, "in"))
+        assertFalse(AppPreferencesRules.shouldApplyLanguage(LanguageMode.ENGLISH, "en"))
+        assertFalse(AppPreferencesRules.shouldApplyLanguage(LanguageMode.ENGLISH, "en-US"))
+
+        // Pilihan beda -> diterapkan
+        assertTrue(AppPreferencesRules.shouldApplyLanguage(LanguageMode.INDONESIA, ""))
+        assertTrue(AppPreferencesRules.shouldApplyLanguage(LanguageMode.INDONESIA, "en"))
+        assertTrue(AppPreferencesRules.shouldApplyLanguage(LanguageMode.ENGLISH, ""))
+        assertTrue(AppPreferencesRules.shouldApplyLanguage(LanguageMode.ENGLISH, "id"))
+    }
 }

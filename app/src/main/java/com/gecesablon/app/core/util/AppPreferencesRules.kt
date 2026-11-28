@@ -35,6 +35,25 @@ object AppPreferencesRules {
     }
 
     /**
+     * Menentukan apakah [AppCompatDelegate.setApplicationLocales] perlu dipanggil
+     * dengan membandingkan [mode] tersimpan terhadap tag locale yang sedang aktif.
+     */
+    fun shouldApplyLanguage(mode: LanguageMode, currentLocaleTags: String): Boolean {
+        val targetTag = toLanguageTag(mode)
+        val normalizedCurrent = currentLocaleTags.trim().lowercase(Locale.ROOT)
+        if (targetTag == null) {
+            return normalizedCurrent.isNotEmpty()
+        }
+        val normalizedFirstTag = normalizedCurrent.substringBefore(',').trim()
+        val effectiveCurrent = if (normalizedFirstTag == "in" || normalizedFirstTag.startsWith("in-")) {
+            "id"
+        } else {
+            normalizedFirstTag.substringBefore('-')
+        }
+        return effectiveCurrent != targetTag
+    }
+
+    /**
      * Memetakan [LanguageMode] ke [Locale] untuk pemformatan tanggal dan angka.
      */
     fun toLocale(mode: LanguageMode, systemLocale: Locale = Locale.getDefault()): Locale = when (mode) {
