@@ -79,7 +79,7 @@ fun IncomeSourceCard(
             val ordersPctText = if (sources.ordersPercentage != null) {
                 Formatter.formatPercent(sources.ordersPercentage, 1)
             } else {
-                "—"
+                "\u2014"
             }
 
             Row(
@@ -128,7 +128,7 @@ fun IncomeSourceCard(
             val manualPctText = if (sources.manualPercentage != null) {
                 Formatter.formatPercent(sources.manualPercentage, 1)
             } else {
-                "—"
+                "\u2014"
             }
 
             Row(

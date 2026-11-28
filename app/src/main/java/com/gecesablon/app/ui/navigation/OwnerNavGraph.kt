@@ -113,20 +113,40 @@ fun NavGraphBuilder.ownerNavGraph(
             )
         }
 
-        // Tab Pesanan (pakai StaffOrdersScreen yang sudah ada)
+        // Tab Pesanan (pakai StaffOrdersScreen yang sudah ada dengan header Owner)
         composable(Routes.OWNER_ORDERS) {
             StaffOrdersScreen(
+                isOwner = true,
                 onNavigateToDetail = { orderId ->
                     navController.navigate(Routes.staffOrderDetailRoute(orderId))
+                },
+                onNavigateToAccount = {
+                    navController.navigate(Routes.OWNER_ACCOUNT) {
+                        popUpTo(Routes.OWNER_HOME) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 }
             )
         }
 
-        // Tab Proses (pakai StaffProcessScreen yang sudah ada)
+        // Tab Proses (pakai StaffProcessScreen yang sudah ada dengan header Owner)
         composable(Routes.OWNER_PROCESS) {
             StaffProcessScreen(
+                isOwner = true,
                 onNavigateToDetail = { orderId ->
                     navController.navigate(Routes.staffOrderDetailRoute(orderId))
+                },
+                onNavigateToAccount = {
+                    navController.navigate(Routes.OWNER_ACCOUNT) {
+                        popUpTo(Routes.OWNER_HOME) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 }
             )
         }

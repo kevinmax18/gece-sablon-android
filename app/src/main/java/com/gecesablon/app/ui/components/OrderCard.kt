@@ -228,7 +228,7 @@ private fun OrderCardPreview() {
                 status = OrderStatus.DITERIMA,
                 title = "Budi Setiawan",
                 itemName = "Kaos Cotton Combed 24s",
-                itemVariant = "DTF (A6 Dada Kiri + A3 Punggung) • Hitam Solid",
+                itemVariant = "DTF (A6 Dada Kiri + A3 Punggung) \u2022 Hitam Solid",
                 quantityPcs = 24,
                 footerInfo = "Resolusi File HD Terunggah",
                 onClick = {}
@@ -239,7 +239,7 @@ private fun OrderCardPreview() {
                 status = OrderStatus.PRESSING,
                 title = "Komunitas Lari Urban",
                 itemName = "Baju Polo Pique",
-                itemVariant = "DTF Dada Kiri • Navy Blue",
+                itemVariant = "DTF Dada Kiri \u2022 Navy Blue",
                 quantityPcs = 36,
                 footerInfo = "Total: Rp2.160.000",
                 onClick = {}
